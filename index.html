@@ -190,108 +190,41 @@
     input::placeholder { color: var(--muted); }
     select { cursor: pointer; }
 
-    /* ── Phone — Premium Custom Lada Picker ── */
+    /* ── Phone ── */
     .phone-wrap {
       display: flex;
       border: 1.5px solid var(--border);
       border-radius: 10px;
-      overflow: visible;
+      overflow: hidden;
       transition: border-color .2s, box-shadow .2s;
-      position: relative;
     }
     .phone-wrap:focus-within {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(22,93,255,.12);
     }
-    /* Custom lada trigger button */
-    .lada-trigger {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 14px;
-      min-width: 130px;
+    .lada-select {
+      border: none !important;
+      border-right: 1.5px solid var(--border) !important;
+      border-radius: 0 !important;
+      width: 200px;
+      min-width: 200px;
       background: var(--light);
-      border: none;
-      border-right: 1.5px solid var(--border);
-      border-radius: 10px 0 0 10px;
-      cursor: pointer;
+      padding: 13px 14px;
       font-family: 'DM Sans', sans-serif;
-      font-size: .88rem;
-      font-weight: 600;
-      color: var(--navy);
-      white-space: nowrap;
-      transition: background .15s;
-      outline: none;
-      height: 100%;
-    }
-    .lada-trigger:hover { background: #eaf0ff; }
-    .lada-trigger-flag { font-size: 1.35rem; line-height: 1; }
-    .lada-trigger-code { font-size: .82rem; color: var(--muted); font-weight: 500; }
-    .lada-trigger-arrow {
-      margin-left: auto;
-      font-size: .65rem;
-      color: var(--muted);
-      transition: transform .2s;
-    }
-    .lada-trigger.open .lada-trigger-arrow { transform: rotate(180deg); }
-
-    /* Dropdown panel */
-    .lada-dropdown {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      width: 300px;
-      background: var(--white);
-      border: 1.5px solid var(--blue);
-      border-radius: 14px;
-      box-shadow: 0 16px 40px rgba(10,31,68,.18);
-      z-index: 200;
-      display: none;
-      overflow: hidden;
-    }
-    .lada-dropdown.open { display: block; }
-    .lada-search-wrap {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .lada-search {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .85rem;
-      outline: none;
+      font-size: .93rem;
       color: var(--dark);
-    }
-    .lada-search:focus { border-color: var(--blue); }
-    .lada-list {
-      max-height: 240px;
-      overflow-y: auto;
-    }
-    .lada-option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
       cursor: pointer;
-      transition: background .12s;
-      font-size: .88rem;
+      outline: none;
+      appearance: none;
     }
-    .lada-option:hover, .lada-option.selected { background: var(--light); }
-    .lada-option.selected { font-weight: 700; color: var(--blue); }
-    .lada-opt-flag { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
-    .lada-opt-country { flex: 1; color: var(--dark); }
-    .lada-opt-code { color: var(--muted); font-size: .8rem; font-weight: 600; }
-    /* Hidden real input for form submit */
-    .lada-hidden { display: none; }
+    .lada-select:focus { box-shadow: none !important; }
     .phone-input {
       border: none !important;
-      border-radius: 0 10px 10px 0 !important;
+      border-radius: 0 !important;
       flex: 1;
       min-width: 0;
     }
-    .phone-input:focus { box-shadow: none !important; border-color: transparent !important; }
+    .phone-input:focus { box-shadow: none !important; }
 
     /* ── CP ── */
     .cp-result {
@@ -722,23 +655,37 @@
       <div style="margin-top:22px;" class="grid-2">
         <div class="field">
           <label for="telefono">Teléfono <span class="req">*</span></label>
-          <div class="phone-wrap" id="phoneWrap">
-            <!-- Custom lada trigger -->
-            <button type="button" class="lada-trigger" id="ladaTrigger" aria-haspopup="listbox">
-              <span class="lada-trigger-flag" id="ladaFlag">🇲🇽</span>
-              <span class="lada-trigger-code" id="ladaCode">+52</span>
-              <span class="lada-trigger-arrow">▼</span>
-            </button>
-            <!-- Hidden real input -->
-            <input type="hidden" id="ladaValue" name="Lada" value="+52" class="lada-hidden" />
-            <!-- Dropdown -->
-            <div class="lada-dropdown" id="ladaDropdown" role="listbox">
-              <div class="lada-search-wrap">
-                <input type="text" class="lada-search" id="ladaSearch" placeholder="🔍  Buscar país…" autocomplete="off" />
-              </div>
-              <div class="lada-list" id="ladaList"></div>
-            </div>
-            <!-- Phone number -->
+          <div class="phone-wrap">
+            <select class="lada-select" id="lada" name="Lada">
+              <option value="+52"  selected>🇲🇽  +52  México</option>
+              <option value="+1"          >🇺🇸  +1   EE.UU.</option>
+              <option value="+1"          >🇨🇦  +1   Canadá</option>
+              <option value="+54"         >🇦🇷  +54  Argentina</option>
+              <option value="+591"        >🇧🇴  +591 Bolivia</option>
+              <option value="+55"         >🇧🇷  +55  Brasil</option>
+              <option value="+56"         >🇨🇱  +56  Chile</option>
+              <option value="+57"         >🇨🇴  +57  Colombia</option>
+              <option value="+506"        >🇨🇷  +506 Costa Rica</option>
+              <option value="+53"         >🇨🇺  +53  Cuba</option>
+              <option value="+593"        >🇪🇨  +593 Ecuador</option>
+              <option value="+503"        >🇸🇻  +503 El Salvador</option>
+              <option value="+502"        >🇬🇹  +502 Guatemala</option>
+              <option value="+504"        >🇭🇳  +504 Honduras</option>
+              <option value="+505"        >🇳🇮  +505 Nicaragua</option>
+              <option value="+507"        >🇵🇦  +507 Panamá</option>
+              <option value="+595"        >🇵🇾  +595 Paraguay</option>
+              <option value="+51"         >🇵🇪  +51  Perú</option>
+              <option value="+1-787"      >🇵🇷  +1   Puerto Rico</option>
+              <option value="+1-809"      >🇩🇴  +1   Rep. Dominicana</option>
+              <option value="+598"        >🇺🇾  +598 Uruguay</option>
+              <option value="+58"         >🇻🇪  +58  Venezuela</option>
+              <option value="+34"         >🇪🇸  +34  España</option>
+              <option value="+351"        >🇵🇹  +351 Portugal</option>
+              <option value="+49"         >🇩🇪  +49  Alemania</option>
+              <option value="+33"         >🇫🇷  +33  Francia</option>
+              <option value="+44"         >🇬🇧  +44  Reino Unido</option>
+              <option value="+39"         >🇮🇹  +39  Italia</option>
+            </select>
             <input class="phone-input" type="tel" id="telefono" name="Teléfono" placeholder="55 1234 5678" required />
           </div>
         </div>
@@ -865,17 +812,17 @@
         <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
+    <h2 class="modal-title" id="modalTitle">¡Recibimos tu solicitud!</h2>
     <div class="modal-divider"></div>
-    <h2 class="modal-title" id="modalTitle">¡Tu solicitud fue enviada con éxito!</h2>
     <p class="modal-body">
-      Gracias por confiar en <strong>AVA</strong>. Hemos recibido tu solicitud de cotización de seguro de auto
-      y uno de nuestros asesores especializados la revisará a la brevedad posible.<br><br>
-      En breve recibirás respuesta a través del correo electrónico o teléfono que nos proporcionaste.
-      ¡Estamos aquí para ayudarte a encontrar la mejor cobertura! 🚗🛡️
+      Muchas gracias por elegirnos. Es un placer poder ayudarte a encontrar
+      el seguro de auto que mejor se adapte a tus necesidades.<br><br>
+      Uno de nuestros asesores revisará tu información y te contactará
+      <strong>a la brevedad posible</strong> a través del correo o teléfono
+      que nos proporcionaste. ¡Estamos para servirte! 🛡️🚗
     </p>
-    <div class="modal-tag">📬 Tiempo estimado de respuesta: menos de 24 horas</div>
-    <br>
-    <button class="modal-close-btn" onclick="closeModal()">Entendido, ¡gracias!</button>
+    <div class="modal-tag">⏱️ Tiempo de respuesta estimado: menos de 24 horas hábiles</div>
+    <button class="modal-close-btn" onclick="closeModal()">¡Entendido, gracias!</button>
   </div>
 </div>
 
@@ -910,104 +857,6 @@ const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png','zip','rar'];
     sel.appendChild(o);
   }
 })();
-
-/* ════════════════════════════════════════════════════════════
-   PREMIUM LADA PICKER — con banderas reales de cada país
-   ════════════════════════════════════════════════════════════ */
-const LADA_DATA = [
-  { code:'+52',    flag:'🇲🇽', country:'México',        placeholder:'55 1234 5678' },
-  { code:'+1',     flag:'🇺🇸', country:'Estados Unidos', placeholder:'(555) 123-4567' },
-  { code:'+1',     flag:'🇨🇦', country:'Canadá',         placeholder:'(555) 123-4567' },
-  { code:'+54',    flag:'🇦🇷', country:'Argentina',      placeholder:'11 1234 5678' },
-  { code:'+591',   flag:'🇧🇴', country:'Bolivia',        placeholder:'7 123 4567' },
-  { code:'+55',    flag:'🇧🇷', country:'Brasil',         placeholder:'(11) 9 1234-5678' },
-  { code:'+56',    flag:'🇨🇱', country:'Chile',          placeholder:'9 1234 5678' },
-  { code:'+57',    flag:'🇨🇴', country:'Colombia',       placeholder:'321 123 4567' },
-  { code:'+506',   flag:'🇨🇷', country:'Costa Rica',     placeholder:'8 123 4567' },
-  { code:'+53',    flag:'🇨🇺', country:'Cuba',           placeholder:'5 123 4567' },
-  { code:'+593',   flag:'🇪🇨', country:'Ecuador',        placeholder:'9 9123 4567' },
-  { code:'+503',   flag:'🇸🇻', country:'El Salvador',    placeholder:'7 123-4567' },
-  { code:'+502',   flag:'🇬🇹', country:'Guatemala',      placeholder:'5 123 4567' },
-  { code:'+504',   flag:'🇭🇳', country:'Honduras',       placeholder:'9 123-4567' },
-  { code:'+505',   flag:'🇳🇮', country:'Nicaragua',      placeholder:'8 123 4567' },
-  { code:'+507',   flag:'🇵🇦', country:'Panamá',         placeholder:'6 123-4567' },
-  { code:'+595',   flag:'🇵🇾', country:'Paraguay',       placeholder:'981 123 456' },
-  { code:'+51',    flag:'🇵🇪', country:'Perú',           placeholder:'9 1234 5678' },
-  { code:'+1-787', flag:'🇵🇷', country:'Puerto Rico',    placeholder:'787 123 4567' },
-  { code:'+1-809', flag:'🇩🇴', country:'Rep. Dominicana',placeholder:'809 123 4567' },
-  { code:'+598',   flag:'🇺🇾', country:'Uruguay',        placeholder:'9 123 4567' },
-  { code:'+58',    flag:'🇻🇪', country:'Venezuela',      placeholder:'412 123 4567' },
-  { code:'+34',    flag:'🇪🇸', country:'España',         placeholder:'612 345 678' },
-  { code:'+351',   flag:'🇵🇹', country:'Portugal',       placeholder:'912 345 678' },
-  { code:'+49',    flag:'🇩🇪', country:'Alemania',       placeholder:'151 1234 5678' },
-  { code:'+33',    flag:'🇫🇷', country:'Francia',        placeholder:'6 12 34 56 78' },
-  { code:'+44',    flag:'🇬🇧', country:'Reino Unido',    placeholder:'7700 123456' },
-  { code:'+39',    flag:'🇮🇹', country:'Italia',         placeholder:'312 345 6789' },
-  { code:'+31',    flag:'🇳🇱', country:'Países Bajos',   placeholder:'6 1234 5678' },
-  { code:'+81',    flag:'🇯🇵', country:'Japón',          placeholder:'90-1234-5678' },
-  { code:'+86',    flag:'🇨🇳', country:'China',          placeholder:'138 1234 5678' },
-  { code:'+82',    flag:'🇰🇷', country:'Corea del Sur',  placeholder:'10-1234-5678' },
-];
-
-let selectedLada = LADA_DATA[0]; // default: México
-
-const ladaTrigger = document.getElementById('ladaTrigger');
-const ladaDropdown = document.getElementById('ladaDropdown');
-const ladaSearch   = document.getElementById('ladaSearch');
-const ladaList     = document.getElementById('ladaList');
-const ladaFlag     = document.getElementById('ladaFlag');
-const ladaCode     = document.getElementById('ladaCode');
-const ladaValue    = document.getElementById('ladaValue');
-const phoneInput   = document.getElementById('telefono');
-
-function renderLadaList(filter = '') {
-  ladaList.innerHTML = '';
-  const q = filter.toLowerCase();
-  LADA_DATA
-    .filter(l => !q || l.country.toLowerCase().includes(q) || l.code.includes(q))
-    .forEach(l => {
-      const div = document.createElement('div');
-      div.className = 'lada-option' + (l === selectedLada ? ' selected' : '');
-      div.innerHTML = `
-        <span class="lada-opt-flag">${l.flag}</span>
-        <span class="lada-opt-country">${l.country}</span>
-        <span class="lada-opt-code">${l.code}</span>`;
-      div.addEventListener('mousedown', e => {
-        e.preventDefault();
-        selectedLada = l;
-        ladaFlag.textContent = l.flag;
-        ladaCode.textContent = l.code;
-        ladaValue.value = l.code;
-        phoneInput.placeholder = l.placeholder;
-        closeLadaDropdown();
-      });
-      ladaList.appendChild(div);
-    });
-}
-
-function openLadaDropdown() {
-  ladaDropdown.classList.add('open');
-  ladaTrigger.classList.add('open');
-  ladaSearch.value = '';
-  renderLadaList();
-  setTimeout(() => ladaSearch.focus(), 50);
-}
-function closeLadaDropdown() {
-  ladaDropdown.classList.remove('open');
-  ladaTrigger.classList.remove('open');
-}
-
-ladaTrigger.addEventListener('click', e => {
-  e.stopPropagation();
-  ladaDropdown.classList.contains('open') ? closeLadaDropdown() : openLadaDropdown();
-});
-ladaSearch.addEventListener('input', () => renderLadaList(ladaSearch.value));
-document.addEventListener('click', e => {
-  if(!ladaDropdown.contains(e.target) && e.target !== ladaTrigger) closeLadaDropdown();
-});
-
-// Init render
-renderLadaList();
 
 /* ════════════════════════════════════════════════════════════
    COPOMEX — Endpoint oficial:
