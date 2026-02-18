@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AVA – Formulario Seguro de Auto – Cotizar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV"></script>
+
+  <style>
+    :root {
+      --navy:   #0A1F44;
+      --blue:   #165DFF;
+      --white:  #FFFFFF;
+      --dark:   #333333;
+      --light:  #F4F7FF;
+      --border: #D6E0FF;
+      --muted:  #6B7A99;
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(10,31,68,.12);
+      --tl-green:  #22c55e;
+      --tl-yellow: #eab308;
+      --tl-red:    #ef4444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, #112A5E 100%);
+      padding: 44px 20px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(22,93,255,.25) 0%, transparent 60%);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .logo span { color: var(--blue); }
+    .subtitle {
+      color: rgba(255,255,255,.78);
+      font-size: .88rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+      font-weight: 500;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 900px;
+      margin: 36px auto 100px;
+      padding: 0 16px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 40px;
+      margin-bottom: 28px;
+    }
+    @media(max-width:600px){ .card { padding: 24px 18px; } }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--blue);
+    }
+    .section-icon {
+      width: 36px; height: 36px;
+      background: var(--light);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    /* ── Grids ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media(max-width:680px){ .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── Fields ── */
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    label { font-size: .82rem; font-weight: 600; color: var(--navy); letter-spacing: .4px; }
+    label .req { color: var(--blue); margin-left: 2px; }
+    label .opt { color: var(--muted); font-weight: 400; margin-left: 4px; font-size:.78rem; }
+
+    input[type=text], input[type=email], input[type=date], select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .93rem;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      appearance: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(22,93,255,.12);
+    }
+    input::placeholder { color: var(--muted); }
+    select { cursor: pointer; }
+
+    /* ── Phone ── */
+    .phone-wrap {
+      display: flex;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .phone-wrap:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(22,93,255,.12);
+    }
+    .lada-select {
+      border: none !important;
+      border-right: 1.5px solid var(--border) !important;
+      border-radius: 0 !important;
+      width: 148px; min-width: 148px;
+      background: var(--light);
+      padding: 13px 10px;
+      font-size: .85rem;
+    }
+    .lada-select:focus { box-shadow: none !important; }
+    .phone-input { border: none !important; border-radius: 0 !important; flex: 1; }
+    .phone-input:focus { box-shadow: none !important; }
+
+    /* ── CP ── */
+    .cp-result {
+      display: none;
+      background: var(--light);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: .87rem;
+      color: var(--navy);
+      line-height: 1.7;
+      margin-top: 4px;
+    }
+    .cp-result.visible { display: block; }
+    .cp-badge {
+      display: inline-block;
+      background: var(--blue); color: var(--white);
+      border-radius: 6px; padding: 2px 8px;
+      font-size: .75rem; font-weight: 700; margin-right: 6px;
+    }
+    .cp-loading { color: var(--muted); font-size: .85rem; display: none; margin-top: 4px; }
+    .cp-loading.visible { display: block; }
+    .cp-error { color: #e53e3e; font-size: .82rem; display: none; margin-top: 4px; }
+    .cp-error.visible { display: block; }
+    .helper { font-size:.76rem; color: var(--muted); }
+
+    /* ── Brand search ── */
+    .brand-search-wrap { position: relative; }
+    .brand-dropdown {
+      position: absolute;
+      top: calc(100% + 4px); left: 0; right: 0;
+      background: var(--white);
+      border: 1.5px solid var(--blue);
+      border-radius: 10px;
+      box-shadow: 0 12px 28px rgba(10,31,68,.15);
+      max-height: 220px; overflow-y: auto;
+      z-index: 100; display: none;
+    }
+    .brand-dropdown.open { display: block; }
+    .brand-item {
+      padding: 10px 16px; font-size: .9rem; cursor: pointer;
+      display: flex; align-items: center; gap: 10px;
+      transition: background .15s;
+    }
+    .brand-item:hover { background: var(--light); }
+    .brand-cat {
+      padding: 7px 14px 3px;
+      font-size: .72rem; font-weight: 700;
+      color: var(--muted); letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .brand-flag { font-size: 1.1rem; }
+    .otro-marca { display: none; }
+    .otro-marca.visible { display: block; }
+
+    /* ══════════════════════════════════════
+       FILE UPLOAD — MULTI + TRAFFIC LIGHT
+       ══════════════════════════════════════ */
+    .file-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 28px 20px 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .file-zone:hover, .file-zone.drag {
+      border-color: var(--blue);
+      background: rgba(22,93,255,.04);
+    }
+    .file-zone input[type=file] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+    .file-zone-icon { font-size: 2.4rem; margin-bottom: 8px; }
+    .file-zone-text { font-size: .9rem; color: var(--muted); }
+    .file-zone-text strong { color: var(--blue); }
+    .file-zone-hint {
+      margin-top: 8px; font-size: .77rem;
+      color: var(--muted); line-height: 1.6;
+    }
+    .file-zone-hint strong { color: var(--navy); }
+
+    /* Capacity bar */
+    .cap-bar-wrap { margin-top: 16px; display: none; }
+    .cap-bar-wrap.visible { display: block; }
+    .cap-bar-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px; font-size: .8rem; font-weight: 600; color: var(--navy);
+    }
+    .cap-bar-track {
+      width: 100%; height: 11px;
+      background: #e8edf7; border-radius: 99px; overflow: hidden;
+    }
+    .cap-bar-fill {
+      height: 100%; border-radius: 99px;
+      transition: width .35s ease, background .35s ease;
+      background: var(--tl-green); width: 0%;
+    }
+    .cap-bar-fill.yellow { background: var(--tl-yellow); }
+    .cap-bar-fill.red    { background: var(--tl-red); }
+
+    .cap-status {
+      margin-top: 8px; font-size: .8rem;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tl-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--tl-green); flex-shrink: 0;
+      transition: background .3s;
+    }
+    .tl-dot.yellow { background: var(--tl-yellow); }
+    .tl-dot.red    { background: var(--tl-red); }
+
+    /* File chips */
+    .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .file-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px; font-size: .84rem;
+    }
+    .file-chip-icon { font-size: 1.1rem; }
+    .file-chip-name {
+      flex: 1; color: var(--navy); font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .file-chip-size { color: var(--muted); font-size: .76rem; white-space: nowrap; }
+    .file-chip-remove {
+      cursor: pointer; color: var(--muted);
+      font-size: 1rem; line-height: 1; flex-shrink: 0;
+      transition: color .2s;
+    }
+    .file-chip-remove:hover { color: var(--tl-red); }
+    .file-error { color: var(--tl-red); font-size: .82rem; margin-top: 6px; display: none; }
+    .file-error.visible { display: block; }
+
+    /* ── Submit ── */
+    .btn-submit {
+      display: block; width: 100%; padding: 18px;
+      background: linear-gradient(135deg, var(--blue) 0%, #0A40CC 100%);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 1px;
+      border: none; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(22,93,255,.35);
+      transition: all .3s; margin-top: 8px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(22,93,255,.45); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-notice { text-align: center; font-size: .78rem; color: var(--muted); margin-top: 10px; }
+    .recaptcha-notice { text-align: center; font-size: .72rem; color: var(--muted); margin-top: 6px; }
+    .recaptcha-notice a { color: var(--blue); text-decoration: none; }
+
+    .divider { height: 1px; background: var(--border); margin: 8px 0 20px; }
+
+    /* ── WhatsApp float ── */
+    .whatsapp-float {
+      position: fixed; bottom: 50px; left: 50px;
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: white; width: 75px; height: 75px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 30px rgba(37,211,102,.4);
+      cursor: pointer; z-index: 1000;
+      transition: all .4s cubic-bezier(.4,0,.2,1);
+      text-decoration: none;
+      animation: floatPremium 3s ease-in-out infinite;
+      border: 4px solid white; overflow: hidden;
+    }
+    .whatsapp-float::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.3) 50%, transparent 70%);
+      animation: shine 3s infinite;
+    }
+    .whatsapp-float:hover { transform: scale(1.2) translateY(-5px); box-shadow: 0 20px 40px rgba(37,211,102,.6); animation: none; }
+    .whatsapp-tooltip {
+      position: absolute; left: 95px; background: white; color: #333;
+      padding: 15px 25px; border-radius: 12px; white-space: nowrap;
+      box-shadow: 0 8px 25px rgba(0,0,0,.15); opacity: 0; pointer-events: none;
+      transition: all .4s cubic-bezier(.4,0,.2,1); font-size: 1rem; font-weight: 600;
+      border: 1px solid rgba(0,0,0,.1); z-index: 1001;
+    }
+    .whatsapp-float:hover .whatsapp-tooltip { opacity: 1; transform: translateX(10px); }
+    .whatsapp-icon { width: 36px; height: 36px; position: relative; z-index: 1; }
+    @keyframes floatPremium {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      25%      { transform: translateY(-15px) rotate(2deg); }
+      75%      { transform: translateY(-5px) rotate(-2deg); }
+    }
+    @keyframes shine {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    @media(max-width:768px){
+      .whatsapp-float { width:65px; height:65px; bottom:30px; left:30px; }
+      .whatsapp-tooltip { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo"><span>A</span>VA</div>
+  <div class="subtitle">Formulario Seguro de Auto — Cotizar</div>
+</header>
+
+<!-- ═══ FORM ═══ -->
+<div class="container">
+  <form id="solicitudForm"
+        action="https://formsubmit.co/info@anpai.com.mx"
+        method="POST"
+        enctype="multipart/form-data">
+
+    <!-- FormSubmit config -->
+    <input type="hidden" name="_subject"  value="Nueva Cotización de Seguro de Auto – AVA">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha"  value="false"><!-- desactivamos captcha de FormSubmit; usamos reCAPTCHA v3 propio -->
+    <input type="hidden" name="_next"     value="https://tudominio.com/gracias.html">
+    <input type="hidden" name="g-recaptcha-response" id="recaptchaToken">
+
+    <!-- ─── DATOS PERSONALES ─── -->
+    <div class="card">
+      <div class="section-title">
+        <div class="section-icon">👤</div>
+        Datos Personales
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="primer_nombre">Primer Nombre <span class="req">*</span></label>
+          <input type="text" id="primer_nombre" name="Primer Nombre" placeholder="Tu primer nombre" required />
+        </div>
+        <div class="field">
+          <label for="segundo_nombre">Segundo Nombre <span class="opt">(opcional)</span></label>
+          <input type="text" id="segundo_nombre" name="Segundo Nombre" placeholder="Tu segundo nombre" />
+        </div>
+        <div class="field">
+          <label for="primer_apellido">Primer Apellido <span class="req">*</span></label>
+          <input type="text" id="primer_apellido" name="Primer Apellido" placeholder="Tu primer apellido" required />
+        </div>
+        <div class="field">
+          <label for="segundo_apellido">Segundo Apellido <span class="req">*</span></label>
+          <input type="text" id="segundo_apellido" name="Segundo Apellido" placeholder="Tu segundo apellido" required />
+        </div>
+        <div class="field">
+          <label for="genero">Género <span class="req">*</span></label>
+          <select id="genero" name="Género" required>
+            <option value="">Selecciona…</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fecha_nacimiento">Fecha de Nacimiento <span class="req">*</span></label>
+          <input type="date" id="fecha_nacimiento" name="Fecha de Nacimiento" required />
+        </div>
+      </div>
+
+      <!-- Código Postal -->
+      <div style="margin-top:22px;" class="grid-2">
+        <div class="field">
+          <label for="cp">Código Postal <span class="req">*</span></label>
+          <input type="text" id="cp" name="Código Postal" placeholder="Ej. 06600" maxlength="5" required />
+          <span class="helper">Ingresa 5 dígitos para autocompletar tu ubicación</span>
+          <div class="cp-loading" id="cpLoading">🔍 Buscando…</div>
+          <div class="cp-error"   id="cpError">No se encontró el código postal.</div>
+          <div class="cp-result"  id="cpResult"></div>
+        </div>
+        <div class="field"></div>
+      </div>
+
+      <!-- Teléfono + Email -->
+      <div style="margin-top:22px;" class="grid-2">
+        <div class="field">
+          <label for="telefono">Teléfono <span class="req">*</span></label>
+          <div class="phone-wrap">
+            <select class="lada-select" id="lada" name="Lada">
+              <option value="+52" selected>🇲🇽 +52 México</option>
+              <option value="+1">🇺🇸 +1  EE.UU.</option>
+              <option value="+1-CA">🇨🇦 +1  Canadá</option>
+              <option value="+54">🇦🇷 +54 Argentina</option>
+              <option value="+55">🇧🇷 +55 Brasil</option>
+              <option value="+56">🇨🇱 +56 Chile</option>
+              <option value="+57">🇨🇴 +57 Colombia</option>
+              <option value="+51">🇵🇪 +51 Perú</option>
+              <option value="+34">🇪🇸 +34 España</option>
+              <option value="+44">🇬🇧 +44 R.Unido</option>
+              <option value="+49">🇩🇪 +49 Alemania</option>
+              <option value="+33">🇫🇷 +33 Francia</option>
+            </select>
+            <input class="phone-input" type="text" id="telefono" name="Teléfono" placeholder="55 1234 5678" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Correo Electrónico <span class="req">*</span></label>
+          <input type="email" id="email" name="Correo Electrónico" placeholder="correo@ejemplo.com" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── DATOS DEL VEHÍCULO ─── -->
+    <div class="card">
+      <div class="section-title">
+        <div class="section-icon">🚗</div>
+        Datos del Vehículo
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="condicion">Condición del Vehículo <span class="req">*</span></label>
+          <select id="condicion" name="Condición del Vehículo" required>
+            <option value="">Selecciona…</option>
+            <option value="Nuevo">Nuevo</option>
+            <option value="Seminuevo">Seminuevo</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="marcaSearch">Marca <span class="req">*</span></label>
+          <div class="brand-search-wrap">
+            <input type="text" id="marcaSearch" placeholder="Buscar marca…" autocomplete="off" />
+            <input type="hidden" id="marca" name="Marca del Vehículo" required />
+            <div class="brand-dropdown" id="brandDropdown"></div>
+          </div>
+        </div>
+
+        <div class="field otro-marca" id="otraMarcaWrap">
+          <label for="otraMarca">Especifica la Marca <span class="req">*</span></label>
+          <input type="text" id="otraMarca" name="Otra Marca" placeholder="Nombre de la marca" />
+        </div>
+
+        <div class="field">
+          <label for="version">Versión / Trim <span class="req">*</span></label>
+          <input type="text" id="version" name="Versión" placeholder="Ej. XSE, Sport, Limited…" required />
+        </div>
+
+        <div class="field">
+          <label for="anio">Año Modelo <span class="req">*</span></label>
+          <select id="anio" name="Año Modelo" required>
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ═══ ADJUNTAR DOCUMENTOS — SEMÁFORO ═══ -->
+      <div style="margin-top:28px;">
+        <div class="divider"></div>
+        <label style="margin-bottom:12px; display:block; font-size:.9rem;">
+          📎 Adjuntar Documentos <span class="opt">(opcional — factura, póliza, etc.)</span>
+        </label>
+
+        <div class="file-zone" id="fileZone">
+          <input type="file" id="fileInput"
+                 accept=".pdf,.jpg,.jpeg,.png,.zip,.rar"
+                 multiple />
+          <div class="file-zone-icon">📂</div>
+          <div class="file-zone-text">
+            Arrastra tus archivos aquí o <strong>haz clic para seleccionar</strong>
+          </div>
+          <div class="file-zone-hint">
+            Formatos: PDF, JPG, PNG, ZIP, RAR &nbsp;|&nbsp;
+            <strong>Límite total: 5 MB</strong> — puedes adjuntar varios archivos<br>
+            💡 Si tus documentos superan el límite, comprímalos en un archivo
+            <strong>ZIP o RAR</strong> antes de adjuntarlos
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div class="file-error" id="fileError"></div>
+
+        <!-- Barra semáforo -->
+        <div class="cap-bar-wrap" id="capBarWrap">
+          <div class="cap-bar-header">
+            <span>Capacidad utilizada</span>
+            <span id="capLabel">0 KB de 5 MB</span>
+          </div>
+          <div class="cap-bar-track">
+            <div class="cap-bar-fill" id="capFill"></div>
+          </div>
+          <div class="cap-status">
+            <div class="tl-dot" id="tlDot"></div>
+            <span id="capStatusText"></span>
+          </div>
+        </div>
+
+        <!-- Lista de archivos adjuntos -->
+        <div class="file-list" id="fileList"></div>
+      </div>
+
+      <!-- Submit -->
+      <div style="margin-top:36px;">
+        <button type="submit" class="btn-submit" id="btnSubmit">
+          🛡️ &nbsp;Enviar Cotización de Seguro
+        </button>
+        <p class="btn-notice">
+          Tus datos están protegidos con cifrado SSL y verificación reCAPTCHA v3.
+        </p>
+        <p class="recaptcha-notice">
+          Protegido por reCAPTCHA de Google —
+          <a href="https://policies.google.com/privacy" target="_blank">Privacidad</a> ·
+          <a href="https://policies.google.com/terms" target="_blank">Términos</a>
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- ═══ WHATSAPP FLOAT ═══ -->
+<a href="https://wa.me/525525374608?text=Hola%20ANPAI%2C%20tengo%20una%20consulta"
+   class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp con ANPAI">
+  <span class="whatsapp-tooltip">💬 ¿Dudas? Chatea con nosotros</span>
+  <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.67-1.612-.92-2.207-.24-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.76.982.998-3.675-.236-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.9 6.994c-.004 5.45-4.436 9.88-9.885 9.88m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.18-1.24-6.162-3.495-8.411"/>
+  </svg>
+</a>
+
+<!-- ═══ ELFSIGHT AI CHATBOT ═══ -->
+<script src="https://elfsightcdn.com/platform.js" async></script>
+<div class="elfsight-app-beb4a331-0ecc-4c09-b401-4d88d35cbf03" data-elfsight-app-lazy></div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+/* ── Constantes ── */
+const RECAPTCHA_SITE_KEY = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
+const CP_TOKEN           = '36da398a-1848-44f3-a952-06c9bfb02cc8';
+const MAX_BYTES          = 5 * 1024 * 1024;  // 5 MB
+const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png','zip','rar'];
+
+/* ── Año Modelo dropdown ── */
+(function(){
+  const sel = document.getElementById('anio');
+  const now = new Date().getFullYear();
+  for(let y = now + 1; y >= 1990; y--){
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y;
+    sel.appendChild(o);
+  }
+})();
+
+/* ── COPOMEX ── */
+document.getElementById('cp').addEventListener('input', async function(){
+  const val = this.value.replace(/\D/g,'');
+  this.value = val;
+  const res = document.getElementById('cpResult');
+  const ldr = document.getElementById('cpLoading');
+  const err = document.getElementById('cpError');
+  res.className = 'cp-result'; err.className = 'cp-error';
+  if(val.length !== 5) return;
+  ldr.className = 'cp-loading visible';
+  try {
+    const r    = await fetch(`https://api.copomex.com/v1/codigo_postal/${val}?token=${CP_TOKEN}`);
+    const data = await r.json();
+    ldr.className = 'cp-loading';
+    if(data.error || !data.response){ err.className = 'cp-error visible'; return; }
+    const info     = Array.isArray(data.response) ? data.response[0] : data.response;
+    const colonias = Array.isArray(data.response)
+      ? data.response.map(c => c.asentamiento || c.response?.asentamiento).filter(Boolean) : [];
+    let html = `<div><span class="cp-badge">CP ${val}</span> ${info.municipio||''}, ${info.estado||''}</div>`;
+    if(colonias.length)
+      html += `<div style="margin-top:5px;"><strong>Colonias:</strong> ${colonias.slice(0,5).join(', ')}${colonias.length>5?' y más…':''}</div>`;
+    res.innerHTML = html; res.className = 'cp-result visible';
+  } catch(e){ ldr.className='cp-loading'; err.className='cp-error visible'; }
+});
+
+/* ── Brand search ── */
+const BRANDS = {
+  'Chinas':          [{f:'🇨🇳',n:'BYD'},{f:'🇨🇳',n:'Chery'},{f:'🇨🇳',n:'BAIC'},{f:'🇨🇳',n:'Great Wall'},{f:'🇨🇳',n:'Geely'},{f:'🇨🇳',n:'JAC'},{f:'🇨🇳',n:'Haval'},{f:'🇨🇳',n:'MG'},{f:'🇨🇳',n:'Foton'},{f:'🇨🇳',n:'DFSK'}],
+  'Europeas':        [{f:'🇩🇪',n:'BMW'},{f:'🇩🇪',n:'Mercedes-Benz'},{f:'🇩🇪',n:'Volkswagen'},{f:'🇩🇪',n:'Audi'},{f:'🇩🇪',n:'Porsche'},{f:'🇮🇹',n:'Fiat'},{f:'🇮🇹',n:'Alfa Romeo'},{f:'🇫🇷',n:'Peugeot'},{f:'🇫🇷',n:'Renault'},{f:'🇸🇪',n:'Volvo'},{f:'🇸🇪',n:'SEAT'},{f:'🇬🇧',n:'Land Rover'},{f:'🇬🇧',n:'Jaguar'}],
+  'Estadounidenses': [{f:'🇺🇸',n:'Ford'},{f:'🇺🇸',n:'Chevrolet'},{f:'🇺🇸',n:'Dodge'},{f:'🇺🇸',n:'Jeep'},{f:'🇺🇸',n:'RAM'},{f:'🇺🇸',n:'Cadillac'},{f:'🇺🇸',n:'Buick'},{f:'🇺🇸',n:'Lincoln'},{f:'🇺🇸',n:'GMC'},{f:'🇺🇸',n:'Tesla'}],
+  'Japonesas':       [{f:'🇯🇵',n:'Toyota'},{f:'🇯🇵',n:'Honda'},{f:'🇯🇵',n:'Nissan'},{f:'🇯🇵',n:'Mazda'},{f:'🇯🇵',n:'Mitsubishi'},{f:'🇯🇵',n:'Subaru'},{f:'🇯🇵',n:'Suzuki'},{f:'🇯🇵',n:'Lexus'},{f:'🇯🇵',n:'Infiniti'},{f:'🇯🇵',n:'Acura'}],
+  'Coreanas':        [{f:'🇰🇷',n:'Hyundai'},{f:'🇰🇷',n:'Kia'},{f:'🇰🇷',n:'Genesis'},{f:'🇰🇷',n:'SsangYong'},{f:'🇰🇷',n:'Daewoo'}],
+};
+const searchInput    = document.getElementById('marcaSearch');
+const hiddenMarca    = document.getElementById('marca');
+const dropdown       = document.getElementById('brandDropdown');
+const otraMarcaWrap  = document.getElementById('otraMarcaWrap');
+const otraMarcaInput = document.getElementById('otraMarca');
+
+function buildDropdown(filter=''){
+  dropdown.innerHTML='';
+  for(const [cat,items] of Object.entries(BRANDS)){
+    const m=items.filter(b=>b.n.toLowerCase().includes(filter.toLowerCase()));
+    if(!m.length) continue;
+    const c=document.createElement('div'); c.className='brand-cat'; c.textContent=cat;
+    dropdown.appendChild(c);
+    m.forEach(b=>{
+      const el=document.createElement('div'); el.className='brand-item';
+      el.innerHTML=`<span class="brand-flag">${b.f}</span>${b.n}`;
+      el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand(b.n);});
+      dropdown.appendChild(el);
+    });
+  }
+  if('otra'.includes(filter.toLowerCase())||filter===''){
+    const el=document.createElement('div'); el.className='brand-item';
+    el.innerHTML=`<span class="brand-flag">🔍</span>Otra marca…`;
+    el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand('__otro__');});
+    dropdown.appendChild(el);
+  }
+}
+function selectBrand(name){
+  if(name==='__otro__'){
+    searchInput.value='Otra marca…'; hiddenMarca.value='';
+    otraMarcaWrap.classList.add('visible'); otraMarcaInput.required=true;
+  } else {
+    searchInput.value=name; hiddenMarca.value=name;
+    otraMarcaWrap.classList.remove('visible'); otraMarcaInput.required=false;
+  }
+  dropdown.classList.remove('open');
+}
+searchInput.addEventListener('focus', ()=>{ buildDropdown(); dropdown.classList.add('open'); });
+searchInput.addEventListener('input', ()=>{ buildDropdown(searchInput.value); dropdown.classList.add('open'); });
+searchInput.addEventListener('blur',  ()=>{ setTimeout(()=>dropdown.classList.remove('open'),150); });
+
+/* ═══════════════════════════════════════
+   MULTI-FILE + SEMÁFORO DE CAPACIDAD
+   ═══════════════════════════════════════ */
+const fileZone      = document.getElementById('fileZone');
+const fileInput     = document.getElementById('fileInput');
+const fileList      = document.getElementById('fileList');
+const fileError     = document.getElementById('fileError');
+const capBarWrap    = document.getElementById('capBarWrap');
+const capFill       = document.getElementById('capFill');
+const capLabel      = document.getElementById('capLabel');
+const tlDot         = document.getElementById('tlDot');
+const capStatusText = document.getElementById('capStatusText');
+
+let attachedFiles = [];  // { file, id }
+let nextId = 0;
+
+function fmtSize(b){
+  if(b<1024)        return b+' B';
+  if(b<1048576)     return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(2)+' MB';
+}
+function totalSize(){ return attachedFiles.reduce((s,f)=>s+f.file.size,0); }
+
+function updateBar(){
+  const tot = totalSize();
+  const pct = Math.min((tot/MAX_BYTES)*100,100);
+
+  capFill.style.width = pct+'%';
+  capLabel.textContent = `${fmtSize(tot)} de 5 MB`;
+  capFill.classList.remove('yellow','red');
+  tlDot.classList.remove('yellow','red');
+
+  const rem = MAX_BYTES - tot;
+  if(pct >= 100){
+    capFill.classList.add('red'); tlDot.classList.add('red');
+    capStatusText.textContent = '⛔ Límite alcanzado — elimina algún archivo para continuar';
+  } else if(pct >= 75){
+    capFill.classList.add('yellow'); tlDot.classList.add('yellow');
+    capStatusText.textContent = `⚠️ Casi lleno — quedan ${fmtSize(rem)} disponibles`;
+  } else {
+    capStatusText.textContent = `✅ Capacidad disponible — quedan ${fmtSize(rem)}`;
+  }
+  capBarWrap.classList.toggle('visible', attachedFiles.length>0);
+}
+
+function renderList(){
+  fileList.innerHTML='';
+  attachedFiles.forEach(({file,id})=>{
+    const ext=file.name.split('.').pop().toLowerCase();
+    const icon=/zip|rar/.test(ext)?'🗜️':/pdf/.test(ext)?'📄':'🖼️';
+    const chip=document.createElement('div'); chip.className='file-chip';
+    chip.innerHTML=`
+      <span class="file-chip-icon">${icon}</span>
+      <span class="file-chip-name" title="${file.name}">${file.name}</span>
+      <span class="file-chip-size">${fmtSize(file.size)}</span>
+      <span class="file-chip-remove" title="Eliminar" onclick="removeFile(${id})">✕</span>
+    `;
+    fileList.appendChild(chip);
+  });
+}
+
+function syncInput(){
+  try {
+    const dt=new DataTransfer();
+    attachedFiles.forEach(({file})=>dt.items.add(file));
+    fileInput.files=dt.files;
+  } catch(e){}
+}
+
+function addFiles(newFiles){
+  fileError.className='file-error';
+  const errors=[];
+  Array.from(newFiles).forEach(file=>{
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(!ALLOWED_EXTS.includes(ext)){ errors.push(`"${file.name}": formato no permitido.`); return; }
+    if(totalSize()+file.size>MAX_BYTES){ errors.push(`"${file.name}" supera el límite de 5 MB. Comprime en ZIP/RAR.`); return; }
+    const dup=attachedFiles.some(a=>a.file.name===file.name&&a.file.size===file.size);
+    if(dup) return;
+    attachedFiles.push({file,id:nextId++});
+  });
+  if(errors.length){ fileError.textContent=errors.join(' '); fileError.className='file-error visible'; }
+  renderList(); updateBar(); syncInput();
+}
+
+window.removeFile=function(id){
+  attachedFiles=attachedFiles.filter(a=>a.id!==id);
+  renderList(); updateBar(); syncInput();
+  fileError.className='file-error';
+};
+
+fileInput.addEventListener('change',e=>{addFiles(e.target.files);fileInput.value='';});
+fileZone.addEventListener('dragover',e=>{e.preventDefault();fileZone.classList.add('drag');});
+fileZone.addEventListener('dragleave',()=>fileZone.classList.remove('drag'));
+fileZone.addEventListener('drop',e=>{e.preventDefault();fileZone.classList.remove('drag');addFiles(e.dataTransfer.files);});
+
+/* ═══════════════════════════════════════
+   reCAPTCHA v3 + ENVÍO
+   ═══════════════════════════════════════ */
+document.getElementById('solicitudForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  /* Validar marca */
+  const isOtro = otraMarcaWrap.classList.contains('visible');
+  if(!hiddenMarca.value && !isOtro){ alert('Por favor selecciona una marca de vehículo.'); return; }
+  if(isOtro && !otraMarcaInput.value.trim()){ alert('Por favor especifica la marca del vehículo.'); return; }
+  if(isOtro) hiddenMarca.value = otraMarcaInput.value.trim();
+
+  /* Validar peso total */
+  if(totalSize()>MAX_BYTES){ alert('El total de archivos supera 5 MB. Elimina o comprime algunos archivos.'); return; }
+
+  const btn=document.getElementById('btnSubmit');
+  btn.disabled=true; btn.innerHTML='⏳ &nbsp;Verificando seguridad…';
+
+  try {
+    const token = await new Promise((resolve,reject)=>{
+      if(typeof grecaptcha==='undefined'){ reject(new Error('reCAPTCHA no disponible')); return; }
+      grecaptcha.ready(()=>{
+        grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submit_cotizacion'})
+          .then(resolve).catch(reject);
+      });
+    });
+    document.getElementById('recaptchaToken').value=token;
+    btn.innerHTML='🚀 &nbsp;Enviando…';
+    this.submit();
+  } catch(err){
+    console.error('reCAPTCHA error:',err);
+    btn.disabled=false;
+    btn.innerHTML='🛡️ &nbsp;Enviar Cotización de Seguro';
+    alert('Error de verificación reCAPTCHA. Por favor intenta de nuevo.');
+  }
+});
+</script>
+</body>
+</html>
