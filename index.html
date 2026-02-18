@@ -657,34 +657,44 @@
           <label for="telefono">Teléfono <span class="req">*</span></label>
           <div class="phone-wrap">
             <select class="lada-select" id="lada" name="Lada">
-              <option value="+52"  selected>🇲🇽  +52  México</option>
-              <option value="+1"          >🇺🇸  +1   EE.UU.</option>
-              <option value="+1"          >🇨🇦  +1   Canadá</option>
-              <option value="+54"         >🇦🇷  +54  Argentina</option>
-              <option value="+591"        >🇧🇴  +591 Bolivia</option>
-              <option value="+55"         >🇧🇷  +55  Brasil</option>
-              <option value="+56"         >🇨🇱  +56  Chile</option>
-              <option value="+57"         >🇨🇴  +57  Colombia</option>
-              <option value="+506"        >🇨🇷  +506 Costa Rica</option>
-              <option value="+53"         >🇨🇺  +53  Cuba</option>
-              <option value="+593"        >🇪🇨  +593 Ecuador</option>
-              <option value="+503"        >🇸🇻  +503 El Salvador</option>
-              <option value="+502"        >🇬🇹  +502 Guatemala</option>
-              <option value="+504"        >🇭🇳  +504 Honduras</option>
-              <option value="+505"        >🇳🇮  +505 Nicaragua</option>
-              <option value="+507"        >🇵🇦  +507 Panamá</option>
-              <option value="+595"        >🇵🇾  +595 Paraguay</option>
-              <option value="+51"         >🇵🇪  +51  Perú</option>
-              <option value="+1-787"      >🇵🇷  +1   Puerto Rico</option>
-              <option value="+1-809"      >🇩🇴  +1   Rep. Dominicana</option>
-              <option value="+598"        >🇺🇾  +598 Uruguay</option>
-              <option value="+58"         >🇻🇪  +58  Venezuela</option>
-              <option value="+34"         >🇪🇸  +34  España</option>
-              <option value="+351"        >🇵🇹  +351 Portugal</option>
-              <option value="+49"         >🇩🇪  +49  Alemania</option>
-              <option value="+33"         >🇫🇷  +33  Francia</option>
-              <option value="+44"         >🇬🇧  +44  Reino Unido</option>
-              <option value="+39"         >🇮🇹  +39  Italia</option>
+              <optgroup label="── México ──">
+                <option value="+52" selected>🇲🇽  +52  México</option>
+              </optgroup>
+              <optgroup label="── América del Norte ──">
+                <option value="+1"    >🇨🇦  +1   Canadá</option>
+                <option value="+1"    >🇺🇸  +1   EE.UU.</option>
+              </optgroup>
+              <optgroup label="── América Central y Caribe ──">
+                <option value="+506"  >🇨🇷  +506 Costa Rica</option>
+                <option value="+53"   >🇨🇺  +53  Cuba</option>
+                <option value="+1-809">🇩🇴  +1   Rep. Dominicana</option>
+                <option value="+503"  >🇸🇻  +503 El Salvador</option>
+                <option value="+502"  >🇬🇹  +502 Guatemala</option>
+                <option value="+504"  >🇭🇳  +504 Honduras</option>
+                <option value="+505"  >🇳🇮  +505 Nicaragua</option>
+                <option value="+507"  >🇵🇦  +507 Panamá</option>
+                <option value="+1-787">🇵🇷  +1   Puerto Rico</option>
+              </optgroup>
+              <optgroup label="── América del Sur ──">
+                <option value="+54"  >🇦🇷  +54  Argentina</option>
+                <option value="+591" >🇧🇴  +591 Bolivia</option>
+                <option value="+55"  >🇧🇷  +55  Brasil</option>
+                <option value="+56"  >🇨🇱  +56  Chile</option>
+                <option value="+57"  >🇨🇴  +57  Colombia</option>
+                <option value="+593" >🇪🇨  +593 Ecuador</option>
+                <option value="+595" >🇵🇾  +595 Paraguay</option>
+                <option value="+51"  >🇵🇪  +51  Perú</option>
+                <option value="+598" >🇺🇾  +598 Uruguay</option>
+                <option value="+58"  >🇻🇪  +58  Venezuela</option>
+              </optgroup>
+              <optgroup label="── Europa ──">
+                <option value="+49"  >🇩🇪  +49  Alemania</option>
+                <option value="+34"  >🇪🇸  +34  España</option>
+                <option value="+33"  >🇫🇷  +33  Francia</option>
+                <option value="+39"  >🇮🇹  +39  Italia</option>
+                <option value="+351" >🇵🇹  +351 Portugal</option>
+                <option value="+44"  >🇬🇧  +44  Reino Unido</option>
+              </optgroup>
             </select>
             <input class="phone-input" type="tel" id="telefono" name="Teléfono" placeholder="55 1234 5678" required />
           </div>
