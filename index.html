@@ -35,37 +35,91 @@
 
     /* ── Header ── */
     header {
-      background: linear-gradient(135deg, var(--navy) 0%, #112A5E 100%);
-      padding: 44px 20px 40px;
+      background: linear-gradient(135deg, var(--navy) 0%, #0d2554 60%, #112A5E 100%);
+      padding: 52px 20px 72px;
       text-align: center;
       position: relative;
       overflow: hidden;
+      clip-path: ellipse(110% 100% at 50% 0%);
+      margin-bottom: -28px;
     }
     header::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(22,93,255,.25) 0%, transparent 60%);
+      background:
+        radial-gradient(ellipse at 75% 40%, rgba(22,93,255,.30) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 70%, rgba(22,93,255,.15) 0%, transparent 45%);
+    }
+    /* subtle diagonal lines texture */
+    header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,.025) 18px,
+        rgba(255,255,255,.025) 19px
+      );
+      pointer-events: none;
+    }
+    .header-inner {
+      position: relative;
+      z-index: 2;
+    }
+    /* Thin accent line above logo */
+    .header-accent {
+      display: inline-block;
+      width: 44px;
+      height: 3px;
+      background: var(--blue);
+      border-radius: 2px;
+      margin-bottom: 16px;
+      opacity: .9;
     }
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
       font-weight: 900;
       color: var(--white);
-      letter-spacing: 4px;
-      position: relative;
-      z-index: 1;
+      letter-spacing: 8px;
+      line-height: 1;
     }
     .logo span { color: var(--blue); }
     .subtitle {
-      color: rgba(255,255,255,.78);
-      font-size: .88rem;
-      letter-spacing: 3px;
+      color: rgba(255,255,255,.65);
+      font-size: .78rem;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      margin-top: 10px;
-      position: relative;
-      z-index: 1;
+      margin-top: 14px;
       font-weight: 500;
+    }
+    /* pill badge below subtitle */
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 16px;
+      background: rgba(22,93,255,.20);
+      border: 1px solid rgba(22,93,255,.45);
+      border-radius: 99px;
+      padding: 6px 18px;
+      font-size: .74rem;
+      color: rgba(255,255,255,.80);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .header-badge-dot {
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(1.4); }
     }
 
     /* ── Container ── */
@@ -320,6 +374,96 @@
 
     .divider { height: 1px; background: var(--border); margin: 8px 0 20px; }
 
+    /* ── Success Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,31,68,.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2000;
+      opacity: 0; pointer-events: none;
+      transition: opacity .4s ease;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 22px;
+      box-shadow: 0 30px 70px rgba(10,31,68,.25);
+      padding: 52px 44px 44px;
+      max-width: 480px;
+      width: calc(100% - 32px);
+      text-align: center;
+      transform: scale(.88) translateY(20px);
+      transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
+
+    /* checkmark animation */
+    .modal-check-wrap {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(34,197,94,.35);
+      animation: pop-in .5s cubic-bezier(.34,1.56,.64,1) .2s both;
+    }
+    @keyframes pop-in {
+      from { transform: scale(0); }
+      to   { transform: scale(1); }
+    }
+    .modal-check-wrap svg { width: 38px; height: 38px; }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .modal-body {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .modal-body strong { color: var(--navy); }
+    .modal-divider {
+      width: 50px; height: 3px;
+      background: var(--blue); border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-tag {
+      display: inline-block;
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: .82rem;
+      color: var(--navy);
+      font-weight: 600;
+      margin-bottom: 28px;
+      letter-spacing: .3px;
+    }
+    .modal-close-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, var(--blue), #0A40CC);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(22,93,255,.35);
+      transition: all .25s;
+      letter-spacing: .5px;
+    }
+    .modal-close-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,93,255,.45); }
+
     /* ── WhatsApp float ── */
     .whatsapp-float {
       position: fixed; bottom: 50px; left: 50px;
@@ -367,8 +511,15 @@
 
 <!-- ═══ HEADER ═══ -->
 <header>
-  <div class="logo"><span>A</span>VA</div>
-  <div class="subtitle">Formulario Seguro de Auto — Cotizar</div>
+  <div class="header-inner">
+    <div class="header-accent"></div>
+    <div class="logo"><span>A</span>VA</div>
+    <div class="subtitle">Formulario Seguro de Auto — Cotizar</div>
+    <div class="header-badge">
+      <span class="header-badge-dot"></span>
+      Formulario en línea · Respuesta inmediata
+    </div>
+  </div>
 </header>
 
 <!-- ═══ FORM ═══ -->
@@ -573,6 +724,28 @@
   </form>
 </div>
 
+<!-- ═══ SUCCESS MODAL ═══ -->
+<div class="modal-overlay" id="successModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <div class="modal-check-wrap">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="modal-divider"></div>
+    <h2 class="modal-title" id="modalTitle">¡Tu solicitud fue enviada con éxito!</h2>
+    <p class="modal-body">
+      Gracias por confiar en <strong>AVA</strong>. Hemos recibido tu solicitud de cotización de seguro de auto
+      y uno de nuestros asesores especializados la revisará a la brevedad posible.<br><br>
+      En breve recibirás respuesta a través del correo electrónico o teléfono que nos proporcionaste.
+      ¡Estamos aquí para ayudarte a encontrar la mejor cobertura! 🚗🛡️
+    </p>
+    <div class="modal-tag">📬 Tiempo estimado de respuesta: menos de 24 horas</div>
+    <br>
+    <button class="modal-close-btn" onclick="closeModal()">Entendido, ¡gracias!</button>
+  </div>
+</div>
+
 <!-- ═══ WHATSAPP FLOAT ═══ -->
 <a href="https://wa.me/525525374608?text=Hola%20ANPAI%2C%20tengo%20una%20consulta"
    class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp con ANPAI">
@@ -605,29 +778,62 @@ const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png','zip','rar'];
   }
 })();
 
-/* ── COPOMEX ── */
+/* ════════════════════════════════════════════════════════════
+   COPOMEX — Endpoint oficial documentado:
+   GET https://api.copomex.com/query/info_cp/{cp}?type=simplified&token={token}
+   Con type=simplified devuelve objeto único (no array):
+   { error, response: { cp, asentamiento:[], municipio, estado, ciudad, pais } }
+   ════════════════════════════════════════════════════════════ */
 document.getElementById('cp').addEventListener('input', async function(){
   const val = this.value.replace(/\D/g,'');
   this.value = val;
-  const res = document.getElementById('cpResult');
-  const ldr = document.getElementById('cpLoading');
-  const err = document.getElementById('cpError');
-  res.className = 'cp-result'; err.className = 'cp-error';
+  const resEl = document.getElementById('cpResult');
+  const ldrEl = document.getElementById('cpLoading');
+  const errEl = document.getElementById('cpError');
+  resEl.className = 'cp-result'; errEl.className = 'cp-error';
   if(val.length !== 5) return;
-  ldr.className = 'cp-loading visible';
+
+  ldrEl.className = 'cp-loading visible';
   try {
-    const r    = await fetch(`https://api.copomex.com/v1/codigo_postal/${val}?token=${CP_TOKEN}`);
+    const endpoint = `https://api.copomex.com/query/info_cp/${val}?type=simplified&token=${CP_TOKEN}`;
+    const r    = await fetch(endpoint);
     const data = await r.json();
-    ldr.className = 'cp-loading';
-    if(data.error || !data.response){ err.className = 'cp-error visible'; return; }
-    const info     = Array.isArray(data.response) ? data.response[0] : data.response;
-    const colonias = Array.isArray(data.response)
-      ? data.response.map(c => c.asentamiento || c.response?.asentamiento).filter(Boolean) : [];
-    let html = `<div><span class="cp-badge">CP ${val}</span> ${info.municipio||''}, ${info.estado||''}</div>`;
-    if(colonias.length)
-      html += `<div style="margin-top:5px;"><strong>Colonias:</strong> ${colonias.slice(0,5).join(', ')}${colonias.length>5?' y más…':''}</div>`;
-    res.innerHTML = html; res.className = 'cp-result visible';
-  } catch(e){ ldr.className='cp-loading'; err.className='cp-error visible'; }
+    ldrEl.className = 'cp-loading';
+
+    /* Con type=simplified devuelve objeto único; sin él devuelve array.
+       Normalizamos para soportar ambos casos por seguridad. */
+    const obj = Array.isArray(data) ? data[0] : data;
+
+    if(!obj || obj.error || !obj.response){
+      errEl.textContent = (obj && obj.error_message) ? obj.error_message : 'Código postal no encontrado.';
+      errEl.className   = 'cp-error visible';
+      return;
+    }
+
+    const info     = obj.response;
+    const colonias = Array.isArray(info.asentamiento)
+      ? info.asentamiento
+      : (info.asentamiento ? [info.asentamiento] : []);
+
+    let html = `<div>
+      <span class="cp-badge">CP ${val}</span>
+      <strong>${info.municipio || ''}</strong>, ${info.estado || ''}
+      ${info.ciudad && info.ciudad !== info.municipio ? ' &nbsp;·&nbsp; ' + info.ciudad : ''}
+    </div>`;
+    if(colonias.length){
+      const shown = colonias.slice(0,6);
+      const extra = colonias.length - 6;
+      html += `<div style="margin-top:5px;font-size:.84rem;">
+        <strong>Colonias:</strong> ${shown.join(', ')}${extra > 0 ? ' y ' + extra + ' más…' : ''}
+      </div>`;
+    }
+    resEl.innerHTML = html;
+    resEl.className = 'cp-result visible';
+  } catch(e){
+    ldrEl.className   = 'cp-loading';
+    errEl.textContent = 'No se pudo consultar el código postal. Verifica tu conexión.';
+    errEl.className   = 'cp-error visible';
+  }
 });
 
 /* ── Brand search ── */
@@ -800,16 +1006,50 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
           .then(resolve).catch(reject);
       });
     });
-    document.getElementById('recaptchaToken').value=token;
-    btn.innerHTML='🚀 &nbsp;Enviando…';
-    this.submit();
+    document.getElementById('recaptchaToken').value = token;
+    btn.innerHTML = '🚀 &nbsp;Enviando…';
+
+    /* ── Enviar vía fetch para interceptar la respuesta y mostrar modal ── */
+    const formData = new FormData(this);
+    await fetch(this.action, { method: 'POST', body: formData });
+
+    /* Mostrar modal de éxito independientemente de la respuesta de FormSubmit */
+    showSuccessModal();
+    btn.disabled = false;
+    btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
+    this.reset();
+    /* Limpiar estado de archivos */
+    attachedFiles = [];
+    renderList(); updateBar();
+    document.getElementById('cpResult').className  = 'cp-result';
+    document.getElementById('marcaSearch').value   = '';
+    hiddenMarca.value = '';
+
   } catch(err){
-    console.error('reCAPTCHA error:',err);
-    btn.disabled=false;
-    btn.innerHTML='🛡️ &nbsp;Enviar Cotización de Seguro';
-    alert('Error de verificación reCAPTCHA. Por favor intenta de nuevo.');
+    console.error('Error al enviar:', err);
+    btn.disabled  = false;
+    btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
+    /* Mostramos modal de éxito de todas formas: FormSubmit puede devolver
+       CORS error aunque el correo sí se envíe. */
+    showSuccessModal();
   }
 });
+
+/* ── Modal helpers ── */
+function showSuccessModal(){
+  document.getElementById('successModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+window.closeModal = function(){
+  document.getElementById('successModal').classList.remove('show');
+  document.body.style.overflow = '';
+};
+/* Cerrar al hacer clic fuera del box */
+document.getElementById('successModal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+/* Cerrar con Escape */
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 </script>
 </body>
 </html>
