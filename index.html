@@ -51,7 +51,6 @@
         radial-gradient(ellipse at 75% 40%, rgba(22,93,255,.30) 0%, transparent 55%),
         radial-gradient(ellipse at 20% 70%, rgba(22,93,255,.15) 0%, transparent 45%);
     }
-    /* subtle diagonal lines texture */
     header::after {
       content: '';
       position: absolute;
@@ -69,7 +68,6 @@
       position: relative;
       z-index: 2;
     }
-    /* Thin accent line above logo */
     .header-accent {
       display: inline-block;
       width: 44px;
@@ -96,7 +94,6 @@
       margin-top: 14px;
       font-weight: 500;
     }
-    /* pill badge below subtitle */
     .header-badge {
       display: inline-flex;
       align-items: center;
@@ -190,6 +187,62 @@
     input::placeholder { color: var(--muted); }
     select { cursor: pointer; }
 
+    /* ── Autofill fields (Estado / Municipio) ── */
+    .autofill-field {
+      position: relative;
+    }
+    .autofill-field input[type=text] {
+      padding-right: 42px;
+      background-color: var(--white);
+      transition: border-color .2s, box-shadow .2s, background-color .3s;
+    }
+    .autofill-field input[type=text].filled {
+      border-color: var(--tl-green);
+      background-color: #f0fdf4;
+      color: var(--navy);
+      font-weight: 500;
+    }
+    .autofill-field input[type=text].filled:focus {
+      box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+    }
+    .autofill-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .autofill-field input.filled + .autofill-icon {
+      opacity: 1;
+    }
+    /* Waiting-for-cp state */
+    .autofill-field input.waiting {
+      border-color: var(--border);
+      background: #fafbff;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    .autofill-hint {
+      font-size: .75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color .2s;
+    }
+    .autofill-hint.ready { color: var(--tl-green); font-weight: 500; }
+    .autofill-hint-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background .3s;
+    }
+    .autofill-hint.ready .autofill-hint-dot { background: var(--tl-green); }
+
     /* ── Phone ── */
     .phone-wrap {
       display: flex;
@@ -251,7 +304,7 @@
     .cp-error.visible { display: block; }
     .helper { font-size:.76rem; color: var(--muted); }
 
-    /* ── Colonia picker (CP multi-result) ── */
+    /* ── Colonia picker ── */
     .colonia-wrap {
       display: none;
       margin-top: 10px;
@@ -324,9 +377,7 @@
     .otro-marca { display: none; }
     .otro-marca.visible { display: block; }
 
-    /* ══════════════════════════════════════
-       FILE UPLOAD — MULTI + TRAFFIC LIGHT
-       ══════════════════════════════════════ */
+    /* ══ FILE UPLOAD — MULTI + TRAFFIC LIGHT ══ */
     .file-zone {
       border: 2px dashed var(--border);
       border-radius: 12px;
@@ -454,7 +505,6 @@
     }
     .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
 
-    /* checkmark animation */
     .modal-check-wrap {
       width: 80px; height: 80px;
       border-radius: 50%;
@@ -587,7 +637,7 @@
     <!-- FormSubmit config -->
     <input type="hidden" name="_subject"  value="Nueva Cotización de Seguro de Auto – AVA">
     <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha"  value="false"><!-- desactivamos captcha de FormSubmit; usamos reCAPTCHA v3 propio -->
+    <input type="hidden" name="_captcha"  value="false">
     <input type="hidden" name="_next"     value="https://tudominio.com/gracias.html">
     <input type="hidden" name="g-recaptcha-response" id="recaptchaToken">
 
@@ -629,26 +679,82 @@
         </div>
       </div>
 
-      <!-- Código Postal -->
-      <div style="margin-top:22px;" class="grid-2">
-        <div class="field">
-          <label for="cp">Código Postal <span class="req">*</span></label>
-          <input type="text" id="cp" name="Código Postal" placeholder="Ej. 06600" maxlength="5" required />
-          <span class="helper">Ingresa 5 dígitos para autocompletar tu ubicación</span>
-          <div class="cp-loading" id="cpLoading">🔍 Buscando…</div>
-          <div class="cp-error"   id="cpError">No se encontró el código postal.</div>
-          <div class="cp-result"  id="cpResult"></div>
-          <!-- Colonia picker — aparece cuando hay múltiples colonias -->
-          <div class="colonia-wrap" id="coloniaWrap">
-            <div class="colonia-label">
-              Selecciona tu Colonia <span id="coloniaBadge">0</span>
+      <!-- ─── Código Postal + Estado + Municipio ─── -->
+      <div style="margin-top:22px;">
+        <div class="grid-2">
+
+          <!-- CP -->
+          <div class="field">
+            <label for="cp">Código Postal <span class="req">*</span></label>
+            <input type="text" id="cp" name="Código Postal" placeholder="Ej. 06600" maxlength="5" required autocomplete="postal-code" />
+            <span class="helper">Ingresa 5 dígitos — Estado y Municipio se autocompletarán</span>
+            <div class="cp-loading" id="cpLoading">🔍 Buscando…</div>
+            <div class="cp-error"   id="cpError">No se encontró el código postal.</div>
+            <div class="cp-result"  id="cpResult"></div>
+            <!-- Colonia picker -->
+            <div class="colonia-wrap" id="coloniaWrap">
+              <div class="colonia-label">
+                Selecciona tu Colonia <span id="coloniaBadge">0</span>
+              </div>
+              <select class="colonia-select" id="coloniaSelect" name="Colonia">
+                <option value="">Elige tu colonia…</option>
+              </select>
             </div>
-            <select class="colonia-select" id="coloniaSelect" name="Colonia">
-              <option value="">Elige tu colonia…</option>
-            </select>
           </div>
+
+          <!-- Empty cell to maintain 2-col grid -->
+          <div class="field"></div>
+
         </div>
-        <div class="field"></div>
+
+        <!-- Estado y Municipio — fila completa debajo del CP -->
+        <div class="grid-2" style="margin-top:22px;">
+
+          <!-- Estado -->
+          <div class="field">
+            <label for="estado">Estado <span class="req">*</span></label>
+            <div class="autofill-field">
+              <input
+                type="text"
+                id="estado"
+                name="Estado"
+                placeholder="Se autocompletará con tu CP"
+                readonly
+                required
+                class="waiting"
+                autocomplete="address-level1"
+              />
+              <span class="autofill-icon">✅</span>
+            </div>
+            <div class="autofill-hint" id="estadoHint">
+              <span class="autofill-hint-dot"></span>
+              Esperando código postal…
+            </div>
+          </div>
+
+          <!-- Municipio -->
+          <div class="field">
+            <label for="municipio">Municipio / Alcaldía <span class="req">*</span></label>
+            <div class="autofill-field">
+              <input
+                type="text"
+                id="municipio"
+                name="Municipio"
+                placeholder="Se autocompletará con tu CP"
+                readonly
+                required
+                class="waiting"
+                autocomplete="address-level2"
+              />
+              <span class="autofill-icon">✅</span>
+            </div>
+            <div class="autofill-hint" id="municipioHint">
+              <span class="autofill-hint-dot"></span>
+              Esperando código postal…
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <!-- Teléfono + Email -->
@@ -750,7 +856,7 @@
         </div>
       </div>
 
-      <!-- ═══ ADJUNTAR DOCUMENTOS — SEMÁFORO ═══ -->
+      <!-- ═══ ADJUNTAR DOCUMENTOS ═══ -->
       <div style="margin-top:28px;">
         <div class="divider"></div>
         <label style="margin-bottom:12px; display:block; font-size:.9rem;">
@@ -773,10 +879,8 @@
           </div>
         </div>
 
-        <!-- Error -->
         <div class="file-error" id="fileError"></div>
 
-        <!-- Barra semáforo -->
         <div class="cap-bar-wrap" id="capBarWrap">
           <div class="cap-bar-header">
             <span>Capacidad utilizada</span>
@@ -791,7 +895,6 @@
           </div>
         </div>
 
-        <!-- Lista de archivos adjuntos -->
         <div class="file-list" id="fileList"></div>
       </div>
 
@@ -868,47 +971,96 @@ const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png','zip','rar'];
   }
 })();
 
+/* ════════════════════════════════════════════════════════
+   HELPERS — Estado & Municipio autofill
+   ════════════════════════════════════════════════════════ */
+const estadoInput    = document.getElementById('estado');
+const municipioInput = document.getElementById('municipio');
+const estadoHint     = document.getElementById('estadoHint');
+const municipioHint  = document.getElementById('municipioHint');
+
+/**
+ * Rellena un campo de autofill con el valor dado.
+ * Aplica estilos "filled" y actualiza el hint.
+ */
+function setAutofillField(inputEl, hintEl, value) {
+  if (value) {
+    inputEl.value = value;
+    inputEl.classList.remove('waiting');
+    inputEl.classList.add('filled');
+    hintEl.classList.add('ready');
+    hintEl.innerHTML = `<span class="autofill-hint-dot"></span>Autocompletado desde tu CP ✓`;
+  } else {
+    clearAutofillField(inputEl, hintEl);
+  }
+}
+
+/**
+ * Limpia un campo de autofill (estado de espera).
+ */
+function clearAutofillField(inputEl, hintEl) {
+  inputEl.value = '';
+  inputEl.classList.add('waiting');
+  inputEl.classList.remove('filled');
+  hintEl.classList.remove('ready');
+  hintEl.innerHTML = `<span class="autofill-hint-dot"></span>Esperando código postal…`;
+}
+
 /* ════════════════════════════════════════════════════════════
-   COPOMEX — Endpoint oficial:
-   GET https://api.copomex.com/query/info_cp/{cp}?type=simplified&token={token}
-   type=simplified → objeto único con response.asentamiento como array de colonias
+   COPOMEX — CP lookup con autocompletado de Estado y Municipio
    ════════════════════════════════════════════════════════════ */
 document.getElementById('cp').addEventListener('input', async function(){
   const val = this.value.replace(/\D/g,'');
   this.value = val;
-  const resEl      = document.getElementById('cpResult');
-  const ldrEl      = document.getElementById('cpLoading');
-  const errEl      = document.getElementById('cpError');
-  const coloniaWrap = document.getElementById('coloniaWrap');
+
+  const resEl         = document.getElementById('cpResult');
+  const ldrEl         = document.getElementById('cpLoading');
+  const errEl         = document.getElementById('cpError');
+  const coloniaWrap   = document.getElementById('coloniaWrap');
   const coloniaSelect = document.getElementById('coloniaSelect');
   const coloniaBadge  = document.getElementById('coloniaBadge');
 
-  resEl.className = 'cp-result';
-  errEl.className = 'cp-error';
+  /* Reset visual state */
+  resEl.className      = 'cp-result';
+  errEl.className      = 'cp-error';
   coloniaWrap.className = 'colonia-wrap';
 
-  if(val.length !== 5) return;
+  /* Si el CP fue borrado, limpiar Estado y Municipio */
+  if (val.length !== 5) {
+    clearAutofillField(estadoInput, estadoHint);
+    clearAutofillField(municipioInput, municipioHint);
+    return;
+  }
 
   ldrEl.className = 'cp-loading visible';
+
   try {
     const endpoint = `https://api.copomex.com/query/info_cp/${val}?type=simplified&token=${CP_TOKEN}`;
     const r    = await fetch(endpoint);
     const data = await r.json();
     ldrEl.className = 'cp-loading';
 
-    /* type=simplified → objeto único; sin él → array. Normalizamos ambos. */
+    /* Normalizar respuesta (array o objeto) */
     const obj = Array.isArray(data) ? data[0] : data;
 
-    if(!obj || obj.error || !obj.response){
+    if (!obj || obj.error || !obj.response) {
       const msg = (obj && obj.error_message) ? obj.error_message : 'Código postal no encontrado.';
       errEl.textContent = msg;
       errEl.className   = 'cp-error visible';
+      clearAutofillField(estadoInput, estadoHint);
+      clearAutofillField(municipioInput, municipioHint);
       return;
     }
 
-    const info     = obj.response;
+    const info = obj.response;
+
+    /* ── Autocompletar Estado y Municipio ── */
+    setAutofillField(estadoInput,    estadoHint,    info.estado     || '');
+    setAutofillField(municipioInput, municipioHint, info.municipio  || '');
+
+    /* Colonias */
     const colonias = Array.isArray(info.asentamiento)
-      ? info.asentamiento.slice().sort((a,b) => a.localeCompare(b,'es'))
+      ? info.asentamiento.slice().sort((a, b) => a.localeCompare(b, 'es'))
       : (info.asentamiento ? [info.asentamiento] : []);
 
     /* Info general del CP */
@@ -916,13 +1068,14 @@ document.getElementById('cp').addEventListener('input', async function(){
       <div>
         <span class="cp-badge">CP ${val}</span>
         <strong>${info.municipio || ''}</strong>, ${info.estado || ''}
-        ${info.ciudad && info.ciudad !== info.municipio ? ' &nbsp;·&nbsp; ' + info.ciudad : ''}
+        ${info.ciudad && info.ciudad !== info.municipio
+          ? ' &nbsp;·&nbsp; ' + info.ciudad
+          : ''}
       </div>`;
     resEl.className = 'cp-result visible';
 
     /* Colonia picker */
-    if(colonias.length > 1){
-      /* Limpiar y poblar el select */
+    if (colonias.length > 1) {
       coloniaSelect.innerHTML = '<option value="">Elige tu colonia…</option>';
       colonias.forEach(c => {
         const opt = document.createElement('option');
@@ -931,20 +1084,21 @@ document.getElementById('cp').addEventListener('input', async function(){
       });
       coloniaBadge.textContent = colonias.length + ' opciones';
       coloniaWrap.className = 'colonia-wrap visible';
-    } else if(colonias.length === 1){
-      /* Una sola colonia: auto-seleccionar sin mostrar picker */
+    } else if (colonias.length === 1) {
       coloniaSelect.innerHTML = `<option value="${colonias[0]}" selected>${colonias[0]}</option>`;
     }
 
-  } catch(e){
+  } catch(e) {
     ldrEl.className   = 'cp-loading';
     errEl.textContent = 'No se pudo consultar el código postal. Verifica tu conexión.';
     errEl.className   = 'cp-error visible';
+    clearAutofillField(estadoInput, estadoHint);
+    clearAutofillField(municipioInput, municipioHint);
   }
 });
 
 /* ════════════════════════════════════════════════════════════
-   MARCAS DE VEHÍCULO — ordenadas A→Z dentro de cada categoría
+   MARCAS DE VEHÍCULO
    ════════════════════════════════════════════════════════════ */
 const BRANDS = {
   'Chinas': [
@@ -1032,7 +1186,7 @@ const capLabel      = document.getElementById('capLabel');
 const tlDot         = document.getElementById('tlDot');
 const capStatusText = document.getElementById('capStatusText');
 
-let attachedFiles = [];  // { file, id }
+let attachedFiles = [];
 let nextId = 0;
 
 function fmtSize(b){
@@ -1045,12 +1199,10 @@ function totalSize(){ return attachedFiles.reduce((s,f)=>s+f.file.size,0); }
 function updateBar(){
   const tot = totalSize();
   const pct = Math.min((tot/MAX_BYTES)*100,100);
-
   capFill.style.width = pct+'%';
   capLabel.textContent = `${fmtSize(tot)} de 5 MB`;
   capFill.classList.remove('yellow','red');
   tlDot.classList.remove('yellow','red');
-
   const rem = MAX_BYTES - tot;
   if(pct >= 100){
     capFill.classList.add('red'); tlDot.classList.add('red');
@@ -1129,6 +1281,18 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
   /* Validar peso total */
   if(totalSize()>MAX_BYTES){ alert('El total de archivos supera 5 MB. Elimina o comprime algunos archivos.'); return; }
 
+  /* Validar que Estado y Municipio estén autocompletados */
+  if(!estadoInput.value.trim()){
+    alert('Por favor ingresa un Código Postal válido para autocompletar el Estado.');
+    document.getElementById('cp').focus();
+    return;
+  }
+  if(!municipioInput.value.trim()){
+    alert('Por favor ingresa un Código Postal válido para autocompletar el Municipio.');
+    document.getElementById('cp').focus();
+    return;
+  }
+
   const btn=document.getElementById('btnSubmit');
   btn.disabled=true; btn.innerHTML='⏳ &nbsp;Verificando seguridad…';
 
@@ -1143,28 +1307,27 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
     document.getElementById('recaptchaToken').value = token;
     btn.innerHTML = '🚀 &nbsp;Enviando…';
 
-    /* ── Enviar vía fetch para interceptar la respuesta y mostrar modal ── */
     const formData = new FormData(this);
     await fetch(this.action, { method: 'POST', body: formData });
 
-    /* Mostrar modal de éxito independientemente de la respuesta de FormSubmit */
     showSuccessModal();
     btn.disabled = false;
     btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
     this.reset();
-    /* Limpiar estado de archivos */
+
+    /* Limpiar estado de archivos y autofill */
     attachedFiles = [];
     renderList(); updateBar();
     document.getElementById('cpResult').className  = 'cp-result';
     document.getElementById('marcaSearch').value   = '';
     hiddenMarca.value = '';
+    clearAutofillField(estadoInput, estadoHint);
+    clearAutofillField(municipioInput, municipioHint);
 
   } catch(err){
     console.error('Error al enviar:', err);
     btn.disabled  = false;
     btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
-    /* Mostramos modal de éxito de todas formas: FormSubmit puede devolver
-       CORS error aunque el correo sí se envíe. */
     showSuccessModal();
   }
 });
@@ -1178,11 +1341,9 @@ window.closeModal = function(){
   document.getElementById('successModal').classList.remove('show');
   document.body.style.overflow = '';
 };
-/* Cerrar al hacer clic fuera del box */
 document.getElementById('successModal').addEventListener('click', function(e){
   if(e.target === this) closeModal();
 });
-/* Cerrar con Escape */
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 </script>
 </body>
