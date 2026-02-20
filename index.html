@@ -560,6 +560,91 @@
       .whatsapp-tooltip { display: none; }
     }
 
+    /* ===================== BOTÓN FLOTANTE — INICIAR TRÁMITE ===================== */
+    .tramite-float {
+      position: fixed;
+      top: 50px;
+      left: 50px;
+      background: linear-gradient(135deg, #0A1F44 0%, #1a3a6e 100%);
+      color: white;
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(10, 31, 68, 0.4);
+      cursor: pointer;
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      animation: floatPremiumTramite 3s ease-in-out infinite;
+      border: 4px solid white;
+      overflow: hidden;
+    }
+    .tramite-float::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.20) 50%, transparent 70%);
+      animation: shine 3s infinite;
+    }
+    .tramite-float:hover {
+      transform: scale(1.2) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(10,31,68,.6);
+      animation: none;
+    }
+    .tramite-tooltip {
+      position: absolute;
+      left: 95px;
+      background: white;
+      color: #0A1F44;
+      padding: 15px 25px;
+      border-radius: 12px;
+      white-space: nowrap;
+      box-shadow: 0 8px 25px rgba(0,0,0,.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.4,0,.2,1);
+      font-size: 1rem;
+      font-weight: 600;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0,0,0,.1);
+      z-index: 1001;
+    }
+    .tramite-float:hover .tramite-tooltip {
+      opacity: 1;
+      transform: translateX(10px);
+    }
+    .tramite-icon {
+      width: 36px;
+      height: 36px;
+      position: relative;
+      z-index: 1;
+      fill: white;
+    }
+    @keyframes floatPremiumTramite {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      25%      { transform: translateY(-15px) rotate(2deg); }
+      75%      { transform: translateY(-5px) rotate(-2deg); }
+    }
+    /* Dark mode para el botón de trámite */
+    body.dark-mode .tramite-float {
+      border: 4px solid #1a202c;
+      background: linear-gradient(135deg, #1e2d50 0%, #253d72 100%);
+    }
+    body.dark-mode .tramite-tooltip {
+      background: rgba(26,32,44,.97);
+      color: #c8d6f0;
+      border: 1px solid #2d3748;
+    }
+    @media (max-width: 768px) {
+      .tramite-float { width: 65px; height: 65px; top: 30px; left: 30px; }
+      .tramite-icon  { width: 32px; height: 32px; }
+      .tramite-tooltip { display: none; }
+    }
+
     /* ===================== TEMA OSCURO — VARIABLES GLOBALES ===================== */
     body.dark-mode {
       --navy:   #d0d8ec;
@@ -870,6 +955,17 @@
     </svg>
   </div>
 </button>
+
+<!-- ═══ BOTÓN FLOTANTE — INICIAR TRÁMITE ═══ -->
+<a href="https://www.anpai.com.mx/iniciar-tramite"
+   class="tramite-float"
+   rel="noopener noreferrer"
+   aria-label="Iniciar trámite en ANPAI">
+  <span class="tramite-tooltip">📝 Iniciar trámite</span>
+  <svg class="tramite-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+  </svg>
+</a>
 
 <!-- ═══ HEADER ═══ -->
 <header>
@@ -1553,11 +1649,8 @@ function getRequiredFieldsForForm(formId) {
   form.querySelectorAll('[required]').forEach(function(el) {
     if (el.type === 'hidden') return;
     if (el.classList.contains('lada-select')) return;
-    // Excluir el campo de marca oculto (se valida por el input de búsqueda visible)
     if (el.id === 'marca') return;
-    // Excluir campos readonly de autofill que se llenan via CP
     if (el.id === 'estado' || el.id === 'municipio') {
-      // Contarlos como campo especial
       var key = el.id;
       if (!seen[key]) {
         seen[key] = true;
@@ -1581,7 +1674,6 @@ function getRequiredFieldsForForm(formId) {
     }
   });
 
-  // Campo de marca (input visible de búsqueda — required en lógica)
   if (!seen['marcaSearch']) {
     var marcaEl = document.getElementById('marcaSearch');
     if (marcaEl) {
@@ -1598,11 +1690,9 @@ function isFieldFilled(fieldDef) {
     return document.querySelector('input[name="' + fieldDef.name + '"]:checked') !== null;
   }
   if (fieldDef.type === 'autofill') {
-    // Campo autofill: se considera lleno si tiene clase "filled"
     return fieldDef.el && fieldDef.el.classList.contains('filled');
   }
   if (fieldDef.type === 'marca') {
-    // Campo de marca: lleno si hiddenMarca tiene valor
     return document.getElementById('marca').value.trim().length > 0;
   }
   if (fieldDef.type === 'standard') {
