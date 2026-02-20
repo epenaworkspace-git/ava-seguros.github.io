@@ -631,13 +631,17 @@
     }
     /* Dark mode para el botón de trámite */
     body.dark-mode .tramite-float {
-      border: 4px solid #1a202c;
-      background: linear-gradient(135deg, #1e2d50 0%, #253d72 100%);
+      border: 4px solid transparent;
+      background: linear-gradient(135deg, #0d1e3d 0%, #152848 100%);
+      box-shadow: 0 10px 30px rgba(0,0,0,.55);
+    }
+    body.dark-mode .tramite-float:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(77,138,255,.3);
     }
     body.dark-mode .tramite-tooltip {
-      background: rgba(26,32,44,.97);
+      background: rgba(13,22,45,.97);
       color: #c8d6f0;
-      border: 1px solid #2d3748;
+      border: 1px solid #243660;
     }
     @media (max-width: 768px) {
       .tramite-float { width: 65px; height: 65px; top: 30px; left: 30px; }
@@ -722,7 +726,14 @@
     body.dark-mode .modal-body { color: #7a8fb0; }
     body.dark-mode .modal-body strong { color: #c8d6f0; }
     body.dark-mode .modal-tag { background: #1e2d45; border-color: #263558; color: #c8d6f0; }
-    body.dark-mode .whatsapp-tooltip { background: #162040; color: #c8d6f0; border-color: #263558; }
+    body.dark-mode .whatsapp-float {
+      border: 4px solid transparent;
+      box-shadow: 0 10px 30px rgba(37,211,102,.25);
+    }
+    body.dark-mode .whatsapp-float:hover {
+      box-shadow: 0 20px 40px rgba(37,211,102,.4);
+    }
+    body.dark-mode .whatsapp-tooltip { background: rgba(13,22,45,.97); color: #c8d6f0; border-color: #243660; }
 
     /* Transición suave en todos los elementos */
     .card, .section-title, .section-icon, label,
