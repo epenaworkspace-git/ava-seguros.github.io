@@ -21,6 +21,13 @@
       --tl-green:  #22c55e;
       --tl-yellow: #eab308;
       --tl-red:    #ef4444;
+      /* Summary vars */
+      --p:  #0A1F44;
+      --a:  #165DFF;
+      --bd: #D6E0FF;
+      --bg: #F4F7FF;
+      --mid:#6B7A99;
+      --lt: #9eadc8;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -439,6 +446,245 @@
     .file-error { color: var(--tl-red); font-size: .82rem; display: none; margin-top: 6px; }
     .file-error.visible { display: block; }
 
+    /* ══════════════════════════════════
+       AUTENTICIDAD — bloque de calidad
+       ══════════════════════════════════ */
+    .auth-block {
+      margin-top: 28px;
+      border-left: 3px solid var(--blue);
+      padding: 14px 18px;
+      background: rgba(22,93,255,.04);
+      border-radius: 0 10px 10px 0;
+    }
+    .auth-block-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .auth-block-title svg { flex-shrink: 0; }
+    .auth-block-text {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .legible-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media(max-width:560px){ .legible-cards { grid-template-columns: 1fr; } }
+
+    .legible-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: .83rem;
+      line-height: 1.55;
+    }
+    .legible-card--ok {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      color: #166534;
+    }
+    .legible-card--no {
+      background: #fff1f1;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+    }
+    .legible-card-icon {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .legible-card--ok .legible-card-icon { background: #22c55e; color: #fff; }
+    .legible-card--no .legible-card-icon { background: #ef4444; color: #fff; }
+    .legible-card-title { font-weight: 700; font-size: .86rem; margin-bottom: 3px; }
+
+    /* ══════════════════════════════════
+       RESUMEN DE SOLICITUD
+       ══════════════════════════════════ */
+    .sumbox {
+      background: #fff;
+      border: 1.5px solid var(--bd);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 2px 16px rgba(10,31,68,.07);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .sum-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.35rem .9rem;
+      background: linear-gradient(135deg, var(--p) 0%, #0e2a60 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .sum-header::before {
+      content: '';
+      position: absolute;
+      top: -28px; right: -28px;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,142,255,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .sum-header-left {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      position: relative;
+      z-index: 1;
+    }
+    .sum-header-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.12);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sum-header-icon svg { width: 17px; height: 17px; fill: #fff; }
+    .sum-ttl {
+      font-size: .82rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .sum-ttl-sub {
+      font-size: .68rem;
+      color: rgba(255,255,255,.55);
+      font-weight: 400;
+      margin-top: .1rem;
+    }
+    .sum-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: rgba(15,195,115,.18);
+      border: 1px solid rgba(15,195,115,.4);
+      border-radius: 99px;
+      padding: .26rem .72rem;
+      font-size: .68rem;
+      font-weight: 700;
+      color: #6eeabb;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+    .sum-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #0FC373;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.75); }
+    }
+    .sum-body { }
+    .sum-group { padding: .9rem 1.35rem; }
+    .sum-group + .sum-group { border-top: 1px solid #EEF2F7; }
+    .sum-group-label {
+      display: flex; align-items: center; gap: .45rem;
+      margin-bottom: .7rem;
+    }
+    .sum-group-label-icon { font-size: .88rem; }
+    .sum-group-label-text {
+      font-size: .68rem; font-weight: 800;
+      color: var(--a);
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+    .sum-row {
+      display: flex; align-items: baseline; gap: .5rem;
+      font-size: .8rem; line-height: 1.9;
+    }
+    .sum-k {
+      color: var(--mid); font-weight: 500;
+      min-width: 148px; flex-shrink: 0;
+      font-size: .77rem;
+    }
+    .sum-v {
+      color: #1a1a2e; font-weight: 600;
+      font-size: .82rem; word-break: break-word;
+    }
+    .sum-v--empty { color: var(--lt); font-weight: 400; font-style: italic; }
+    .sum-chip {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: rgba(22,93,255,.08); color: var(--a);
+      border: 1px solid rgba(22,93,255,.18);
+      border-radius: 99px; padding: .15rem .65rem;
+      font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+    }
+    .sum-chip--files {
+      background: rgba(15,195,115,.09); color: #0a7a49;
+      border-color: rgba(15,195,115,.25);
+    }
+    .sum-chip--amount {
+      background: rgba(245,158,11,.09); color: #92400e;
+      border-color: rgba(245,158,11,.25);
+    }
+    .sum-footer {
+      border-top: 1px solid #EEF2F7;
+      padding: .85rem 1.35rem;
+      background: #FAFBFD;
+      display: flex; align-items: flex-start; gap: .65rem;
+    }
+    .sum-footer-icon { font-size: 1rem; flex-shrink: 0; margin-top: .05rem; }
+    .sum-footer-text { font-size: .73rem; color: var(--mid); line-height: 1.65; }
+    .sum-footer-text strong { color: var(--p); font-weight: 700; }
+    @media (max-width: 600px) {
+      .sum-header  { padding: .85rem 1rem; flex-wrap: wrap; gap: .5rem; }
+      .sum-group   { padding: .75rem 1rem; }
+      .sum-footer  { padding: .75rem 1rem; }
+      .sum-ttl     { font-size: .78rem; }
+      .sum-badge   { font-size: .63rem; padding: .2rem .55rem; }
+      .sum-row     { flex-direction: column; gap: .04rem; line-height: 1.55; padding: .12rem 0; }
+      .sum-k       { min-width: unset; font-size: .72rem; color: var(--a); }
+      .sum-v       { font-size: .8rem; }
+    }
+
+    /* ══ CHECKBOX DECLARACIÓN ══ */
+    .check-declaration {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--light);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 22px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .check-declaration:hover { border-color: var(--blue); background: rgba(22,93,255,.03); }
+    .check-declaration input[type=checkbox] {
+      width: 20px; height: 20px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .check-declaration-text {
+      font-size: .85rem;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+    .check-declaration-text strong { color: var(--blue); }
+
     /* ── Submit ── */
     .btn-submit {
       display: block; width: 100%; padding: 18px;
@@ -450,9 +696,13 @@
       box-shadow: 0 8px 24px rgba(22,93,255,.35);
       transition: all .3s; margin-top: 8px;
     }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(22,93,255,.45); }
-    .btn-submit:active { transform: translateY(0); }
-    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(22,93,255,.45); }
+    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .btn-submit:disabled {
+      opacity: .45; cursor: not-allowed; transform: none;
+      background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+      box-shadow: none;
+    }
     .btn-notice { text-align: center; font-size: .78rem; color: var(--muted); margin-top: 10px; }
     .recaptcha-notice { text-align: center; font-size: .72rem; color: var(--muted); margin-top: 6px; }
     .recaptcha-notice a { color: var(--blue); text-decoration: none; }
@@ -560,88 +810,39 @@
       .whatsapp-tooltip { display: none; }
     }
 
-    /* ===================== BOTÓN FLOTANTE — INICIAR TRÁMITE ===================== */
+    /* ── Botón flotante INICIAR TRÁMITE ── */
     .tramite-float {
-      position: fixed;
-      top: 50px;
-      left: 50px;
+      position: fixed; top: 50px; left: 50px;
       background: linear-gradient(135deg, #0A1F44 0%, #1a3a6e 100%);
-      color: white;
-      width: 75px;
-      height: 75px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: white; width: 75px; height: 75px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 10px 30px rgba(10, 31, 68, 0.4);
-      cursor: pointer;
-      z-index: 1000;
+      cursor: pointer; z-index: 1000;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       animation: floatPremiumTramite 3s ease-in-out infinite;
-      border: 4px solid white;
-      overflow: hidden;
+      border: 4px solid white; overflow: hidden;
     }
     .tramite-float::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.20) 50%, transparent 70%);
       animation: shine 3s infinite;
     }
-    .tramite-float:hover {
-      transform: scale(1.2) translateY(-5px);
-      box-shadow: 0 20px 40px rgba(10,31,68,.6);
-      animation: none;
-    }
+    .tramite-float:hover { transform: scale(1.2) translateY(-5px); box-shadow: 0 20px 40px rgba(10,31,68,.6); animation: none; }
     .tramite-tooltip {
-      position: absolute;
-      left: 95px;
-      background: white;
-      color: #0A1F44;
-      padding: 15px 25px;
-      border-radius: 12px;
-      white-space: nowrap;
-      box-shadow: 0 8px 25px rgba(0,0,0,.15);
-      opacity: 0;
-      pointer-events: none;
+      position: absolute; left: 95px; background: white; color: #0A1F44;
+      padding: 15px 25px; border-radius: 12px; white-space: nowrap;
+      box-shadow: 0 8px 25px rgba(0,0,0,.15); opacity: 0; pointer-events: none;
       transition: all 0.4s cubic-bezier(0.4,0,.2,1);
-      font-size: 1rem;
-      font-weight: 600;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(0,0,0,.1);
-      z-index: 1001;
+      font-size: 1rem; font-weight: 600;
+      border: 1px solid rgba(0,0,0,.1); z-index: 1001;
     }
-    .tramite-float:hover .tramite-tooltip {
-      opacity: 1;
-      transform: translateX(10px);
-    }
-    .tramite-icon {
-      width: 36px;
-      height: 36px;
-      position: relative;
-      z-index: 1;
-      fill: white;
-    }
+    .tramite-float:hover .tramite-tooltip { opacity: 1; transform: translateX(10px); }
+    .tramite-icon { width: 36px; height: 36px; position: relative; z-index: 1; fill: white; }
     @keyframes floatPremiumTramite {
       0%,100% { transform: translateY(0) rotate(0deg); }
       25%      { transform: translateY(-15px) rotate(2deg); }
       75%      { transform: translateY(-5px) rotate(-2deg); }
-    }
-    /* Dark mode para el botón de trámite */
-    body.dark-mode .tramite-float {
-      border: 4px solid transparent;
-      background: linear-gradient(135deg, #0d1e3d 0%, #152848 100%);
-      box-shadow: 0 10px 30px rgba(0,0,0,.55);
-    }
-    body.dark-mode .tramite-float:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(77,138,255,.3);
-    }
-    body.dark-mode .tramite-tooltip {
-      background: rgba(13,22,45,.97);
-      color: #c8d6f0;
-      border: 1px solid #243660;
     }
     @media (max-width: 768px) {
       .tramite-float { width: 65px; height: 65px; top: 30px; left: 30px; }
@@ -649,7 +850,7 @@
       .tramite-tooltip { display: none; }
     }
 
-    /* ===================== TEMA OSCURO — VARIABLES GLOBALES ===================== */
+    /* ══ DARK MODE ══ */
     body.dark-mode {
       --navy:   #d0d8ec;
       --blue:   #4d8aff;
@@ -659,50 +860,31 @@
       --border: #243660;
       --muted:  #7a8fb0;
       --shadow: 0 8px 40px rgba(0,0,0,0.35);
+      --p:  #d0d8ec;
+      --a:  #4d8aff;
+      --bd: #243660;
+      --bg: #162040;
+      --mid:#7a8fb0;
+      --lt: #3a4e70;
       background: #0c1525;
       color: #c8d6f0;
     }
-    body.dark-mode header {
-      background: linear-gradient(135deg, #040d1e 0%, #071430 60%, #091a3e 100%);
-    }
-    body.dark-mode .card {
-      background: rgba(17,28,50,0.97);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.35);
-    }
+    body.dark-mode header { background: linear-gradient(135deg, #040d1e 0%, #071430 60%, #091a3e 100%); }
+    body.dark-mode .card { background: rgba(17,28,50,0.97); box-shadow: 0 8px 40px rgba(0,0,0,0.35); }
     body.dark-mode .section-title { color: #c8d6f0; }
     body.dark-mode .section-icon { background: #1e2d45; }
     body.dark-mode label { color: #8ba4cc; }
-    body.dark-mode input[type=text],
-    body.dark-mode input[type=email],
-    body.dark-mode input[type=date],
-    body.dark-mode select {
-      background: #162040;
-      border-color: #243660;
-      color: #d0d8ec;
+    body.dark-mode input[type=text], body.dark-mode input[type=email], body.dark-mode input[type=date], body.dark-mode select {
+      background: #162040; border-color: #243660; color: #d0d8ec;
     }
-    body.dark-mode input[type=text]:focus,
-    body.dark-mode input[type=email]:focus,
-    body.dark-mode input[type=date]:focus,
-    body.dark-mode select:focus {
-      background: #1a2850;
-      border-color: #4d8aff;
-      box-shadow: 0 0 0 3px rgba(77,138,255,0.15);
+    body.dark-mode input[type=text]:focus, body.dark-mode input[type=email]:focus,
+    body.dark-mode input[type=date]:focus, body.dark-mode select:focus {
+      background: #1a2850; border-color: #4d8aff; box-shadow: 0 0 0 3px rgba(77,138,255,0.15);
     }
     body.dark-mode input::placeholder { color: #4a5878; }
-    body.dark-mode .autofill-field input.waiting {
-      background: #111827;
-      border-color: #1e2d45;
-    }
-    body.dark-mode .autofill-field input.filled {
-      background: #0f2a1a;
-      border-color: #22c55e;
-      color: #c8d6f0;
-    }
-    body.dark-mode .lada-select {
-      background: #1e2d45;
-      color: #c8d6f0;
-      border-right-color: #243660 !important;
-    }
+    body.dark-mode .autofill-field input.waiting { background: #111827; border-color: #1e2d45; }
+    body.dark-mode .autofill-field input.filled { background: #0f2a1a; border-color: #22c55e; color: #c8d6f0; }
+    body.dark-mode .lada-select { background: #1e2d45; color: #c8d6f0; border-right-color: #243660 !important; }
     body.dark-mode .phone-wrap { border-color: #243660; }
     body.dark-mode .cp-result { background: #1e2d45; border-color: #243660; color: #c8d6f0; }
     body.dark-mode .colonia-label { color: #8ba4cc; }
@@ -717,8 +899,7 @@
     body.dark-mode .cap-bar-track { background: #1e2d45; }
     body.dark-mode .cap-bar-header { color: #8ba4cc; }
     body.dark-mode .divider { background: #243660; }
-    body.dark-mode .btn-notice,
-    body.dark-mode .recaptcha-notice { color: #5a7098; }
+    body.dark-mode .btn-notice, body.dark-mode .recaptcha-notice { color: #5a7098; }
     body.dark-mode .recaptcha-notice a { color: #4d8aff; }
     body.dark-mode .helper { color: #5a7098; }
     body.dark-mode .modal-box { background: #111827; }
@@ -726,259 +907,299 @@
     body.dark-mode .modal-body { color: #7a8fb0; }
     body.dark-mode .modal-body strong { color: #c8d6f0; }
     body.dark-mode .modal-tag { background: #1e2d45; border-color: #263558; color: #c8d6f0; }
-    body.dark-mode .whatsapp-float {
-      border: 4px solid transparent;
-      box-shadow: 0 10px 30px rgba(37,211,102,.25);
-    }
-    body.dark-mode .whatsapp-float:hover {
-      box-shadow: 0 20px 40px rgba(37,211,102,.4);
-    }
+    body.dark-mode .whatsapp-float { border: 4px solid transparent; box-shadow: 0 10px 30px rgba(37,211,102,.25); }
     body.dark-mode .whatsapp-tooltip { background: rgba(13,22,45,.97); color: #c8d6f0; border-color: #243660; }
+    body.dark-mode .tramite-float { border: 4px solid transparent; background: linear-gradient(135deg, #0d1e3d 0%, #152848 100%); box-shadow: 0 10px 30px rgba(0,0,0,.55); }
+    body.dark-mode .tramite-tooltip { background: rgba(13,22,45,.97); color: #c8d6f0; border: 1px solid #243660; }
+    /* Auth block dark */
+    body.dark-mode .auth-block { background: rgba(77,138,255,.07); border-left-color: #4d8aff; }
+    body.dark-mode .auth-block-title { color: #c8d6f0; }
+    body.dark-mode .auth-block-text { color: #7a8fb0; }
+    body.dark-mode .legible-card--ok { background: #0f2a1a; border-color: #166534; color: #86efac; }
+    body.dark-mode .legible-card--no { background: #2a0f0f; border-color: #991b1b; color: #fca5a5; }
+    body.dark-mode .legible-card--ok .legible-card-icon { background: #166534; }
+    body.dark-mode .legible-card--no .legible-card-icon { background: #991b1b; }
+    /* Summary dark */
+    body.dark-mode .sumbox        { background: #111f3a; border-color: #1e2d50; }
+    body.dark-mode .sum-group + .sum-group { border-top-color: #1e2d50; }
+    body.dark-mode .sum-group-label-text   { color: #6ba3ff; }
+    body.dark-mode .sum-k                  { color: #4a5878; }
+    body.dark-mode .sum-v                  { color: #c8d6f0; }
+    body.dark-mode .sum-v--empty           { color: #3a4e70; }
+    body.dark-mode .sum-footer    { border-top-color: #1e2d50; background: #0e1a30; }
+    body.dark-mode .sum-footer-text        { color: #4a5878; }
+    body.dark-mode .sum-footer-text strong { color: #c8d6f0; }
+    body.dark-mode .sum-chip               { background: rgba(22,93,255,.15); color: #6ba3ff; border-color: rgba(22,93,255,.3); }
+    body.dark-mode .sum-chip--files        { background: rgba(15,195,115,.12); color: #6eeabb; border-color: rgba(15,195,115,.3); }
+    body.dark-mode .sum-chip--amount       { background: rgba(245,158,11,.12); color: #fcd34d; border-color: rgba(245,158,11,.3); }
+    /* Checkbox dark */
+    body.dark-mode .check-declaration { background: #1a2645; border-color: #243660; }
+    body.dark-mode .check-declaration-text { color: #c8d6f0; }
 
-    /* Transición suave en todos los elementos */
-    .card, .section-title, .section-icon, label,
-    input[type=text], input[type=email], input[type=date], select,
-    .phone-wrap, .lada-select, .cp-result, .colonia-select,
-    .brand-dropdown, .file-zone, .file-chip, .divider,
-    .modal-box, .modal-title, .modal-body, .modal-tag {
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    /* ===================== THEME TOGGLE BUTTON ===================== */
+    /* ── Theme toggle btn ── */
     .theme-toggle-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 2000;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
+      position: fixed; top: 20px; right: 20px; z-index: 2000;
+      width: 52px; height: 52px; border-radius: 50%;
       background: linear-gradient(145deg, #e8ecf4, #d0d6e8);
-      box-shadow:
-        0 6px 20px rgba(0,0,0,0.18),
-        inset 0 -2px 4px rgba(0,0,0,0.15),
-        inset 0 2px 4px rgba(255,255,255,0.9);
-      cursor: pointer;
-      border: none;
-      outline: none;
-      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18), inset 0 -2px 4px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9);
+      cursor: pointer; border: none; outline: none; overflow: hidden;
       transition: all 0.3s ease;
       animation: subtlePulse 3s infinite ease-in-out;
     }
-    .theme-toggle-btn::before {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 65%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-    .theme-toggle-btn:hover::before { opacity: 1; }
-    .theme-toggle-btn:hover {
-      animation: none;
-      transform: scale(1.08);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25),
-        inset 0 -2px 4px rgba(0,0,0,0.15),
-        inset 0 3px 6px rgba(255,255,255,1);
-    }
+    .theme-toggle-btn:hover { animation: none; transform: scale(1.08); box-shadow: 0 10px 30px rgba(0,0,0,0.25), inset 0 -2px 4px rgba(0,0,0,0.15), inset 0 3px 6px rgba(255,255,255,1); }
     .theme-toggle-btn:active { transform: scale(0.94); }
-    @keyframes subtlePulse {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.03); }
-    }
+    @keyframes subtlePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
     .toggle-icon-wrap {
-      position: relative;
-      width: 100%; height: 100%;
+      position: relative; width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
     }
     .theme-toggle-btn:hover .toggle-icon-wrap { transform: rotate(20deg); }
-    .icon-sun, .icon-moon {
-      position: absolute;
-      width: 28px; height: 28px;
-      transition: all 0.45s cubic-bezier(0.68,-0.55,0.265,1.55);
-    }
-    .icon-sun {
-      opacity: 1;
-      transform: scale(1) rotate(0deg);
-      filter: drop-shadow(0 0 4px rgba(255,215,0,0.6));
-    }
-    .icon-moon {
-      opacity: 0;
-      transform: scale(0.4) rotate(-80deg);
-      filter: drop-shadow(0 0 4px rgba(100,120,255,0.6));
-    }
+    .icon-sun, .icon-moon { position: absolute; width: 28px; height: 28px; transition: all 0.45s cubic-bezier(0.68,-0.55,0.265,1.55); }
+    .icon-sun { opacity: 1; transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 4px rgba(255,215,0,0.6)); }
+    .icon-moon { opacity: 0; transform: scale(0.4) rotate(-80deg); filter: drop-shadow(0 0 4px rgba(100,120,255,0.6)); }
     body.dark-mode .icon-sun  { opacity: 0; transform: scale(0.4) rotate(80deg); }
     body.dark-mode .icon-moon { opacity: 1; transform: scale(1) rotate(0deg); }
-    body.dark-mode .theme-toggle-btn {
-      background: linear-gradient(145deg, #1e2d50, #0f1d38);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4),
-        0 0 15px rgba(65,105,225,0.3),
-        inset 0 -2px 4px rgba(0,0,0,0.4),
-        inset 0 2px 4px rgba(255,255,255,0.06);
-    }
-    @media (max-width: 640px) {
-      .theme-toggle-btn { top: 14px; right: 14px; width: 44px; height: 44px; }
-      .icon-sun, .icon-moon { width: 22px; height: 22px; }
-    }
+    body.dark-mode .theme-toggle-btn { background: linear-gradient(145deg, #1e2d50, #0f1d38); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px rgba(65,105,225,0.3), inset 0 -2px 4px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.06); }
+    @media (max-width: 640px) { .theme-toggle-btn { top: 14px; right: 14px; width: 44px; height: 44px; } .icon-sun, .icon-moon { width: 22px; height: 22px; } }
 
-    /* ===================== FLOATING PROGRESS BAR ===================== */
+    /* ── Floating progress bar ── */
     .form-progress-wrap {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1500;
-      display: none;
-      width: calc(100% - 200px);
-      max-width: 720px;
-      min-width: 280px;
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      z-index: 1500; display: none;
+      width: calc(100% - 200px); max-width: 720px; min-width: 280px;
       pointer-events: none;
     }
     .form-progress-wrap.visible { display: block; }
     .form-progress-pill {
-      background: #ffffff;
-      border-radius: 60px;
+      background: #ffffff; border-radius: 60px;
       padding: 10px 20px 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      box-shadow:
-        0 4px 24px rgba(10,31,68,0.14),
-        0 1px 4px rgba(10,31,68,0.08);
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 4px 24px rgba(10,31,68,0.14), 0 1px 4px rgba(10,31,68,0.08);
       border: 1px solid rgba(10,31,68,0.07);
       transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .form-progress-bar-track {
-      flex: 1;
-      height: 8px;
-      background: #E8ECF4;
-      border-radius: 99px;
-      overflow: hidden;
-      position: relative;
+      flex: 1; height: 8px; background: #E8ECF4;
+      border-radius: 99px; overflow: hidden; position: relative;
       transition: background-color 0.3s ease;
     }
     .form-progress-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, #165DFF 0%, #3a7fff 100%);
-      border-radius: 99px;
-      width: 0%;
+      border-radius: 99px; width: 0%;
       transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
     }
     .form-progress-bar-fill::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -60px;
-      width: 50px; height: 100%;
+      content: ''; position: absolute;
+      top: 0; left: -60px; width: 50px; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
       animation: barShine 2.2s ease-in-out infinite;
     }
-    @keyframes barShine {
-      0%   { left: -60px; opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { left: calc(100% + 20px); opacity: 0; }
-    }
-    .form-progress-text {
-      font-size: 12.5px;
-      font-weight: 500;
-      color: #6B7A99;
-      white-space: nowrap;
-      flex-shrink: 0;
-      letter-spacing: 0.1px;
-      min-width: 130px;
-      text-align: right;
-    }
-    .form-progress-text strong {
-      color: #165DFF;
-      font-weight: 700;
-    }
-    body.dark-mode .form-progress-pill {
-      background: #1a2645;
-      border-color: rgba(255,255,255,0.12);
-      box-shadow: 0 4px 28px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.35);
-    }
+    @keyframes barShine { 0% { left: -60px; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: calc(100% + 20px); opacity: 0; } }
+    .form-progress-text { font-size: 12.5px; font-weight: 500; color: #6B7A99; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.1px; min-width: 130px; text-align: right; }
+    .form-progress-text strong { color: #165DFF; font-weight: 700; }
+    body.dark-mode .form-progress-pill { background: #1a2645; border-color: rgba(255,255,255,0.12); box-shadow: 0 4px 28px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.35); }
     body.dark-mode .form-progress-bar-track { background: #263558; }
-    body.dark-mode .form-progress-bar-fill {
-      background: linear-gradient(90deg, #4d8aff 0%, #78b0ff 100%);
-    }
+    body.dark-mode .form-progress-bar-fill { background: linear-gradient(90deg, #4d8aff 0%, #78b0ff 100%); }
     body.dark-mode .form-progress-text { color: #c8d6f0; font-weight: 600; }
     body.dark-mode .form-progress-text strong { color: #78b0ff; font-weight: 800; }
-    @media (max-width: 640px) {
-      .form-progress-wrap { width: calc(100% - 24px); bottom: 16px; }
-      .form-progress-pill { padding: 8px 14px 8px 12px; gap: 10px; }
-      .form-progress-text { font-size: 11.5px; min-width: 110px; }
+    @media (max-width: 640px) { .form-progress-wrap { width: calc(100% - 24px); bottom: 16px; } .form-progress-pill { padding: 8px 14px 8px 12px; gap: 10px; } .form-progress-text { font-size: 11.5px; min-width: 110px; } }
+
+    /* ── Uppercase field style ── */
+    .uppercase-field { text-transform: uppercase; }
+    .uppercase-field::placeholder { text-transform: none; }
+
+    /* ── RFC / CURP validation states ── */
+    input.field-valid {
+      border-color: var(--tl-green) !important;
+      background-color: #f0fdf4 !important;
+    }
+    input.field-invalid {
+      border-color: var(--tl-red) !important;
+      background-color: #fff1f1 !important;
+    }
+    .field-hint {
+      font-size: .75rem;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 16px;
+    }
+    .field-hint.ok  { color: var(--tl-green); font-weight: 600; }
+    .field-hint.err { color: var(--tl-red); font-weight: 600; }
+
+    /* ── Requisitos de documentos ── */
+    .req-docs-block {
+      margin-top: 22px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+    }
+    .req-docs-header {
+      background: linear-gradient(135deg, var(--navy) 0%, #0e2a60 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .req-docs-header-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .req-docs-header-text {
+      font-size: .82rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .req-docs-body {
+      background: var(--white);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .req-doc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .85rem;
+      color: var(--navy);
+      font-weight: 500;
+    }
+    .req-doc-item-icon {
+      width: 28px; height: 28px;
+      background: rgba(22,93,255,.10);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Aviso de formato ── */
+    .format-notice {
+      margin-top: 18px;
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+    .format-notice-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .84rem;
+      font-weight: 800;
+      color: #92400e;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .format-notice-body {
+      font-size: .82rem;
+      color: #78350f;
+      line-height: 1.7;
+    }
+    body.dark-mode .req-docs-block { border-color: #243660; }
+    body.dark-mode .req-docs-body  { background: #111f3a; }
+    body.dark-mode .req-doc-item   { color: #c8d6f0; }
+    body.dark-mode .req-doc-item-icon { background: rgba(77,138,255,.15); }
+    body.dark-mode .format-notice  { background: #1c1608; border-color: #92400e; }
+    body.dark-mode .format-notice-title { color: #fcd34d; }
+    body.dark-mode .format-notice-body  { color: #fbbf24; }
+    body.dark-mode input.field-valid { background-color: #0f2a1a !important; border-color: #22c55e !important; }
+    body.dark-mode input.field-invalid { background-color: #2a0f0f !important; border-color: #ef4444 !important; }
+
+    /* ── Requisitos de formato — fondo azul ── */
+    .format-notice-blue {
+      background: #EEF4FF;
+      border: 1.5px solid #B8D0FF;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+    .format-notice-blue-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .format-notice-blue-title svg { flex-shrink: 0; color: var(--blue); }
+    .format-notice-blue-body {
+      font-size: .82rem;
+      color: #2a4480;
+      line-height: 1.75;
+    }
+    .format-notice-blue-body strong { color: var(--navy); }
+    .format-notice-blue-link {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .format-notice-blue-link:hover { text-decoration: underline; }
+    body.dark-mode .format-notice-blue {
+      background: rgba(22,93,255,.08);
+      border-color: rgba(22,93,255,.25);
+    }
+    body.dark-mode .format-notice-blue-title { color: #c8d6f0; }
+    body.dark-mode .format-notice-blue-body  { color: #8ba4cc; }
+    body.dark-mode .format-notice-blue-body strong { color: #c8d6f0; }
+    body.dark-mode .format-notice-blue-link  { color: #4d8aff; }
+
+    /* Transition helpers */
+    .card, .section-title, .section-icon, label, input[type=text], input[type=email], input[type=date], select,
+    .phone-wrap, .lada-select, .cp-result, .colonia-select, .brand-dropdown, .file-zone, .file-chip,
+    .divider, .modal-box, .modal-title, .modal-body, .modal-tag {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     }
   </style>
 </head>
 <body>
 
-<!-- ===== BOTÓN MODO CLARO / OSCURO ===== -->
-<button class="theme-toggle-btn" id="themeToggleBtn"
-        aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
+<!-- ── THEME TOGGLE ── -->
+<button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
   <div class="toggle-icon-wrap">
-    <!-- Sol (visible en modo claro) -->
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="4.5" fill="#FFD700" stroke="#FFA500" stroke-width="1.4"/>
       <g stroke="#FFD700" stroke-width="2" stroke-linecap="round">
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(0 12 12)">
-          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(45 12 12)">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(90 12 12)">
-          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(135 12 12)">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(180 12 12)">
-          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(225 12 12)">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(270 12 12)">
-          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
-        </line>
-        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(315 12 12)">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
-        </line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(0 12 12)"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(45 12 12)"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(90 12 12)"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(135 12 12)"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(180 12 12)"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(225 12 12)"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(270 12 12)"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="12" y1="2.5" x2="12" y2="4.5" transform="rotate(315 12 12)"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></line>
       </g>
     </svg>
-    <!-- Luna (visible en modo oscuro) -->
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-            fill="#c8d0ff" stroke="#4169E1" stroke-width="1.5"/>
-      <circle cx="15" cy="9" r="1" fill="#fff8c0" opacity="0.85">
-        <animate attributeName="opacity" values="0.85;0.3;0.85" dur="4s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="17" cy="13" r="0.7" fill="#fff8c0" opacity="0.6">
-        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="13" cy="15" r="0.55" fill="#fff8c0" opacity="0.4">
-        <animate attributeName="opacity" values="0.4;0.1;0.4" dur="5s" repeatCount="indefinite"/>
-      </circle>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#c8d0ff" stroke="#4169E1" stroke-width="1.5"/>
+      <circle cx="15" cy="9" r="1" fill="#fff8c0" opacity="0.85"><animate attributeName="opacity" values="0.85;0.3;0.85" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="17" cy="13" r="0.7" fill="#fff8c0" opacity="0.6"><animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="13" cy="15" r="0.55" fill="#fff8c0" opacity="0.4"><animate attributeName="opacity" values="0.4;0.1;0.4" dur="5s" repeatCount="indefinite"/></circle>
     </svg>
   </div>
 </button>
 
-<!-- ═══ BOTÓN FLOTANTE — INICIAR TRÁMITE ═══ -->
-<a href="https://www.anpai.com.mx/iniciar-tramite"
-   class="tramite-float"
-   rel="noopener noreferrer"
-   aria-label="Iniciar trámite en ANPAI">
+<!-- ── BOTÓN FLOTANTE TRÁMITE ── -->
+<a href="https://www.anpai.com.mx/iniciar-tramite" class="tramite-float" rel="noopener noreferrer" aria-label="Iniciar trámite en ANPAI">
   <span class="tramite-tooltip">📝 Iniciar trámite</span>
-  <svg class="tramite-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-  </svg>
+  <svg class="tramite-icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
 </a>
 
-<!-- ═══ HEADER ═══ -->
+<!-- ── HEADER ── -->
 <header>
   <div class="header-inner">
     <div class="header-accent"></div>
@@ -991,7 +1212,7 @@
   </div>
 </header>
 
-<!-- ═══ FORM ═══ -->
+<!-- ── FORM ── -->
 <div class="container">
   <form id="solicitudForm"
         action="https://formsubmit.co/info@anpai.com.mx"
@@ -1014,19 +1235,19 @@
       <div class="grid-2">
         <div class="field">
           <label for="primer_nombre">Primer Nombre <span class="req">*</span></label>
-          <input type="text" id="primer_nombre" name="Primer Nombre" placeholder="Tu primer nombre" required />
+          <input type="text" id="primer_nombre" class="uppercase-field" name="Primer Nombre" placeholder="Tu primer nombre" required />
         </div>
         <div class="field">
           <label for="segundo_nombre">Segundo Nombre <span class="opt">(opcional)</span></label>
-          <input type="text" id="segundo_nombre" name="Segundo Nombre" placeholder="Tu segundo nombre" />
+          <input type="text" id="segundo_nombre" class="uppercase-field" name="Segundo Nombre" placeholder="Tu segundo nombre" />
         </div>
         <div class="field">
           <label for="primer_apellido">Primer Apellido <span class="req">*</span></label>
-          <input type="text" id="primer_apellido" name="Primer Apellido" placeholder="Tu primer apellido" required />
+          <input type="text" id="primer_apellido" class="uppercase-field" name="Primer Apellido" placeholder="Tu primer apellido" required />
         </div>
         <div class="field">
           <label for="segundo_apellido">Segundo Apellido <span class="req">*</span></label>
-          <input type="text" id="segundo_apellido" name="Segundo Apellido" placeholder="Tu segundo apellido" required />
+          <input type="text" id="segundo_apellido" class="uppercase-field" name="Segundo Apellido" placeholder="Tu segundo apellido" required />
         </div>
         <div class="field">
           <label for="genero">Género <span class="req">*</span></label>
@@ -1040,6 +1261,16 @@
           <label for="fecha_nacimiento">Fecha de Nacimiento <span class="req">*</span></label>
           <input type="date" id="fecha_nacimiento" name="Fecha de Nacimiento" required />
         </div>
+        <div class="field">
+          <label for="rfc">RFC <span class="req">*</span></label>
+          <input type="text" id="rfc" class="uppercase-field" name="RFC" placeholder="AAAA000000AAA" maxlength="13" required autocomplete="off" />
+          <div class="field-hint" id="rfcHint"></div>
+        </div>
+        <div class="field">
+          <label for="curp">CURP <span class="req">*</span></label>
+          <input type="text" id="curp" class="uppercase-field" name="CURP" placeholder="AAAA000000AAAAAA00" maxlength="18" required autocomplete="off" />
+          <div class="field-hint" id="curpHint"></div>
+        </div>
       </div>
 
       <div style="margin-top:22px;">
@@ -1052,9 +1283,7 @@
             <div class="cp-error"   id="cpError">No se encontró el código postal.</div>
             <div class="cp-result"  id="cpResult"></div>
             <div class="colonia-wrap" id="coloniaWrap">
-              <div class="colonia-label">
-                Selecciona tu Colonia <span id="coloniaBadge">0</span>
-              </div>
+              <div class="colonia-label">Selecciona tu Colonia <span id="coloniaBadge">0</span></div>
               <select class="colonia-select" id="coloniaSelect" name="Colonia">
                 <option value="">Elige tu colonia…</option>
               </select>
@@ -1067,30 +1296,18 @@
           <div class="field">
             <label for="estado">Estado <span class="req">*</span></label>
             <div class="autofill-field">
-              <input type="text" id="estado" name="Estado"
-                placeholder="Se autocompletará con tu CP"
-                readonly required class="waiting"
-                autocomplete="address-level1" />
+              <input type="text" id="estado" name="Estado" placeholder="Se autocompletará con tu CP" readonly required class="waiting" autocomplete="address-level1" />
               <span class="autofill-icon">✅</span>
             </div>
-            <div class="autofill-hint" id="estadoHint">
-              <span class="autofill-hint-dot"></span>
-              Esperando código postal…
-            </div>
+            <div class="autofill-hint" id="estadoHint"><span class="autofill-hint-dot"></span>Esperando código postal…</div>
           </div>
           <div class="field">
             <label for="municipio">Municipio / Alcaldía <span class="req">*</span></label>
             <div class="autofill-field">
-              <input type="text" id="municipio" name="Municipio"
-                placeholder="Se autocompletará con tu CP"
-                readonly required class="waiting"
-                autocomplete="address-level2" />
+              <input type="text" id="municipio" name="Municipio" placeholder="Se autocompletará con tu CP" readonly required class="waiting" autocomplete="address-level2" />
               <span class="autofill-icon">✅</span>
             </div>
-            <div class="autofill-hint" id="municipioHint">
-              <span class="autofill-hint-dot"></span>
-              Esperando código postal…
-            </div>
+            <div class="autofill-hint" id="municipioHint"><span class="autofill-hint-dot"></span>Esperando código postal…</div>
           </div>
         </div>
       </div>
@@ -1169,7 +1386,7 @@
         <div class="field">
           <label for="marcaSearch">Marca <span class="req">*</span></label>
           <div class="brand-search-wrap">
-            <input type="text" id="marcaSearch" placeholder="Buscar marca…" autocomplete="off" />
+            <input type="text" id="marcaSearch" class="uppercase-field" placeholder="Buscar marca…" autocomplete="off" />
             <input type="hidden" id="marca" name="Marca del Vehículo" required />
             <div class="brand-dropdown" id="brandDropdown"></div>
           </div>
@@ -1177,12 +1394,12 @@
 
         <div class="field otro-marca" id="otraMarcaWrap">
           <label for="otraMarca">Especifica la Marca <span class="req">*</span></label>
-          <input type="text" id="otraMarca" name="Otra Marca" placeholder="Nombre de la marca" />
+          <input type="text" id="otraMarca" class="uppercase-field" name="Otra Marca" placeholder="Nombre de la marca" />
         </div>
 
         <div class="field">
           <label for="version">Versión / Trim <span class="req">*</span></label>
-          <input type="text" id="version" name="Versión" placeholder="Ej. XSE, Sport, Limited…" required />
+          <input type="text" id="version" class="uppercase-field" name="Versión" placeholder="Ej. XSE, Sport, Limited…" required />
         </div>
 
         <div class="field">
@@ -1191,51 +1408,170 @@
             <option value="">Selecciona…</option>
           </select>
         </div>
+        <div class="field">
+          <label for="num_serie">Número de Serie (NIV) <span class="req">*</span></label>
+          <input type="text" id="num_serie" class="uppercase-field" name="Número de Serie" placeholder="17 CARACTERES (VIN/NIV)" maxlength="17" required />
+        </div>
+        <div class="field">
+          <label for="num_motor">Número de Motor <span class="opt">(opcional)</span></label>
+          <input type="text" id="num_motor" class="uppercase-field" name="Número de Motor" placeholder="NÚMERO DE MOTOR" />
+        </div>
+        <div class="field">
+          <label for="clave_vehicular">Clave Vehicular <span class="opt">(opcional)</span></label>
+          <input type="text" id="clave_vehicular" class="uppercase-field" name="Clave Vehicular" placeholder="Clave vehicular oficial" />
+        </div>
       </div>
 
-      <div style="margin-top:28px;">
-        <div class="divider"></div>
-        <label style="margin-bottom:12px; display:block; font-size:.9rem;">
-          📎 Adjuntar Documentos <span class="opt">(opcional — factura, póliza, etc.)</span>
-        </label>
-
-        <div class="file-zone" id="fileZone">
-          <input type="file" id="fileInput"
-                 accept=".pdf,.jpg,.jpeg,.png,.zip,.rar"
-                 multiple />
-          <div class="file-zone-icon">📂</div>
-          <div class="file-zone-text">
-            Arrastra tus archivos aquí o <strong>haz clic para seleccionar</strong>
-          </div>
-          <div class="file-zone-hint">
-            Formatos: PDF, JPG, PNG, ZIP, RAR &nbsp;|&nbsp;
-            <strong>Límite total: 5 MB</strong> — puedes adjuntar varios archivos<br>
-            💡 Si tus documentos superan el límite, comprímalos en un archivo
-            <strong>ZIP o RAR</strong> antes de adjuntarlos
-          </div>
-        </div>
-
-        <div class="file-error" id="fileError"></div>
-
-        <div class="cap-bar-wrap" id="capBarWrap">
-          <div class="cap-bar-header">
-            <span>Capacidad utilizada</span>
-            <span id="capLabel">0 KB de 5 MB</span>
-          </div>
-          <div class="cap-bar-track">
-            <div class="cap-bar-fill" id="capFill"></div>
-          </div>
-          <div class="cap-status">
-            <div class="tl-dot" id="tlDot"></div>
-            <span id="capStatusText"></span>
-          </div>
-        </div>
-
-        <div class="file-list" id="fileList"></div>
-      </div>
-
+      <!-- ══ CARGAR DOCUMENTACIÓN ══ -->
       <div style="margin-top:36px;">
-        <button type="submit" class="btn-submit" id="btnSubmit">
+        <div class="section-title" style="margin-bottom:20px;">
+          <div class="section-icon">📎</div>
+          Cargar Documentación
+        </div>
+
+        <!-- Requisitos de documentos -->
+        <div class="req-docs-block">
+          <div class="req-docs-header">
+            <div class="req-docs-header-icon">📋</div>
+            <span class="req-docs-header-text">Documentos Requeridos</span>
+          </div>
+          <div class="req-docs-body">
+            <div class="req-doc-item">
+              <div class="req-doc-item-icon">🧾</div>
+              <span><strong>Factura de origen</strong> del vehículo</span>
+            </div>
+            <div class="req-doc-item">
+              <div class="req-doc-item-icon">🪪</div>
+              <span><strong>Identificación oficial</strong> — INE, Pasaporte o FM2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ REQUISITOS DE FORMATO ══ -->
+        <div class="format-notice-blue" style="margin-top:14px;">
+          <div class="format-notice-blue-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            REQUISITOS DE FORMATO
+          </div>
+          <div class="format-notice-blue-body">
+            Todos los documentos deben estar escaneados en <strong>formato PDF</strong> y ser completamente legibles.<br><br>
+            Este formulario cuenta con un <strong>sistema de compresión automática en ZIP</strong>. Sin embargo, si la compresión resultante supera los 5 MB, deberás comprimirlos por tu cuenta en archivos <strong>ZIP o RAR que no superen los 5 MB cada uno</strong> y enviarlos por separado al correo <a href="mailto:info@anpai.com.mx" class="format-notice-blue-link">info@anpai.com.mx</a>. Es preferible enviar <strong>varios correos con archivos de hasta 5 MB</strong> que intentar enviar archivos de mayor tamaño o varios archivos de 5 MB en un mismo correo, ya que el sistema de mensajería podría no entregarlos o rechazarlos.
+          </div>
+        </div>
+
+        <!-- ══ BLOQUE DE AUTENTICIDAD ══ -->
+        <div class="auth-block" style="margin-top:16px;">
+          <div class="auth-block-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue)">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10,9 9,9 8,9"/>
+            </svg>
+            <strong>Requisito de autenticidad.</strong>
+            Los documentos deben ser copia fiel del original: completamente legibles, sin alteraciones.
+          </div>
+
+          <div class="legible-cards">
+            <div class="legible-card legible-card--ok">
+              <div class="legible-card-icon">✓</div>
+              <div>
+                <div class="legible-card-title">LEGIBLE</div>
+                Foto nítida, bien iluminada, encuadre completo. Sin sombras ni reflejos que cubran datos.
+              </div>
+            </div>
+            <div class="legible-card legible-card--no">
+              <div class="legible-card-icon">✕</div>
+              <div>
+                <div class="legible-card-title">NO LEGIBLE</div>
+                Imagen borrosa, oscura, con dedos tapando datos, o recortada. No puede procesarse.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zona de carga -->
+        <div style="margin-top:18px;">
+          <label style="margin-bottom:10px; display:block; font-size:.86rem; font-weight:600; color:var(--navy);">
+            Adjuntar Documentos <span class="req">*</span>
+          </label>
+
+          <div class="file-zone" id="fileZone">
+            <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple />
+            <div class="file-zone-icon">📂</div>
+            <div class="file-zone-text">Arrastra tus archivos aquí o <strong>haz clic para seleccionarlos</strong></div>
+            <div class="file-zone-hint" style="margin-top:10px;">
+              Formatos: <strong>PDF, JPG, PNG</strong><br>
+              <span style="color:var(--blue);font-weight:600;">✨ Compresión automática incluida</span><br>
+              🔖 Límite total: <strong>5 MB</strong>
+            </div>
+          </div>
+
+          <div class="file-error" id="fileError"></div>
+
+          <div class="cap-bar-wrap" id="capBarWrap">
+            <div class="cap-bar-header">
+              <span>Capacidad utilizada</span>
+              <span id="capLabel">0 KB de 5 MB</span>
+            </div>
+            <div class="cap-bar-track">
+              <div class="cap-bar-fill" id="capFill"></div>
+            </div>
+            <div class="cap-status">
+              <div class="tl-dot" id="tlDot"></div>
+              <span id="capStatusText"></span>
+            </div>
+          </div>
+
+          <div class="file-list" id="fileList"></div>
+        </div>
+      </div>
+
+      <!-- ══ RESUMEN DE SOLICITUD (nuevo) ══ -->
+      <div style="margin-top:28px;">
+        <div class="sumbox" id="sumBox">
+          <div class="sum-header">
+            <div class="sum-header-left">
+              <div class="sum-header-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <div>
+                <div class="sum-ttl">Resumen de Solicitud</div>
+                <div class="sum-ttl-sub">Revisa tus datos antes de enviar</div>
+              </div>
+            </div>
+            <div class="sum-badge" id="sumBadge">
+              <span class="sum-badge-dot"></span>
+              Listo
+            </div>
+          </div>
+          <div class="sum-body" id="sumCont"></div>
+          <div class="sum-footer">
+            <span class="sum-footer-icon">ℹ️</span>
+            <p class="sum-footer-text">
+              <strong>Verifica la información antes de enviar.</strong>
+              Si detectas algún error, corrige el campo correspondiente en el formulario.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CHECKBOX DE DECLARACIÓN (nuevo) ══ -->
+      <div style="margin-top:12px;">
+        <label class="check-declaration" for="declaracionCheck">
+          <input type="checkbox" id="declaracionCheck" />
+          <span class="check-declaration-text">
+            Declaro que la información proporcionada es verídica y que los documentos adjuntos son
+            <strong>copias fieles del original</strong>, completamente legibles y sin alteraciones.
+            Entiendo que proporcionar información falsa puede resultar en la cancelación de mi solicitud.
+          </span>
+        </label>
+      </div>
+
+      <!-- BOTÓN DE ENVÍO -->
+      <div style="margin-top:8px;">
+        <button type="submit" class="btn-submit" id="btnSubmit" disabled>
           🛡️ &nbsp;Enviar Cotización de Seguro
         </button>
         <p class="btn-notice">
@@ -1252,26 +1588,23 @@
   </form>
 </div>
 
-<!-- ===== BARRA DE PROGRESO FLOTANTE ===== -->
+<!-- ── BARRA FLOTANTE DE PROGRESO ── -->
 <div class="form-progress-wrap" id="formProgressWrap">
   <div class="form-progress-pill">
     <div class="form-progress-bar-track">
       <div class="form-progress-bar-fill" id="formProgressFill"></div>
     </div>
     <span class="form-progress-text">
-      <strong id="formProgressDone">0</strong>
-      de
-      <span id="formProgressTotal">0</span>
-      campos completados
+      <strong id="formProgressDone">0</strong> de <span id="formProgressTotal">0</span> campos completados
     </span>
   </div>
 </div>
 
-<!-- ═══ SUCCESS MODAL ═══ -->
+<!-- ── SUCCESS MODAL ── -->
 <div class="modal-overlay" id="successModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-box">
     <div class="modal-check-wrap">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 24 24" fill="none">
         <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
@@ -1289,27 +1622,77 @@
   </div>
 </div>
 
-<!-- ═══ WHATSAPP FLOAT ═══ -->
+<!-- ── WHATSAPP FLOAT ── -->
 <a href="https://wa.me/525525374608?text=Hola%20ANPAI%2C%20tengo%20una%20consulta"
    class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp con ANPAI">
   <span class="whatsapp-tooltip">💬 ¿Dudas? Chatea con nosotros</span>
-  <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg class="whatsapp-icon" viewBox="0 0 24 24">
     <path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.67-1.612-.92-2.207-.24-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.76.982.998-3.675-.236-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.9 6.994c-.004 5.45-4.436 9.88-9.885 9.88m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.18-1.24-6.162-3.495-8.411"/>
   </svg>
 </a>
 
-<!-- ═══ ELFSIGHT AI CHATBOT ═══ -->
-<script src="https://elfsightcdn.com/platform.js" async></script>
+<!-- ── ELFSIGHT CHATBOT ── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-beb4a331-0ecc-4c09-b401-4d88d35cbf03" data-elfsight-app-lazy></div>
 
-<!-- ═══ JAVASCRIPT ═══ -->
+<!-- ══ JAVASCRIPT ══ -->
 <script>
 /* ── Constantes ── */
 const RECAPTCHA_SITE_KEY = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
 const CP_TOKEN           = '36da398a-1848-44f3-a952-06c9bfb02cc8';
 const MAX_BYTES          = 5 * 1024 * 1024;
-const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png','zip','rar'];
+const ALLOWED_EXTS       = ['pdf','jpg','jpeg','png'];
 const THEME_STORAGE_KEY  = 'ava-formulario-theme';
+/* ══ UPPERCASE ENFORCEMENT ══ */
+(function(){
+  document.querySelectorAll('input.uppercase-field').forEach(function(el){
+    el.addEventListener('input', function(){
+      var pos = this.selectionStart;
+      this.value = this.value.toUpperCase();
+      try { this.setSelectionRange(pos, pos); } catch(e) {}
+    });
+  });
+})();
+
+/* ══ RFC VALIDATION ══ */
+// Formato RFC personas físicas: 4 letras + 6 dígitos + 3 alfanuméricos = 13 chars
+// Formato RFC personas morales: 3 letras + 6 dígitos + 3 alfanuméricos = 12 chars
+const RFC_REGEX = /^([A-ZÑ&]{3,4})(\d{6})([A-Z0-9]{3})$/;
+const CURP_REGEX = /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]{1}\d{1}$/;
+
+document.getElementById('rfc').addEventListener('input', function(){
+  var val = this.value.trim();
+  var msg = document.getElementById('rfcMsg');
+  if(!val){ this.classList.remove('field-valid','field-invalid'); msg.className='field-msg'; return; }
+  if(RFC_REGEX.test(val)){
+    this.classList.add('field-valid'); this.classList.remove('field-invalid');
+    msg.textContent = '✓ RFC válido'; msg.className = 'field-msg visible field-msg--ok';
+  } else {
+    this.classList.add('field-invalid'); this.classList.remove('field-valid');
+    var len = val.length;
+    if(len < 12) msg.textContent = 'RFC incompleto — se requieren 12 o 13 caracteres';
+    else msg.textContent = 'Formato incorrecto. Ejemplo: AAAA000000AAA';
+    msg.className = 'field-msg visible field-msg--err';
+  }
+});
+
+document.getElementById('curp').addEventListener('input', function(){
+  var val = this.value.trim();
+  var msg = document.getElementById('curpMsg');
+  if(!val){ this.classList.remove('field-valid','field-invalid'); msg.className='field-msg'; return; }
+  if(CURP_REGEX.test(val)){
+    this.classList.add('field-valid'); this.classList.remove('field-invalid');
+    msg.textContent = '✓ CURP válida'; msg.className = 'field-msg visible field-msg--ok';
+  } else {
+    this.classList.add('field-invalid'); this.classList.remove('field-valid');
+    var len = val.length;
+    if(len < 18) msg.textContent = 'CURP incompleta — deben ser exactamente 18 caracteres';
+    else msg.textContent = 'Formato incorrecto. Verifica tu CURP.';
+    msg.className = 'field-msg visible field-msg--err';
+  }
+});
+
+
 
 /* ── Año Modelo dropdown ── */
 (function(){
@@ -1322,42 +1705,27 @@ const THEME_STORAGE_KEY  = 'ava-formulario-theme';
   }
 })();
 
-/* ════════════════════════════════════════════════════════════
-   THEME TOGGLE — Modo Oscuro / Claro
-   ════════════════════════════════════════════════════════════ */
+/* ── Theme Toggle ── */
 document.addEventListener('DOMContentLoaded', function() {
   var themeBtn = document.getElementById('themeToggleBtn');
-
-  // Restaurar preferencia guardada (evita flash de tema incorrecto)
   try {
-    if (localStorage.getItem(THEME_STORAGE_KEY) === 'dark') {
-      document.body.classList.add('dark-mode');
-    }
+    if (localStorage.getItem(THEME_STORAGE_KEY) === 'dark') document.body.classList.add('dark-mode');
   } catch(e) {}
 
   if (themeBtn) {
     themeBtn.addEventListener('click', function() {
       var isDark = document.body.classList.toggle('dark-mode');
-
-      try {
-        localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
-      } catch(e) {}
-
-      // Efecto de glow temporal
-      themeBtn.style.boxShadow = isDark
-        ? '0 0 24px rgba(65,105,225,0.75)'
-        : '0 0 24px rgba(255,215,0,0.75)';
+      try { localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light'); } catch(e) {}
+      themeBtn.style.boxShadow = isDark ? '0 0 24px rgba(65,105,225,0.75)' : '0 0 24px rgba(255,215,0,0.75)';
       setTimeout(function() { themeBtn.style.boxShadow = ''; }, 400);
     });
   }
 
-  // Activar barra de progreso para el formulario
   showProgressBar('solicitudForm');
+  buildSummary();
 });
 
-/* ════════════════════════════════════════════════════════════
-   HELPERS — Estado & Municipio autofill
-   ════════════════════════════════════════════════════════════ */
+/* ── Autofill helpers ── */
 const estadoInput    = document.getElementById('estado');
 const municipioInput = document.getElementById('municipio');
 const estadoHint     = document.getElementById('estadoHint');
@@ -1370,11 +1738,8 @@ function setAutofillField(inputEl, hintEl, value) {
     inputEl.classList.add('filled');
     hintEl.classList.add('ready');
     hintEl.innerHTML = `<span class="autofill-hint-dot"></span>Autocompletado desde tu CP ✓`;
-  } else {
-    clearAutofillField(inputEl, hintEl);
-  }
+  } else { clearAutofillField(inputEl, hintEl); }
 }
-
 function clearAutofillField(inputEl, hintEl) {
   inputEl.value = '';
   inputEl.classList.add('waiting');
@@ -1383,9 +1748,7 @@ function clearAutofillField(inputEl, hintEl) {
   hintEl.innerHTML = `<span class="autofill-hint-dot"></span>Esperando código postal…`;
 }
 
-/* ════════════════════════════════════════════════════════════
-   COPOMEX — CP lookup
-   ════════════════════════════════════════════════════════════ */
+/* ── CP lookup ── */
 document.getElementById('cp').addEventListener('input', async function(){
   const val = this.value.replace(/\D/g,'');
   this.value = val;
@@ -1404,106 +1767,61 @@ document.getElementById('cp').addEventListener('input', async function(){
   if (val.length !== 5) {
     clearAutofillField(estadoInput, estadoHint);
     clearAutofillField(municipioInput, municipioHint);
-    updateProgressBar();
-    return;
+    updateProgressBar(); buildSummary(); return;
   }
-
   ldrEl.className = 'cp-loading visible';
 
   try {
-    const endpoint = `https://api.copomex.com/query/info_cp/${val}?type=simplified&token=${CP_TOKEN}`;
-    const r    = await fetch(endpoint);
+    const r    = await fetch(`https://api.copomex.com/query/info_cp/${val}?type=simplified&token=${CP_TOKEN}`);
     const data = await r.json();
     ldrEl.className = 'cp-loading';
-
     const obj = Array.isArray(data) ? data[0] : data;
 
     if (!obj || obj.error || !obj.response) {
       const msg = (obj && obj.error_message) ? obj.error_message : 'Código postal no encontrado.';
-      errEl.textContent = msg;
-      errEl.className   = 'cp-error visible';
+      errEl.textContent = msg; errEl.className = 'cp-error visible';
       clearAutofillField(estadoInput, estadoHint);
       clearAutofillField(municipioInput, municipioHint);
-      updateProgressBar();
-      return;
+      updateProgressBar(); buildSummary(); return;
     }
 
     const info = obj.response;
-
-    setAutofillField(estadoInput,    estadoHint,    info.estado    || '');
+    setAutofillField(estadoInput, estadoHint, info.estado || '');
     setAutofillField(municipioInput, municipioHint, info.municipio || '');
 
     const colonias = Array.isArray(info.asentamiento)
-      ? info.asentamiento.slice().sort((a, b) => a.localeCompare(b, 'es'))
+      ? info.asentamiento.slice().sort((a,b)=>a.localeCompare(b,'es'))
       : (info.asentamiento ? [info.asentamiento] : []);
 
-    resEl.innerHTML = `
-      <div>
-        <span class="cp-badge">CP ${val}</span>
-        <strong>${info.municipio || ''}</strong>, ${info.estado || ''}
-        ${info.ciudad && info.ciudad !== info.municipio ? ' &nbsp;·&nbsp; ' + info.ciudad : ''}
-      </div>`;
+    resEl.innerHTML = `<div><span class="cp-badge">CP ${val}</span><strong>${info.municipio||''}</strong>, ${info.estado||''}${info.ciudad&&info.ciudad!==info.municipio?' &nbsp;·&nbsp; '+info.ciudad:''}</div>`;
     resEl.className = 'cp-result visible';
 
     if (colonias.length > 1) {
       coloniaSelect.innerHTML = '<option value="">Elige tu colonia…</option>';
-      colonias.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c; opt.textContent = c;
-        coloniaSelect.appendChild(opt);
-      });
-      coloniaBadge.textContent = colonias.length + ' opciones';
+      colonias.forEach(c=>{ const opt=document.createElement('option'); opt.value=c; opt.textContent=c; coloniaSelect.appendChild(opt); });
+      coloniaBadge.textContent = colonias.length+' opciones';
       coloniaWrap.className = 'colonia-wrap visible';
     } else if (colonias.length === 1) {
       coloniaSelect.innerHTML = `<option value="${colonias[0]}" selected>${colonias[0]}</option>`;
     }
-
-    // Actualizar barra tras autocompletar Estado y Municipio
-    updateProgressBar();
-
+    updateProgressBar(); buildSummary();
   } catch(e) {
-    ldrEl.className   = 'cp-loading';
+    ldrEl.className = 'cp-loading';
     errEl.textContent = 'No se pudo consultar el código postal. Verifica tu conexión.';
-    errEl.className   = 'cp-error visible';
+    errEl.className = 'cp-error visible';
     clearAutofillField(estadoInput, estadoHint);
     clearAutofillField(municipioInput, municipioHint);
-    updateProgressBar();
+    updateProgressBar(); buildSummary();
   }
 });
 
-/* ════════════════════════════════════════════════════════════
-   MARCAS DE VEHÍCULO
-   ════════════════════════════════════════════════════════════ */
+/* ── Marcas ── */
 const BRANDS = {
-  'Chinas': [
-    {f:'🇨🇳',n:'BAIC'},{f:'🇨🇳',n:'BYD'},{f:'🇨🇳',n:'Chery'},
-    {f:'🇨🇳',n:'DFSK'},{f:'🇨🇳',n:'Foton'},{f:'🇨🇳',n:'Geely'},
-    {f:'🇨🇳',n:'Great Wall'},{f:'🇨🇳',n:'Haval'},
-    {f:'🇨🇳',n:'JAC'},{f:'🇨🇳',n:'MG'}
-  ],
-  'Europeas': [
-    {f:'🇮🇹',n:'Alfa Romeo'},{f:'🇩🇪',n:'Audi'},{f:'🇩🇪',n:'BMW'},
-    {f:'🇮🇹',n:'Fiat'},{f:'🇬🇧',n:'Jaguar'},{f:'🇬🇧',n:'Land Rover'},
-    {f:'🇩🇪',n:'Mercedes-Benz'},{f:'🇫🇷',n:'Peugeot'},
-    {f:'🇩🇪',n:'Porsche'},{f:'🇫🇷',n:'Renault'},
-    {f:'🇪🇸',n:'SEAT'},{f:'🇩🇪',n:'Volkswagen'},{f:'🇸🇪',n:'Volvo'}
-  ],
-  'Estadounidenses': [
-    {f:'🇺🇸',n:'Buick'},{f:'🇺🇸',n:'Cadillac'},{f:'🇺🇸',n:'Chevrolet'},
-    {f:'🇺🇸',n:'Dodge'},{f:'🇺🇸',n:'Ford'},{f:'🇺🇸',n:'GMC'},
-    {f:'🇺🇸',n:'Jeep'},{f:'🇺🇸',n:'Lincoln'},
-    {f:'🇺🇸',n:'RAM'},{f:'🇺🇸',n:'Tesla'}
-  ],
-  'Japonesas': [
-    {f:'🇯🇵',n:'Acura'},{f:'🇯🇵',n:'Honda'},{f:'🇯🇵',n:'Infiniti'},
-    {f:'🇯🇵',n:'Lexus'},{f:'🇯🇵',n:'Mazda'},{f:'🇯🇵',n:'Mitsubishi'},
-    {f:'🇯🇵',n:'Nissan'},{f:'🇯🇵',n:'Subaru'},
-    {f:'🇯🇵',n:'Suzuki'},{f:'🇯🇵',n:'Toyota'}
-  ],
-  'Coreanas': [
-    {f:'🇰🇷',n:'Daewoo'},{f:'🇰🇷',n:'Genesis'},
-    {f:'🇰🇷',n:'Hyundai'},{f:'🇰🇷',n:'Kia'},{f:'🇰🇷',n:'SsangYong'}
-  ],
+  'Chinas': [{f:'🇨🇳',n:'BAIC'},{f:'🇨🇳',n:'BYD'},{f:'🇨🇳',n:'Chery'},{f:'🇨🇳',n:'DFSK'},{f:'🇨🇳',n:'Foton'},{f:'🇨🇳',n:'Geely'},{f:'🇨🇳',n:'Great Wall'},{f:'🇨🇳',n:'Haval'},{f:'🇨🇳',n:'JAC'},{f:'🇨🇳',n:'MG'}],
+  'Europeas': [{f:'🇮🇹',n:'Alfa Romeo'},{f:'🇩🇪',n:'Audi'},{f:'🇩🇪',n:'BMW'},{f:'🇮🇹',n:'Fiat'},{f:'🇬🇧',n:'Jaguar'},{f:'🇬🇧',n:'Land Rover'},{f:'🇩🇪',n:'Mercedes-Benz'},{f:'🇫🇷',n:'Peugeot'},{f:'🇩🇪',n:'Porsche'},{f:'🇫🇷',n:'Renault'},{f:'🇪🇸',n:'SEAT'},{f:'🇩🇪',n:'Volkswagen'},{f:'🇸🇪',n:'Volvo'}],
+  'Estadounidenses': [{f:'🇺🇸',n:'Buick'},{f:'🇺🇸',n:'Cadillac'},{f:'🇺🇸',n:'Chevrolet'},{f:'🇺🇸',n:'Dodge'},{f:'🇺🇸',n:'Ford'},{f:'🇺🇸',n:'GMC'},{f:'🇺🇸',n:'Jeep'},{f:'🇺🇸',n:'Lincoln'},{f:'🇺🇸',n:'RAM'},{f:'🇺🇸',n:'Tesla'}],
+  'Japonesas': [{f:'🇯🇵',n:'Acura'},{f:'🇯🇵',n:'Honda'},{f:'🇯🇵',n:'Infiniti'},{f:'🇯🇵',n:'Lexus'},{f:'🇯🇵',n:'Mazda'},{f:'🇯🇵',n:'Mitsubishi'},{f:'🇯🇵',n:'Nissan'},{f:'🇯🇵',n:'Subaru'},{f:'🇯🇵',n:'Suzuki'},{f:'🇯🇵',n:'Toyota'}],
+  'Coreanas': [{f:'🇰🇷',n:'Daewoo'},{f:'🇰🇷',n:'Genesis'},{f:'🇰🇷',n:'Hyundai'},{f:'🇰🇷',n:'Kia'},{f:'🇰🇷',n:'SsangYong'}],
 };
 
 const searchInput    = document.getElementById('marcaSearch');
@@ -1519,38 +1837,23 @@ function buildDropdown(filter=''){
     if(!m.length) continue;
     const c=document.createElement('div'); c.className='brand-cat'; c.textContent=cat;
     dropdown.appendChild(c);
-    m.forEach(b=>{
-      const el=document.createElement('div'); el.className='brand-item';
-      el.innerHTML=`<span class="brand-flag">${b.f}</span>${b.n}`;
-      el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand(b.n);});
-      dropdown.appendChild(el);
-    });
+    m.forEach(b=>{ const el=document.createElement('div'); el.className='brand-item'; el.innerHTML=`<span class="brand-flag">${b.f}</span>${b.n}`; el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand(b.n);}); dropdown.appendChild(el); });
   }
   if('otra'.includes(filter.toLowerCase())||filter===''){
-    const el=document.createElement('div'); el.className='brand-item';
-    el.innerHTML=`<span class="brand-flag">🔍</span>Otra marca…`;
-    el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand('__otro__');});
-    dropdown.appendChild(el);
+    const el=document.createElement('div'); el.className='brand-item'; el.innerHTML=`<span class="brand-flag">🔍</span>Otra marca…`; el.addEventListener('mousedown',e=>{e.preventDefault();selectBrand('__otro__');}); dropdown.appendChild(el);
   }
 }
 function selectBrand(name){
-  if(name==='__otro__'){
-    searchInput.value='Otra marca…'; hiddenMarca.value='';
-    otraMarcaWrap.classList.add('visible'); otraMarcaInput.required=true;
-  } else {
-    searchInput.value=name; hiddenMarca.value=name;
-    otraMarcaWrap.classList.remove('visible'); otraMarcaInput.required=false;
-  }
+  if(name==='__otro__'){ searchInput.value='Otra marca…'; hiddenMarca.value=''; otraMarcaWrap.classList.add('visible'); otraMarcaInput.required=true; }
+  else { searchInput.value=name; hiddenMarca.value=name; otraMarcaWrap.classList.remove('visible'); otraMarcaInput.required=false; }
   dropdown.classList.remove('open');
-  updateProgressBar();
+  updateProgressBar(); buildSummary();
 }
 searchInput.addEventListener('focus', ()=>{ buildDropdown(); dropdown.classList.add('open'); });
-searchInput.addEventListener('input', ()=>{ buildDropdown(searchInput.value); dropdown.classList.add('open'); });
+searchInput.addEventListener('input', ()=>{ buildDropdown(searchInput.value); dropdown.classList.add('open'); buildSummary(); });
 searchInput.addEventListener('blur',  ()=>{ setTimeout(()=>dropdown.classList.remove('open'),150); });
 
-/* ═══════════════════════════════════════
-   MULTI-FILE + SEMÁFORO DE CAPACIDAD
-   ═══════════════════════════════════════ */
+/* ── File upload ── */
 const fileZone      = document.getElementById('fileZone');
 const fileInput     = document.getElementById('fileInput');
 const fileList      = document.getElementById('fileList');
@@ -1560,61 +1863,35 @@ const capFill       = document.getElementById('capFill');
 const capLabel      = document.getElementById('capLabel');
 const tlDot         = document.getElementById('tlDot');
 const capStatusText = document.getElementById('capStatusText');
+let attachedFiles = []; let nextId = 0;
 
-let attachedFiles = [];
-let nextId = 0;
-
-function fmtSize(b){
-  if(b<1024)    return b+' B';
-  if(b<1048576) return (b/1024).toFixed(1)+' KB';
-  return (b/1048576).toFixed(2)+' MB';
-}
+function fmtSize(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
 function totalSize(){ return attachedFiles.reduce((s,f)=>s+f.file.size,0); }
 
 function updateBar(){
-  const tot = totalSize();
-  const pct = Math.min((tot/MAX_BYTES)*100,100);
-  capFill.style.width = pct+'%';
-  capLabel.textContent = `${fmtSize(tot)} de 5 MB`;
-  capFill.classList.remove('yellow','red');
-  tlDot.classList.remove('yellow','red');
-  const rem = MAX_BYTES - tot;
-  if(pct >= 100){
-    capFill.classList.add('red'); tlDot.classList.add('red');
-    capStatusText.textContent = '⛔ Límite alcanzado — elimina algún archivo para continuar';
-  } else if(pct >= 75){
-    capFill.classList.add('yellow'); tlDot.classList.add('yellow');
-    capStatusText.textContent = `⚠️ Casi lleno — quedan ${fmtSize(rem)} disponibles`;
-  } else {
-    capStatusText.textContent = `✅ Capacidad disponible — quedan ${fmtSize(rem)}`;
-  }
+  const tot=totalSize(); const pct=Math.min((tot/MAX_BYTES)*100,100);
+  capFill.style.width=pct+'%'; capLabel.textContent=`${fmtSize(tot)} de 5 MB`;
+  capFill.classList.remove('yellow','red'); tlDot.classList.remove('yellow','red');
+  const rem=MAX_BYTES-tot;
+  if(pct>=100){ capFill.classList.add('red'); tlDot.classList.add('red'); capStatusText.textContent='⛔ Límite alcanzado — elimina algún archivo para continuar'; }
+  else if(pct>=75){ capFill.classList.add('yellow'); tlDot.classList.add('yellow'); capStatusText.textContent=`⚠️ Casi lleno — quedan ${fmtSize(rem)} disponibles`; }
+  else { capStatusText.textContent=`✅ Capacidad disponible — quedan ${fmtSize(rem)}`; }
   capBarWrap.classList.toggle('visible', attachedFiles.length>0);
 }
-
 function renderList(){
   fileList.innerHTML='';
   attachedFiles.forEach(({file,id})=>{
     const ext=file.name.split('.').pop().toLowerCase();
     const icon=/zip|rar/.test(ext)?'🗜️':/pdf/.test(ext)?'📄':'🖼️';
     const chip=document.createElement('div'); chip.className='file-chip';
-    chip.innerHTML=`
-      <span class="file-chip-icon">${icon}</span>
-      <span class="file-chip-name" title="${file.name}">${file.name}</span>
-      <span class="file-chip-size">${fmtSize(file.size)}</span>
-      <span class="file-chip-remove" title="Eliminar" onclick="removeFile(${id})">✕</span>
-    `;
+    chip.innerHTML=`<span class="file-chip-icon">${icon}</span><span class="file-chip-name" title="${file.name}">${file.name}</span><span class="file-chip-size">${fmtSize(file.size)}</span><span class="file-chip-remove" title="Eliminar" onclick="removeFile(${id})">✕</span>`;
     fileList.appendChild(chip);
   });
+  buildSummary();
 }
-
 function syncInput(){
-  try {
-    const dt=new DataTransfer();
-    attachedFiles.forEach(({file})=>dt.items.add(file));
-    fileInput.files=dt.files;
-  } catch(e){}
+  try { const dt=new DataTransfer(); attachedFiles.forEach(({file})=>dt.items.add(file)); fileInput.files=dt.files; } catch(e){}
 }
-
 function addFiles(newFiles){
   fileError.className='file-error';
   const errors=[];
@@ -1629,157 +1906,277 @@ function addFiles(newFiles){
   if(errors.length){ fileError.textContent=errors.join(' '); fileError.className='file-error visible'; }
   renderList(); updateBar(); syncInput();
 }
-
 window.removeFile=function(id){
   attachedFiles=attachedFiles.filter(a=>a.id!==id);
-  renderList(); updateBar(); syncInput();
-  fileError.className='file-error';
+  renderList(); updateBar(); syncInput(); fileError.className='file-error';
 };
-
 fileInput.addEventListener('change',e=>{addFiles(e.target.files);fileInput.value='';});
 fileZone.addEventListener('dragover',e=>{e.preventDefault();fileZone.classList.add('drag');});
 fileZone.addEventListener('dragleave',()=>fileZone.classList.remove('drag'));
 fileZone.addEventListener('drop',e=>{e.preventDefault();fileZone.classList.remove('drag');addFiles(e.dataTransfer.files);});
 
-/* ═══════════════════════════════════════════════════════════
-   BARRA FLOTANTE DE PROGRESO DE CAMPOS OBLIGATORIOS
-   ═══════════════════════════════════════════════════════════ */
-var progressState = {
-  currentForm: null,
-  total: 0,
-  done: 0
-};
-
-function getRequiredFieldsForForm(formId) {
-  var form = document.getElementById(formId);
-  if (!form) return [];
-  var fields = [];
-  var radioGroups = {};
-  var seen = {};
-
-  form.querySelectorAll('[required]').forEach(function(el) {
-    if (el.type === 'hidden') return;
-    if (el.classList.contains('lada-select')) return;
-    if (el.id === 'marca') return;
-    if (el.id === 'estado' || el.id === 'municipio') {
-      var key = el.id;
-      if (!seen[key]) {
-        seen[key] = true;
-        fields.push({ type: 'autofill', el: el });
-      }
-      return;
-    }
-
-    var key = el.name || el.id || ('anon_' + Math.random());
-
-    if (el.type === 'radio') {
-      if (!radioGroups[el.name]) {
-        radioGroups[el.name] = true;
-        fields.push({ type: 'radio', name: el.name });
-      }
-    } else {
-      if (!seen[key]) {
-        seen[key] = true;
-        fields.push({ type: 'standard', el: el });
-      }
-    }
+/* ══ MAYÚSCULAS EN TODOS LOS CAMPOS (excepto email) ══ */
+document.getElementById('solicitudForm').querySelectorAll('input:not([type=email]):not([type=date]):not([type=file]):not([type=hidden]):not([type=checkbox])').forEach(function(el){
+  el.addEventListener('input', function(){
+    // Store cursor position
+    var start = this.selectionStart;
+    var end   = this.selectionEnd;
+    this.value = this.value.toUpperCase();
+    // Restore cursor
+    try { this.setSelectionRange(start, end); } catch(e){}
   });
+});
 
-  if (!seen['marcaSearch']) {
-    var marcaEl = document.getElementById('marcaSearch');
-    if (marcaEl) {
-      seen['marcaSearch'] = true;
-      fields.push({ type: 'marca', el: marcaEl });
-    }
+/* ══ RFC / CURP — VALIDACIÓN EN TIEMPO REAL ══ */
+const RFC_REGEX  = /^([A-ZÑ&]{3,4})(\d{6})([A-Z0-9]{3})$/;
+const CURP_REGEX = /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]{1}\d{1}$/;
+
+function validateRFC(){
+  var el   = document.getElementById('rfc');
+  var hint = document.getElementById('rfcHint');
+  var val  = el.value.trim();
+  if(!val){ el.classList.remove('field-valid','field-invalid'); hint.textContent=''; hint.className='field-hint'; return; }
+  if(RFC_REGEX.test(val)){
+    el.classList.add('field-valid'); el.classList.remove('field-invalid');
+    hint.textContent='✓ RFC válido'; hint.className='field-hint ok';
+  } else {
+    el.classList.add('field-invalid'); el.classList.remove('field-valid');
+    var len=val.length;
+    if(len<12) hint.textContent='Faltan '+(12-len)+' caracteres (mín. 12)';
+    else if(len>13) hint.textContent='Máximo 13 caracteres';
+    else hint.textContent='Formato incorrecto — ej. ABCD830523XY0';
+    hint.className='field-hint err';
+  }
+}
+function validateCURP(){
+  var el   = document.getElementById('curp');
+  var hint = document.getElementById('curpHint');
+  var val  = el.value.trim();
+  if(!val){ el.classList.remove('field-valid','field-invalid'); hint.textContent=''; hint.className='field-hint'; return; }
+  if(CURP_REGEX.test(val)){
+    el.classList.add('field-valid'); el.classList.remove('field-invalid');
+    hint.textContent='✓ CURP válida'; hint.className='field-hint ok';
+  } else {
+    el.classList.add('field-invalid'); el.classList.remove('field-valid');
+    var len=val.length;
+    if(len<18) hint.textContent='Faltan '+(18-len)+' caracteres (requiere 18)';
+    else hint.textContent='Formato incorrecto — verifica tu CURP oficial';
+    hint.className='field-hint err';
+  }
+}
+document.getElementById('rfc').addEventListener('input', validateRFC);
+document.getElementById('curp').addEventListener('input', validateCURP);
+
+/* ══ RESUMEN DE SOLICITUD ══ */
+function V(id){ var el=document.getElementById(id); return el?el.value:''; }
+
+function buildSummary(){
+  var sumBox  = document.getElementById('sumBox');
+  var sumCont = document.getElementById('sumCont');
+  if(!sumBox||!sumCont) return;
+
+  function makeRow(label,value,chipClass){
+    var empty=!value||!String(value).trim()||value==='N/A';
+    var valHtml;
+    if(empty){ valHtml='<span class="sum-v sum-v--empty">—</span>'; }
+    else if(chipClass){ valHtml='<span class="sum-chip '+chipClass+'">'+value+'</span>'; }
+    else { valHtml='<span class="sum-v">'+value+'</span>'; }
+    return '<div class="sum-row"><span class="sum-k">'+label+':</span>'+valHtml+'</div>';
+  }
+  function makeGroup(emoji,titulo,filas){
+    return '<div class="sum-group"><div class="sum-group-label"><span class="sum-group-label-icon">'+emoji+'</span><span class="sum-group-label-text">'+titulo+'</span></div>'+filas+'</div>';
   }
 
+  var nombre=[V('primer_nombre'),V('segundo_nombre'),V('primer_apellido'),V('segundo_apellido')].filter(Boolean).join(' ').replace(/\s+/,' ').trim();
+  var marcaFinal=document.getElementById('marca').value||'';
+  if(marcaFinal==='__otro__'||(!marcaFinal&&V('otraMarca'))) marcaFinal='Otra ('+V('otraMarca')+')';
+
+  var numArchivos=attachedFiles.length;
+  var archivosStr=numArchivos>0?numArchivos+' archivo(s) adjunto(s)':'Sin archivos adjuntos';
+
+  var g1=makeGroup('👤','Datos Personales',
+    makeRow('Nombre completo',nombre)+
+    makeRow('Género',V('genero'))+
+    makeRow('Fecha de nac.',V('fecha_nacimiento'))+
+    makeRow('RFC',V('rfc'))+
+    makeRow('CURP',V('curp'))+
+    makeRow('Teléfono',V('telefono'))+
+    makeRow('Correo',V('email'))
+  );
+  var g2=makeGroup('📍','Domicilio',
+    makeRow('C.P.',V('cp'))+
+    makeRow('Colonia',V('coloniaSelect'))+
+    makeRow('Municipio',V('municipio'))+
+    makeRow('Estado',V('estado'))
+  );
+  var g3=makeGroup('🚗','Vehículo',
+    makeRow('Condición',V('condicion'))+
+    makeRow('Marca',marcaFinal,'sum-chip')+
+    makeRow('Versión',V('version'))+
+    makeRow('Año',V('anio'))+
+    makeRow('Núm. de Serie',V('num_serie'))+
+    makeRow('Núm. de Motor',V('num_motor'))+
+    makeRow('Clave Vehicular',V('clave_vehicular'))
+  );
+  var g4=makeGroup('📎','Documentos Adjuntos',
+    makeRow('Archivos',archivosStr,numArchivos>0?'sum-chip--files':'')
+  );
+
+  sumCont.innerHTML=g1+g2+g3+g4;
+}
+
+/* ── Listen to all form inputs to update summary ── */
+document.getElementById('solicitudForm').addEventListener('input', function(){ buildSummary(); });
+document.getElementById('solicitudForm').addEventListener('change', function(){ buildSummary(); });
+
+/* ══ CHECKBOX → habilita/deshabilita botón ══ */
+document.getElementById('declaracionCheck').addEventListener('change', function(){
+  document.getElementById('btnSubmit').disabled = !this.checked;
+});
+
+/* ══ PROGRESS BAR ══ */
+var progressState = { currentForm: null, total: 0, done: 0 };
+
+function getRequiredFieldsForForm(formId){
+  var form=document.getElementById(formId); if(!form) return [];
+  var fields=[]; var radioGroups={}; var seen={};
+  form.querySelectorAll('[required]').forEach(function(el){
+    if(el.type==='hidden') return;
+    if(el.classList.contains('lada-select')) return;
+    if(el.id==='marca') return;
+    if(el.id==='estado'||el.id==='municipio'){
+      var key=el.id; if(!seen[key]){ seen[key]=true; fields.push({type:'autofill',el:el}); } return;
+    }
+    var key=el.name||el.id||('anon_'+Math.random());
+    if(el.type==='radio'){ if(!radioGroups[el.name]){ radioGroups[el.name]=true; fields.push({type:'radio',name:el.name}); } }
+    else { if(!seen[key]){ seen[key]=true; fields.push({type:'standard',el:el}); } }
+  });
+  if(!seen['marcaSearch']){ var marcaEl=document.getElementById('marcaSearch'); if(marcaEl){ seen['marcaSearch']=true; fields.push({type:'marca',el:marcaEl}); } }
+  // RFC and CURP are already captured by the standard loop since they have required attr
   return fields;
 }
 
-function isFieldFilled(fieldDef) {
-  if (fieldDef.type === 'radio') {
-    return document.querySelector('input[name="' + fieldDef.name + '"]:checked') !== null;
-  }
-  if (fieldDef.type === 'autofill') {
-    return fieldDef.el && fieldDef.el.classList.contains('filled');
-  }
-  if (fieldDef.type === 'marca') {
-    return document.getElementById('marca').value.trim().length > 0;
-  }
-  if (fieldDef.type === 'standard') {
-    return fieldDef.el && fieldDef.el.value.trim().length > 0;
-  }
+function isFieldFilled(fieldDef){
+  if(fieldDef.type==='radio') return document.querySelector('input[name="'+fieldDef.name+'"]:checked')!==null;
+  if(fieldDef.type==='autofill') return fieldDef.el&&fieldDef.el.classList.contains('filled');
+  if(fieldDef.type==='marca') return document.getElementById('marca').value.trim().length>0;
+  if(fieldDef.type==='standard') return fieldDef.el&&fieldDef.el.value.trim().length>0;
   return false;
 }
 
-function updateProgressBar() {
-  if (!progressState.currentForm) return;
-
-  var fields = getRequiredFieldsForForm(progressState.currentForm);
-  var total = fields.length;
-  var done  = 0;
-  fields.forEach(function(f) { if (isFieldFilled(f)) done++; });
-
-  progressState.total = total;
-  progressState.done  = done;
-
-  var pct = total > 0 ? (done / total) * 100 : 0;
-  document.getElementById('formProgressFill').style.width = pct + '%';
-  document.getElementById('formProgressDone').textContent  = done;
-  document.getElementById('formProgressTotal').textContent = total;
+function updateProgressBar(){
+  if(!progressState.currentForm) return;
+  var fields=getRequiredFieldsForForm(progressState.currentForm);
+  var total=fields.length; var done=0;
+  fields.forEach(function(f){ if(isFieldFilled(f)) done++; });
+  progressState.total=total; progressState.done=done;
+  var pct=total>0?(done/total)*100:0;
+  document.getElementById('formProgressFill').style.width=pct+'%';
+  document.getElementById('formProgressDone').textContent=done;
+  document.getElementById('formProgressTotal').textContent=total;
 }
 
-function attachProgressListeners(formId) {
-  var form = document.getElementById(formId);
-  if (!form) return;
-
-  form.querySelectorAll('input, select, textarea').forEach(function(el) {
-    el.addEventListener('input',  updateProgressBar);
-    el.addEventListener('change', updateProgressBar);
+function attachProgressListeners(formId){
+  var form=document.getElementById(formId); if(!form) return;
+  form.querySelectorAll('input,select,textarea').forEach(function(el){
+    el.addEventListener('input',updateProgressBar);
+    el.addEventListener('change',updateProgressBar);
   });
 }
 
-function showProgressBar(formId) {
-  progressState.currentForm = formId;
+function showProgressBar(formId){
+  progressState.currentForm=formId;
   document.getElementById('formProgressWrap').classList.add('visible');
   attachProgressListeners(formId);
   updateProgressBar();
 }
 
-/* ═══════════════════════════════════════
-   reCAPTCHA v3 + ENVÍO
-   ═══════════════════════════════════════ */
+/* ══ SUBMIT ══ */
 document.getElementById('solicitudForm').addEventListener('submit', async function(e){
   e.preventDefault();
 
+  // Validar campos obligatorios y hacer scroll al primero vacío
+  const requiredFields = [
+    { id: 'primer_nombre',    label: 'Primer Nombre' },
+    { id: 'primer_apellido',  label: 'Primer Apellido' },
+    { id: 'segundo_apellido', label: 'Segundo Apellido' },
+    { id: 'genero',           label: 'Género' },
+    { id: 'fecha_nacimiento', label: 'Fecha de Nacimiento' },
+    { id: 'rfc',              label: 'RFC' },
+    { id: 'curp',             label: 'CURP' },
+    { id: 'cp',               label: 'Código Postal' },
+    { id: 'estado',           label: 'Estado' },
+    { id: 'municipio',        label: 'Municipio' },
+    { id: 'telefono',         label: 'Teléfono' },
+    { id: 'email',            label: 'Correo Electrónico' },
+    { id: 'condicion',        label: 'Condición del Vehículo' },
+    { id: 'marcaSearch',      label: 'Marca' },
+    { id: 'version',          label: 'Versión / Trim' },
+    { id: 'anio',             label: 'Año Modelo' },
+    { id: 'num_serie',        label: 'Número de Serie' },
+  ];
+
+  for (const f of requiredFields) {
+    const el = document.getElementById(f.id);
+    if (!el) continue;
+    // Para marca, validar el hidden
+    if (f.id === 'marcaSearch') {
+      if (!hiddenMarca.value.trim()) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus();
+        alert('Por favor selecciona una Marca de vehículo.');
+        return;
+      }
+      continue;
+    }
+    if (!el.value.trim()) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.focus();
+      alert(`Por favor completa el campo: ${f.label}`);
+      return;
+    }
+  }
+
+  // Validar formato RFC
+  const rfcVal = document.getElementById('rfc').value.trim();
+  const rfcRegex = /^([A-ZÑ&]{3,4})(\d{6})([A-Z0-9]{3})$/;
+  if(!rfcRegex.test(rfcVal)){
+    document.getElementById('rfc').scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('rfc').focus();
+    alert('El RFC no tiene el formato correcto. Verifica e intenta de nuevo.');
+    return;
+  }
+  // Validar formato CURP
+  const curpVal = document.getElementById('curp').value.trim();
+  const curpRegex = /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]{1}\d{1}$/;
+  if(!curpRegex.test(curpVal)){
+    document.getElementById('curp').scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('curp').focus();
+    alert('La CURP no tiene el formato oficial correcto. Verifica e intenta de nuevo.');
+    return;
+  }
+
+  // Validaciones adicionales
   const isOtro = otraMarcaWrap.classList.contains('visible');
-  if(!hiddenMarca.value && !isOtro){ alert('Por favor selecciona una marca de vehículo.'); return; }
-  if(isOtro && !otraMarcaInput.value.trim()){ alert('Por favor especifica la marca del vehículo.'); return; }
+  if(isOtro && !otraMarcaInput.value.trim()){
+    otraMarcaInput.scrollIntoView({ behavior:'smooth', block:'center' });
+    otraMarcaInput.focus();
+    alert('Por favor especifica la marca del vehículo.');
+    return;
+  }
   if(isOtro) hiddenMarca.value = otraMarcaInput.value.trim();
 
   if(totalSize()>MAX_BYTES){ alert('El total de archivos supera 5 MB. Elimina o comprime algunos archivos.'); return; }
+  if(!estadoInput.value.trim()){ alert('Por favor ingresa un Código Postal válido para autocompletar el Estado.'); document.getElementById('cp').focus(); return; }
+  if(!municipioInput.value.trim()){ alert('Por favor ingresa un Código Postal válido para autocompletar el Municipio.'); document.getElementById('cp').focus(); return; }
 
-  if(!estadoInput.value.trim()){
-    alert('Por favor ingresa un Código Postal válido para autocompletar el Estado.');
-    document.getElementById('cp').focus();
-    return;
-  }
-  if(!municipioInput.value.trim()){
-    alert('Por favor ingresa un Código Postal válido para autocompletar el Municipio.');
-    document.getElementById('cp').focus();
-    return;
-  }
-
-  const btn=document.getElementById('btnSubmit');
+  const btn = document.getElementById('btnSubmit');
   btn.disabled=true; btn.innerHTML='⏳ &nbsp;Verificando seguridad…';
 
   try {
     const token = await new Promise((resolve,reject)=>{
       if(typeof grecaptcha==='undefined'){ reject(new Error('reCAPTCHA no disponible')); return; }
-      grecaptcha.ready(()=>{
-        grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submit_cotizacion'})
-          .then(resolve).catch(reject);
-      });
+      grecaptcha.ready(()=>{ grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submit_cotizacion'}).then(resolve).catch(reject); });
     });
     document.getElementById('recaptchaToken').value = token;
     btn.innerHTML = '🚀 &nbsp;Enviando…';
@@ -1788,22 +2185,22 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
     await fetch(this.action, { method: 'POST', body: formData });
 
     showSuccessModal();
-    btn.disabled = false;
+    btn.disabled = !document.getElementById('declaracionCheck').checked;
     btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
     this.reset();
 
-    attachedFiles = [];
-    renderList(); updateBar();
-    document.getElementById('cpResult').className  = 'cp-result';
-    document.getElementById('marcaSearch').value   = '';
-    hiddenMarca.value = '';
+    attachedFiles=[]; renderList(); updateBar();
+    document.getElementById('cpResult').className='cp-result';
+    document.getElementById('marcaSearch').value=''; hiddenMarca.value='';
     clearAutofillField(estadoInput, estadoHint);
     clearAutofillField(municipioInput, municipioHint);
-    updateProgressBar();
+    document.getElementById('declaracionCheck').checked=false;
+    document.getElementById('btnSubmit').disabled=true;
+    updateProgressBar(); buildSummary();
 
   } catch(err){
     console.error('Error al enviar:', err);
-    btn.disabled  = false;
+    btn.disabled = !document.getElementById('declaracionCheck').checked;
     btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
     showSuccessModal();
   }
@@ -1812,16 +2209,5 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
 /* ── Modal helpers ── */
 function showSuccessModal(){
   document.getElementById('successModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-window.closeModal = function(){
-  document.getElementById('successModal').classList.remove('show');
-  document.body.style.overflow = '';
-};
-document.getElementById('successModal').addEventListener('click', function(e){
-  if(e.target === this) closeModal();
-});
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-</script>
-</body>
-</html>
