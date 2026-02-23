@@ -6,6 +6,8 @@
   <title>AVA – Formulario Seguro de Auto – Cotizar</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://www.google.com/recaptcha/api.js?render=6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV"></script>
+  <!-- fflate: cargado temprano para que esté listo cuando el usuario adjunte archivos -->
+  <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js"></script>
 
   <style>
     :root {
@@ -1185,7 +1187,7 @@
           </div>
           <div class="format-notice-blue-body">
             Todos los documentos deben estar escaneados en <strong>formato PDF</strong> y ser completamente legibles.<br><br>
-            Este formulario cuenta con un <strong>sistema de compresión automática en ZIP</strong>. Sin embargo, si la compresión resultante supera los 5 MB, deberás comprimirlos por tu cuenta en archivos <strong>ZIP o RAR que no superen los 5 MB cada uno</strong> y enviarlos al correo <a href="mailto:info@anpai.com.mx" class="format-notice-blue-link">info@anpai.com.mx</a>.
+            Este formulario cuenta con un <strong>sistema de compresión automática en ZIP</strong>. Sin embargo, si la compresión resultante supera los 5 MB, deberás comprimirlos por tu cuenta en archivos <strong>ZIP o RAR que no superen los 5 MB cada uno</strong> y enviarlos al correo <a href="/cdn-cgi/l/email-protection#bdd4d3dbd2fddcd3cddcd493ded2d093d0c5" class="format-notice-blue-link"><span class="__cf_email__" data-cfemail="f990979f96b99897899890d79a9694d79481">[email&#160;protected]</span></a>.
           </div>
         </div>
 
@@ -1357,7 +1359,7 @@
 </a>
 
 <!-- ── ELFSIGHT ── -->
-<script src="https://elfsightcdn.com/platform.js" async></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-beb4a331-0ecc-4c09-b401-4d88d35cbf03" data-elfsight-app-lazy></div>
 
 <!-- ══════════════════════════════════════════
@@ -1634,6 +1636,9 @@ searchInput.addEventListener('blur',  function() { setTimeout(function() { dropd
 /* ════════════════════════════════════════
    FILE UPLOAD + CAPACIDAD
 ════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   FILE UPLOAD — VARIABLES
+════════════════════════════════════════ */
 var fileZone      = document.getElementById('fileZone');
 var fileInput     = document.getElementById('fileInput');
 var fileList      = document.getElementById('fileList');
@@ -1646,8 +1651,9 @@ var capStatusText = document.getElementById('capStatusText');
 var zipStatus     = document.getElementById('zipStatus');
 var zipStatusText = document.getElementById('zipStatusText');
 
-var attachedFiles = [];
-var nextId        = 0;
+var attachedFiles = [];  // { file, id }
+var currentZipFile = null; // File ZIP listo para enviar
+var nextId = 0;
 
 function fmtSize(b) {
   if (b < 1024) return b + ' B';
@@ -1659,6 +1665,7 @@ function totalSize() {
   return attachedFiles.reduce(function(s, f) { return s + f.file.size; }, 0);
 }
 
+/* ── Barra de capacidad (muestra tamaño original) ── */
 function updateBar() {
   var tot = totalSize();
   var pct = Math.min((tot / MAX_BYTES) * 100, 100);
@@ -1698,22 +1705,123 @@ function renderFileList() {
 function syncFileInput() {
   try {
     var dt = new DataTransfer();
-    attachedFiles.forEach(function(item) { dt.items.add(item.file); });
+    // Si tenemos ZIP listo, sincronizar ese; si no, los originales
+    if (currentZipFile) {
+      dt.items.add(currentZipFile);
+    } else {
+      attachedFiles.forEach(function(item) { dt.items.add(item.file); });
+    }
     fileInput.files = dt.files;
   } catch(e) {}
 }
 
+/* ════════════════════════════════════════
+   COMPRESIÓN ZIP — INMEDIATA AL ADJUNTAR
+════════════════════════════════════════ */
+var _zipTimer = null; // debounce para no comprimir en cada archivo de una selección múltiple
+
+function scheduleZip() {
+  currentZipFile = null;
+  if (attachedFiles.length === 0) {
+    zipStatus.className = 'zip-status';
+    return;
+  }
+
+  // Mostrar estado "pendiente" de inmediato
+  zipStatus.className  = 'zip-status visible';
+  zipStatusText.textContent = '⏳ Preparando compresión…';
+
+  clearTimeout(_zipTimer);
+  _zipTimer = setTimeout(function() { runZip(); }, 300);
+}
+
+function runZip() {
+  if (attachedFiles.length === 0) { zipStatus.className = 'zip-status'; return; }
+
+  // Si el único archivo ya es ZIP/RAR → usarlo directamente
+  if (attachedFiles.length === 1) {
+    var ext = attachedFiles[0].file.name.split('.').pop().toLowerCase();
+    if (ext === 'zip' || ext === 'rar') {
+      currentZipFile = attachedFiles[0].file;
+      zipStatusText.textContent = '✅ Archivo ZIP detectado (' + fmtSize(currentZipFile.size) + ') — listo para enviar';
+      zipStatus.className = 'zip-status visible';
+      syncFileInput(); return;
+    }
+  }
+
+  // Verificar si fflate está disponible (cargado en <head>)
+  if (typeof fflate === 'undefined') {
+    zipStatusText.textContent = '⚠️ Librería de compresión no disponible — se enviarán los archivos originales';
+    zipStatus.className = 'zip-status visible';
+    syncFileInput(); return;
+  }
+
+  zipStatusText.textContent = '🗜️ Comprimiendo archivos…';
+  zipStatus.className = 'zip-status visible';
+
+  var fileData = {};
+  var pending  = attachedFiles.length;
+  var usedKeys = {};
+
+  attachedFiles.forEach(function(item) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // Asegurar nombres únicos dentro del ZIP
+      var base = item.file.name.replace(/[^\w.\-]/g, '_');
+      var key  = base;
+      var c    = 1;
+      while (usedKeys[key]) { key = c + '_' + base; c++; }
+      usedKeys[key] = true;
+      fileData[key] = new Uint8Array(e.target.result);
+      pending--;
+      if (pending === 0) { finishZip(fileData); }
+    };
+    reader.onerror = function() {
+      pending--;
+      if (pending === 0) { finishZip(fileData); }
+    };
+    reader.readAsArrayBuffer(item.file);
+  });
+}
+
+function finishZip(fileData) {
+  try {
+    var zipped  = fflate.zipSync(fileData, { level: 6 });
+    var blob    = new Blob([zipped], { type: 'application/zip' });
+    var zipFile = new File([blob], 'documentos_ava.zip', { type: 'application/zip' });
+
+    if (zipFile.size > MAX_BYTES) {
+      currentZipFile = null;
+      zipStatusText.textContent =
+        '⚠️ ZIP resultante supera 5 MB (' + fmtSize(zipFile.size) + ') — '
+        + 'envía los archivos manualmente a info@anpai.com.mx';
+    } else {
+      currentZipFile = zipFile;
+      zipStatusText.textContent =
+        '✅ ZIP listo: ' + fmtSize(zipFile.size) + ' comprimidos de '
+        + fmtSize(totalSize()) + ' originales — se adjuntará al enviar';
+    }
+  } catch(ex) {
+    currentZipFile = null;
+    zipStatusText.textContent = '⚠️ Error al comprimir — se enviarán los archivos originales';
+    console.error('ZIP error:', ex);
+  }
+  zipStatus.className = 'zip-status visible';
+  syncFileInput();
+}
+
+/* ── Agregar / Quitar archivos ── */
 function addFiles(newFiles) {
   fileError.className = 'file-error';
   var errors = [];
   Array.from(newFiles).forEach(function(file) {
     var ext = file.name.split('.').pop().toLowerCase();
     if (!ALLOWED_EXTS.includes(ext)) {
-      errors.push('"' + file.name + '": formato no permitido.');
+      errors.push('"' + file.name + '": formato no permitido (PDF, JPG o PNG).');
       return;
     }
     if (totalSize() + file.size > MAX_BYTES) {
-      errors.push('"' + file.name + '" supera el límite de 5 MB. Comprime en ZIP/RAR.');
+      errors.push('"' + file.name + '" excede el límite de 5 MB total.');
       return;
     }
     var dup = attachedFiles.some(function(a) {
@@ -1726,15 +1834,23 @@ function addFiles(newFiles) {
     fileError.textContent = errors.join(' ');
     fileError.className   = 'file-error visible';
   }
-  renderFileList(); updateBar(); syncFileInput();
+  renderFileList();
+  updateBar();
+  scheduleZip();   // ← compresión inmediata al adjuntar
   updateProgressBar();
 }
 
 window.removeFile = function(id) {
   attachedFiles = attachedFiles.filter(function(a) { return a.id !== id; });
-  renderFileList(); updateBar(); syncFileInput();
+  currentZipFile = null;
+  renderFileList();
+  updateBar();
   fileError.className = 'file-error';
-  zipStatus.className = 'zip-status';
+  if (attachedFiles.length === 0) {
+    zipStatus.className = 'zip-status';
+  } else {
+    scheduleZip(); // recomprimir sin el archivo eliminado
+  }
   updateProgressBar();
 };
 
@@ -1742,85 +1858,6 @@ fileInput.addEventListener('change', function(e) { addFiles(e.target.files); fil
 fileZone.addEventListener('dragover',  function(e) { e.preventDefault(); fileZone.classList.add('drag'); });
 fileZone.addEventListener('dragleave', function()  { fileZone.classList.remove('drag'); });
 fileZone.addEventListener('drop',      function(e) { e.preventDefault(); fileZone.classList.remove('drag'); addFiles(e.dataTransfer.files); });
-
-/* ════════════════════════════════════════
-   COMPRESIÓN ZIP (usando fflate via CDN)
-   Se carga dinámicamente para no bloquear
-════════════════════════════════════════ */
-var fflateLoaded = false;
-
-function loadFflate(callback) {
-  if (fflateLoaded) { callback(); return; }
-  var s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js';
-  s.onload  = function() { fflateLoaded = true; callback(); };
-  s.onerror = function() { callback(new Error('No se pudo cargar fflate')); };
-  document.head.appendChild(s);
-}
-
-/**
- * Comprime todos los archivos adjuntos en un único ZIP.
- * Retorna una Promise<File> con el ZIP resultante, o null si solo hay 1 archivo pequeño.
- */
-function buildZip() {
-  return new Promise(function(resolve, reject) {
-    if (attachedFiles.length === 0) { resolve(null); return; }
-
-    // Si solo hay un archivo y ya es ZIP/RAR, usarlo directamente
-    if (attachedFiles.length === 1) {
-      var ext = attachedFiles[0].file.name.split('.').pop().toLowerCase();
-      if (ext === 'zip' || ext === 'rar') { resolve(attachedFiles[0].file); return; }
-    }
-
-    loadFflate(function(err) {
-      if (err) {
-        // Fallback: sin compresión, usar archivos directos
-        console.warn('fflate no disponible, enviando sin comprimir');
-        resolve(null); return;
-      }
-
-      zipStatusText.textContent = '🗜️ Comprimiendo archivos…';
-      zipStatus.className = 'zip-status visible';
-
-      var fileData = {};
-      var pending  = attachedFiles.length;
-
-      attachedFiles.forEach(function(item) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          var safeKey = item.file.name.replace(/[^\w.\-]/g, '_');
-          fileData[safeKey] = new Uint8Array(e.target.result);
-          pending--;
-          if (pending === 0) {
-            try {
-              /* global fflate */
-              var zipped = fflate.zipSync(fileData, { level: 6 });
-              var zipBlob = new Blob([zipped], { type: 'application/zip' });
-              var zipFile = new File([zipBlob], 'documentos_ava.zip', { type: 'application/zip' });
-
-              if (zipFile.size > MAX_BYTES) {
-                zipStatusText.textContent = '⚠️ ZIP resultante supera 5 MB (' + fmtSize(zipFile.size) + ') — envía los archivos por correo';
-                resolve(null);
-              } else {
-                zipStatusText.textContent = '✅ ZIP listo: ' + fmtSize(zipFile.size) + ' — se adjuntará automáticamente';
-                resolve(zipFile);
-              }
-            } catch(ex) {
-              zipStatus.className = 'zip-status';
-              console.error('Error al comprimir:', ex);
-              resolve(null);
-            }
-          }
-        };
-        reader.onerror = function() {
-          pending--;
-          if (pending === 0) resolve(null);
-        };
-        reader.readAsArrayBuffer(item.file);
-      });
-    });
-  });
-}
 
 /* ════════════════════════════════════════
    RESUMEN DE SOLICITUD
@@ -2060,15 +2097,38 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
     });
     document.getElementById('recaptchaToken').value = token;
 
-    /* — Compresión ZIP — */
-    var zipFile = null;
-    if (attachedFiles.length > 0) {
-      btn.innerHTML = '🗜️ &nbsp;Comprimiendo documentos…';
-      try {
-        zipFile = await buildZip();
-      } catch(zipErr) {
-        console.warn('Error al comprimir:', zipErr);
-        zipFile = null;
+    /* — Esperar ZIP si aún está procesando — */
+    if (attachedFiles.length > 0 && !currentZipFile) {
+      // El ZIP puede estar en proceso (debounce de 300ms); esperar brevemente
+      btn.innerHTML = '🗜️ &nbsp;Esperando compresión…';
+      await new Promise(function(resolve) { setTimeout(resolve, 700); });
+      // Si aún no hay ZIP, comprimir ahora
+      if (!currentZipFile && typeof fflate !== 'undefined') {
+        btn.innerHTML = '🗜️ &nbsp;Comprimiendo documentos…';
+        await new Promise(function(resolve) {
+          var fileData = {}; var pending = attachedFiles.length; var usedKeys = {};
+          attachedFiles.forEach(function(item) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              var base = item.file.name.replace(/[^\w.\-]/g, '_'); var key = base; var c = 1;
+              while (usedKeys[key]) { key = c + '_' + base; c++; }
+              usedKeys[key] = true;
+              fileData[key] = new Uint8Array(e.target.result);
+              pending--;
+              if (pending === 0) {
+                try {
+                  var zipped = fflate.zipSync(fileData, { level: 6 });
+                  var blob = new Blob([zipped], { type: 'application/zip' });
+                  currentZipFile = new File([blob], 'documentos_ava.zip', { type: 'application/zip' });
+                  if (currentZipFile.size > MAX_BYTES) currentZipFile = null;
+                } catch(ex) { currentZipFile = null; }
+                resolve();
+              }
+            };
+            reader.onerror = function() { pending--; if (pending === 0) resolve(); };
+            reader.readAsArrayBuffer(item.file);
+          });
+        });
       }
     }
 
@@ -2077,12 +2137,12 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
     /* — Construir FormData — */
     var formData = new FormData(this);
 
-    // Eliminar archivos originales del FormData y reemplazar con ZIP si aplica
+    // Reemplazar archivos con el ZIP pre-construido
     formData.delete('fileInput');
-    if (zipFile) {
-      formData.append('documentos', zipFile, zipFile.name);
+    if (currentZipFile) {
+      formData.append('documentos', currentZipFile, currentZipFile.name);
     } else if (attachedFiles.length > 0) {
-      // Fallback: adjuntar archivos originales si la compresión falló
+      // Fallback: adjuntar archivos originales si la compresión no fue posible
       attachedFiles.forEach(function(item) {
         formData.append('documentos', item.file, item.file.name);
       });
@@ -2108,6 +2168,8 @@ document.getElementById('solicitudForm').addEventListener('submit', async functi
 function resetForm() {
   document.getElementById('solicitudForm').reset();
   attachedFiles = [];
+  currentZipFile = null;
+  clearTimeout(_zipTimer);
   renderFileList(); updateBar(); syncFileInput();
   document.getElementById('cpResult').className  = 'cp-result';
   document.getElementById('cpError').className   = 'cp-error';
