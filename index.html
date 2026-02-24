@@ -499,6 +499,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 .decl-wrap input[type=checkbox] { width:20px; height:20px; accent-color:var(--blue); cursor:pointer; flex-shrink:0; margin-top:2px; }
 .decl-text { font-size:.85rem; color:var(--navy); line-height:1.6; }
 .decl-text strong { color:var(--blue); }
+.decl-text .decl-title { display:block; font-size:.9rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
 
 .btn-sub {
   display:block; width:100%; padding:18px; margin-top:18px;
@@ -837,7 +838,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
         </div>
         <div class="fmt-body">
           Sube tus documentos en <strong>PDF, JPG o PNG</strong>. El formulario los comprime automáticamente en ZIP.<br>
-          Si el ZIP final supera los <strong>5 MB</strong>, el envío no será permitido — en ese caso comprímelos tú mismo y envíalos a <a href="/cdn-cgi/l/email-protection#7e171018113e1f100e1f17501d1113501306" class="fmt-link"><span class="__cf_email__" data-cfemail="234a4d454c63424d53424a0d404c4e0d4e5b">[email&#160;protected]</span></a>.
+          Si el ZIP final supera los <strong>5 MB</strong>, el envío no será permitido — en ese caso comprímelos tú mismo y envíalos a <a href="mailto:info@anpai.com.mx" class="fmt-link">info@anpai.com.mx</a>.
         </div>
       </div>
 
@@ -956,13 +957,16 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
       </div>
     </div>
 
-    <!-- DECLARACIÓN -->
+    <!-- ══════════════════════════════════════════
+         DECLARACIÓN — TEXTO ACTUALIZADO
+    ══════════════════════════════════════════ -->
     <label class="decl-wrap" for="declCheck">
       <input type="checkbox" id="declCheck">
       <span class="decl-text">
-        Declaro que la información proporcionada es verídica y que los documentos adjuntos son
-        <strong>copias fieles del original</strong>, completamente legibles y sin alteraciones.
-        Entiendo que proporcionar información falsa puede resultar en la cancelación de mi solicitud.
+        <span class="decl-title">Declaración de veracidad y autenticidad</span>
+        Bajo protesta de decir verdad, declaro que toda la información y documentación proporcionada es auténtica.
+        <strong>Al marcar esta casilla, manifiesto mi conformidad otorgando a esta acción el mismo valor jurídico
+        que mi firma autógrafa, de conformidad con el artículo 89 del Código de Comercio y la NOM-151-SCFI-2016.</strong>
       </span>
     </label>
 
@@ -1010,7 +1014,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
   </svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
 /* ════════════════════════════════════
@@ -1243,12 +1247,10 @@ bSearch.addEventListener('blur',  function() { setTimeout(function() { bDrop.cla
 ════════════════════════════════════ */
 var MAX_ZIP_BYTES = 5 * 1024 * 1024;
 
-/* Estado por instancia */
 var attachState = {
   'AVA': { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null }
 };
 
-/* Utilidades */
 function fmtBytes(b){
   if(b<1024) return b+' B';
   if(b<1048576) return (b/1024).toFixed(1)+' KB';
@@ -1266,12 +1268,10 @@ function getToday(){
   return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
 }
 
-/* Drag & Drop */
 function onDragOver(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.add('drag-over'); }
 function onDragLeave(e,type){ document.getElementById('attachDropzone'+type).classList.remove('drag-over'); }
 function onDrop(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.remove('drag-over'); handleFiles(e.dataTransfer.files,type); }
 
-/* Agregar archivos */
 function handleFiles(fileList,type){
   var state=attachState[type];
   Array.from(fileList).forEach(function(f){
@@ -1285,7 +1285,6 @@ function handleFiles(fileList,type){
   updateProgress(); buildSummary();
 }
 
-/* Quitar archivo */
 window.removeFile=function(type,idx){
   var state=attachState[type];
   state.files.splice(idx,1);
@@ -1301,7 +1300,6 @@ window.removeFile=function(type,idx){
   updateProgress(); buildSummary();
 };
 
-/* Renderizar lista */
 function renderFileList(type){
   var list=document.getElementById('fileList'+type);
   list.innerHTML='';
@@ -1317,7 +1315,6 @@ function renderFileList(type){
   });
 }
 
-/* Actualizar barra de capacidad */
 function updateCapacityBar(type){
   var state=attachState[type];
   var wrap=document.getElementById('capacityWrap'+type);
@@ -1391,7 +1388,6 @@ function hideAttachMsg(type){
   if(el) el.classList.remove('show');
 }
 
-/* Online/Offline */
 window.addEventListener('online',function(){
   Object.keys(attachState).forEach(function(type){
     var state=attachState[type];
@@ -1414,14 +1410,12 @@ window.addEventListener('offline',function(){
   });
 });
 
-/* Programar compresión con debounce */
 var compressionTimers={};
 function scheduleCompression(type){
   clearTimeout(compressionTimers[type]);
   compressionTimers[type]=setTimeout(function(){ startCompression(type); },80);
 }
 
-/* Motor principal de compresión */
 function startCompression(type){
   var state=attachState[type];
   if(state.compressing){ state.compressing=false; }
@@ -1454,7 +1448,6 @@ function startCompression(type){
   if(cp) cp.classList.add('show');
   updateCapacityBar(type);
 
-  /* Ticker: actualiza tiempo transcurrido cada 300ms */
   var ticker=setInterval(function(){
     if(!state.compressing||state._runId!==runId){ clearInterval(ticker); return; }
     state.elapsed=Date.now()-state.startTime;
@@ -1469,11 +1462,9 @@ function startCompression(type){
     if(cp2) cp2.classList.remove('show');
   }
 
-  /* FASE 1: leer archivos */
   function processFile(idx){
     if(state._runId!==runId||!state.compressing){ abort(); return; }
     if(idx>=snapshot.length){
-      /* FASE 2: generar ZIP */
       var ci=document.getElementById('compressInfo'+type);
       if(ci) ci.textContent='Generando ZIP…';
       zip.generateAsync(
@@ -1506,7 +1497,7 @@ function startCompression(type){
       if(state._runId!==runId){ abort(); return; }
       zip.file(f.name,ev.target.result);
       processed+=f.size;
-      var pct=Math.round((processed/totalRaw)*70); /* Fase 1 → 0–70% */
+      var pct=Math.round((processed/totalRaw)*70);
       updateCompressUI(type,pct,processed,totalRaw-processed,(Date.now()-state.startTime)/1000,totalRaw);
       if(!navigator.onLine){
         clearInterval(ticker);
@@ -1525,7 +1516,6 @@ function startCompression(type){
   processFile(0);
 }
 
-/* Actualizar UI del panel de compresión */
 function updateCompressUI(type,pct,done,remaining,elapsedSec,total){
   var ids={pct:'compressPct',bar:'compressBarFill',done:'compressDoneMB',rem:'compressRemMB',donePct:'compressDonePct',elapsed:'compressElapsed',eta:'compressEta',info:'compressInfo'};
   Object.keys(ids).forEach(function(k){
@@ -1622,7 +1612,7 @@ function isFilledById(id) {
 
 function updateProgress() {
   var ids   = REQUIRED_IDS.concat(['estado','mun']);
-  var total = ids.length + 1; // +1 for brand
+  var total = ids.length + 1;
   var done  = 0;
   ids.forEach(function(id) { if (isFilledById(id)) done++; });
   if (bVal.value.trim()) done++;
@@ -1651,7 +1641,6 @@ document.getElementById('mainForm').addEventListener('change', function() { buil
 document.getElementById('mainForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  /* — Required field checks — */
   var checks = [
     {id:'fn',    lbl:'Primer Nombre'},
     {id:'fa',    lbl:'Primer Apellido'},
@@ -1708,7 +1697,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   btn.innerHTML = '⏳ &nbsp;Verificando…';
 
   try {
-    /* reCAPTCHA */
     var token = await new Promise(function(resolve, reject) {
       if (typeof grecaptcha === 'undefined') { resolve('no-recaptcha'); return; }
       grecaptcha.ready(function() {
@@ -1717,12 +1705,10 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     });
     document.getElementById('rcToken').value = token;
 
-    /* — Esperar ZIP si está comprimiendo — */
     var state = attachState['AVA'];
     if (state.files.length > 0) {
       if (state.compressing) {
         btn.innerHTML = '🗜️ &nbsp;Esperando compresión…';
-        /* Esperar hasta que termine, máximo 30s */
         var waited = 0;
         await new Promise(function(resolve) {
           var check = setInterval(function() {
@@ -1731,7 +1717,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
           }, 200);
         });
       }
-      /* Si no hay ZIP y JSZip está disponible, comprimir ahora en el submit */
       if (!state.zipBlob && typeof JSZip !== 'undefined') {
         btn.innerHTML = '🗜️ &nbsp;Comprimiendo documentos…';
         await new Promise(function(resolve) {
@@ -1753,7 +1738,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
           });
         });
       }
-      /* Bloquear si el ZIP supera el límite */
       if (state.zipBlob && state.zipBlob.size > MAX_ZIP_BYTES) {
         alert('⛔ El ZIP comprimido supera los 5 MB (' + fmtBytes(state.zipBlob.size) + ').\nElimina algún archivo antes de enviar.');
         btn.disabled = false;
@@ -1792,7 +1776,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
 ════════════════════════════════════ */
 function resetForm() {
   document.getElementById('mainForm').reset();
-  /* Limpiar estado de archivos */
   Object.keys(attachState).forEach(function(type) {
     attachState[type] = { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null };
     var fl = document.getElementById('fileList'+type); if(fl) fl.innerHTML='';
