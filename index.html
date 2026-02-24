@@ -6,7 +6,7 @@
 <title>AVA – Cotizar Seguro de Auto</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
 <script src="https://www.google.com/recaptcha/api.js?render=6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV"></script>
-<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 /* ═══════════════════════════════════
    ROOT VARIABLES
@@ -67,10 +67,13 @@ body.dark .brand-drop    { background: #162040; border-color: #4d8aff; }
 body.dark .brand-item:hover { background: #1e2d45; }
 body.dark .cp-box        { background: #1e2d45; border-color: #243660; color: #c8d6f0; }
 body.dark .colonia-sel   { background: #162040; border-color: #4d8aff; color: #d0d8ec; }
-body.dark .file-zone     { border-color: #243660; }
-body.dark .chip          { background: #1e2d45; border-color: #263558; }
-body.dark .chip-name     { color: #c8d6f0; }
-body.dark .bar-track     { background: #1e2d45; }
+body.dark .attach-dropzone { border-color: #243660; background: #111f38; }
+body.dark .attach-file-item { background: #1e2d45; border-color: #263558; }
+body.dark .attach-file-name { color: #c8d6f0; }
+body.dark .attach-bar-track { background: #1e2d45; }
+body.dark .compress-progress { border-color: #243660; }
+body.dark .compress-body { background: #111f38; }
+body.dark .compress-stat-val { color: #c8d6f0; }
 body.dark .sum-box       { background: #111f38; border-color: #1e2d50; }
 body.dark .sum-row-sep   { border-color: #1e2d50; }
 body.dark .sum-v         { color: #c8d6f0; }
@@ -292,55 +295,131 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 .otra-wrap.on { display:block; }
 
 /* ═══════════════════════════════════
-   FILE UPLOAD
+   FILE UPLOAD — ARQUITECTURA GUÍA
 ═══════════════════════════════════ */
-.file-zone {
-  border:2px dashed var(--border); border-radius:12px;
-  padding:30px 20px 24px; text-align:center;
-  cursor:pointer; transition:border-color .2s, background .2s;
-  position:relative; overflow:hidden;
+.attach-dropzone {
+  border: 2.5px dashed var(--border);
+  border-radius: 16px; padding: 28px 20px;
+  text-align: center; cursor: pointer;
+  transition: all 0.3s; background: var(--light);
+  position: relative; overflow: hidden;
 }
-.file-zone:hover, .file-zone.drag { border-color:var(--blue); background:rgba(22,93,255,.03); }
-.file-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-.fz-ico { font-size:2.4rem; margin-bottom:8px; }
-.fz-txt { font-size:.9rem; color:var(--muted); }
-.fz-txt strong { color:var(--blue); }
-.fz-hint { margin-top:10px; font-size:.76rem; color:var(--muted); line-height:1.7; }
-.fz-hint strong { color:var(--navy); }
-
-.bar-wrap { display:none; margin-top:16px; }
-.bar-wrap.on { display:block; }
-.bar-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:.8rem; font-weight:600; color:var(--navy); }
-.bar-track { width:100%; height:10px; background:#e8edf7; border-radius:99px; overflow:hidden; }
-.bar-fill { height:100%; border-radius:99px; width:0%; transition:width .35s ease, background .35s ease; background:var(--green); }
-.bar-fill.y { background:var(--yellow); }
-.bar-fill.r { background:var(--red); }
-.bar-status { margin-top:8px; font-size:.79rem; display:flex; align-items:center; gap:7px; }
-.tl-dot { width:10px; height:10px; border-radius:50%; background:var(--green); flex-shrink:0; transition:background .3s; }
-.tl-dot.y { background:var(--yellow); }
-.tl-dot.r { background:var(--red); }
-
-.file-list { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
-.chip {
-  display:flex; align-items:center; gap:10px;
-  background:var(--light); border:1px solid var(--border);
-  border-radius:8px; padding:8px 12px; font-size:.84rem;
+.attach-dropzone:hover,
+.attach-dropzone.drag-over { border-color: var(--blue); background: rgba(22,93,255,.04); }
+.attach-dropzone.drag-over::before {
+  content: 'Suelta aquí'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--blue);
+  background: rgba(22,93,255,.08); border-radius: 13px;
 }
-.chip-ico { font-size:1.1rem; }
-.chip-name { flex:1; color:var(--navy); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.chip-size { color:var(--muted); font-size:.75rem; white-space:nowrap; }
-.chip-rm { cursor:pointer; color:var(--muted); font-size:1rem; flex-shrink:0; transition:color .2s; line-height:1; }
-.chip-rm:hover { color:var(--red); }
-.f-err { display:none; color:var(--red); font-size:.82rem; margin-top:8px; }
-.f-err.on { display:block; }
-
-.zip-note {
-  display:none; margin-top:10px; padding:10px 14px;
-  background:rgba(22,93,255,.05); border:1px solid rgba(22,93,255,.16);
-  border-radius:8px; font-size:.8rem; color:var(--navy);
-  align-items:center; gap:8px;
+.attach-folder-icon { font-size: 44px; margin-bottom: 10px; display: block; }
+.attach-dropzone-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.attach-dropzone-text a { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: none; }
+.attach-formats-line { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+.attach-auto-compress-line { font-size: 12.5px; color: var(--blue); font-weight: 600; margin-top: 4px; }
+.attach-limit-line { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.attach-realtime-stats {
+  display: none; margin-top: 10px; gap: 12px;
+  justify-content: center; align-items: center;
+  font-size: 12.5px; color: var(--muted);
 }
-.zip-note.on { display:flex; }
+.attach-stats-sep { color: var(--border); }
+.attach-limit-exceeded {
+  margin-top: 8px; color: var(--red); font-size: 12.5px; font-weight: 600; display: none;
+}
+
+/* Barra de capacidad */
+.attach-capacity-wrap { margin-top: 16px; display: none; }
+.attach-capacity-wrap.visible { display: block; }
+.attach-capacity-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--navy); }
+.attach-capacity-label { font-weight: 600; }
+.attach-bar-track { height: 10px; background: #e8edf7; border-radius: 99px; overflow: hidden; }
+.attach-bar-fill {
+  height: 100%; border-radius: 99px;
+  transition: width 0.4s ease;
+  position: relative; overflow: hidden;
+}
+.attach-bar-fill::after {
+  content: ''; position: absolute; top: 0; left: -60px;
+  width: 50px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  animation: barShine 2s infinite;
+}
+@keyframes barShine { 0%{left:-60px} 100%{left:calc(100% + 20px)} }
+.attach-bar-fill.green  { background: linear-gradient(90deg,#0FC373,#12e080); }
+.attach-bar-fill.yellow { background: linear-gradient(90deg,#F59E0B,#fbbf24); }
+.attach-bar-fill.red    { background: linear-gradient(90deg,#FF4757,#ff6370); animation: none; }
+.attach-bar-fill.red::after { display: none; }
+
+.attach-status { margin-top: 6px; font-size: 12.5px; display: flex; align-items: center; gap: 6px; }
+.attach-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.attach-status-dot.green  { background: #0FC373; }
+.attach-status-dot.yellow { background: #F59E0B; }
+.attach-status-dot.red    { background: #FF4757; animation: pulseRed 1s infinite; }
+@keyframes pulseRed { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.attach-error-msg {
+  background: rgba(255,71,87,.08); border: 1.5px solid rgba(255,71,87,.3);
+  border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: #d93546;
+  margin-top: 10px; display: none; align-items: center; gap: 8px;
+}
+.attach-error-msg.show { display: flex; }
+
+/* Lista archivos */
+.attach-file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.attach-file-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--light); border: 1px solid var(--border);
+  border-radius: 10px; padding: 9px 12px;
+}
+.attach-file-icon { font-size: 1.1rem; flex-shrink: 0; }
+.attach-file-name { flex: 1; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--navy); }
+.attach-file-size { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.attach-file-remove {
+  width: 24px; height: 24px; border-radius: 50%; border: none;
+  background: rgba(255,71,87,.1); color: #FF4757;
+  cursor: pointer; font-size: 14px; transition: all .2s; flex-shrink: 0;
+}
+.attach-file-remove:hover { background: #FF4757; color: #fff; }
+
+/* Offline */
+.offline-msg {
+  background: rgba(255,71,87,.08); border: 1.5px solid rgba(255,71,87,.25);
+  border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: #d93546;
+  margin-top: 10px; display: none; align-items: center; gap: 8px;
+}
+.offline-msg.show { display: flex; }
+
+/* Panel de compresión */
+.compress-progress { display: none; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 14px; }
+.compress-progress.show { display: block; }
+.compress-header { background: var(--navy); padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+.compress-header-text { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
+.compress-pct { font-weight: 700; color: #78b0ff; font-size: 12.5px; margin-left: auto; }
+.compress-body { padding: 14px 16px; background: var(--white); }
+.compress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.compress-stat { text-align: center; }
+.compress-stat-val { font-size: 16px; font-weight: 800; color: var(--navy); }
+.compress-stat-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+.compress-bar-track { height: 8px; background: #e8edf7; border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.compress-bar-fill {
+  height: 100%; background: linear-gradient(90deg,var(--blue),#3a7fff);
+  border-radius: 99px; width: 0%; transition: width .3s ease;
+  position: relative; overflow: hidden;
+}
+.compress-bar-fill::after {
+  content: ''; position: absolute; top: 0; left: -60px;
+  width: 50px; height: 100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation: barShine 1.5s infinite;
+}
+.compress-info { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); }
+.compress-resume-note {
+  background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3);
+  border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #92400e;
+  margin-top: 8px; display: none; align-items: center; gap: 6px;
+}
+.compress-resume-note.show { display: flex; }
 
 /* ═══════════════════════════════════
    DOCS REQUIRED BLOCK
@@ -758,7 +837,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
         </div>
         <div class="fmt-body">
           Sube tus documentos en <strong>PDF, JPG o PNG</strong>. El formulario los comprime automáticamente en ZIP.<br>
-          Si el ZIP final supera los <strong>5 MB</strong>, el envío no será permitido — en ese caso comprímelos tú mismo y envíalos a <a href="mailto:info@anpai.com.mx" class="fmt-link">info@anpai.com.mx</a>.
+          Si el ZIP final supera los <strong>5 MB</strong>, el envío no será permitido — en ese caso comprímelos tú mismo y envíalos a <a href="/cdn-cgi/l/email-protection#7e171018113e1f100e1f17501d1113501306" class="fmt-link"><span class="__cf_email__" data-cfemail="234a4d454c63424d53424a0d404c4e0d4e5b">[email&#160;protected]</span></a>.
         </div>
       </div>
 
@@ -778,31 +857,84 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
         <label style="display:block;margin-bottom:10px;font-size:.86rem;font-weight:600;color:var(--navy)">
           Adjuntar Documentos <span class="req">*</span>
         </label>
-        <div class="file-zone" id="fzone">
-          <input type="file" id="fInput" accept=".pdf,.jpg,.jpeg,.png" multiple>
-          <div class="fz-ico">📂</div>
-          <div class="fz-txt">Arrastra tus archivos aquí o <strong>haz clic para seleccionarlos</strong></div>
-          <div class="fz-hint">
-            Formatos: <strong>PDF, JPG, PNG</strong><br>
-            <span style="color:var(--blue);font-weight:600">✨ Compresión automática ZIP incluida</span><br>
-            🔖 Límite: <strong>5 MB comprimido</strong>
+
+        <!-- Zona de arrastre -->
+        <div class="attach-dropzone" id="attachDropzoneAVA"
+             ondragover="onDragOver(event,'AVA')"
+             ondragleave="onDragLeave(event,'AVA')"
+             ondrop="onDrop(event,'AVA')"
+             onclick="document.getElementById('fileInputAVA').click()">
+          <span class="attach-folder-icon">📁</span>
+          <div class="attach-dropzone-text">
+            Arrastra tus archivos aquí o
+            <a onclick="event.stopPropagation();document.getElementById('fileInputAVA').click()">haz clic para seleccionarlos</a>
+          </div>
+          <div class="attach-formats-line">Formatos: <strong>PDF, JPG, PNG</strong></div>
+          <div class="attach-auto-compress-line">✨ Compresión automática ZIP incluida</div>
+          <div class="attach-limit-line">📏 Límite total comprimido: <strong>5 MB</strong></div>
+          <div class="attach-realtime-stats" id="attachRealtimeAVA" style="display:none">
+            <span>📦 <strong id="attachCountAVA">0</strong> archivo(s)</span>
+            <span class="attach-stats-sep">|</span>
+            <span>ZIP: <strong id="attachWeightAVA">—</strong></span>
+          </div>
+          <div class="attach-limit-exceeded" id="attachLimitExcAVA" style="display:none">¡Límite de 5 MB superado!</div>
+          <input type="file" id="fileInputAVA" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFiles(this.files,'AVA');this.value='';">
+        </div>
+
+        <!-- Barra de capacidad -->
+        <div class="attach-capacity-wrap" id="capacityWrapAVA">
+          <div class="attach-capacity-header">
+            <span class="attach-capacity-label">Capacidad utilizada (ZIP)</span>
+            <span class="attach-capacity-value" id="capacityValueAVA">— de 5 MB</span>
+          </div>
+          <div class="attach-bar-track">
+            <div class="attach-bar-fill green" id="attachBarAVA" style="width:0%"></div>
+          </div>
+          <div class="attach-status" id="attachStatusAVA">
+            <span class="attach-status-dot green" id="attachDotAVA"></span>
+            <span id="attachStatusTextAVA">En espera de archivos…</span>
+          </div>
+          <div class="attach-error-msg" id="attachErrAVA">
+            <span>⚠️</span>
+            <span id="attachErrTextAVA">El ZIP supera el límite de 5 MB.</span>
           </div>
         </div>
-        <div class="f-err" id="fErr"></div>
 
-        <!-- Barra capacidad (tamaño original) -->
-        <div class="bar-wrap" id="barWrap">
-          <div class="bar-head"><span>Archivos adjuntos</span><span id="barLabel">0 KB</span></div>
-          <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
-          <div class="bar-status"><div class="tl-dot" id="tlDot"></div><span id="barTxt"></span></div>
+        <!-- Panel de compresión en tiempo real -->
+        <div class="compress-progress" id="compressProgressAVA">
+          <div class="compress-header">
+            <span style="font-size:16px">⚡</span>
+            <span class="compress-header-text">Comprimiendo…</span>
+            <span id="compressPctAVA" class="compress-pct">0%</span>
+          </div>
+          <div class="compress-body">
+            <div class="compress-row">
+              <div class="compress-stat"><div class="compress-stat-val" id="compressDoneMBAVA">0 B</div><div class="compress-stat-label">Comprimido</div></div>
+              <div class="compress-stat"><div class="compress-stat-val" id="compressRemMBAVA">0 B</div><div class="compress-stat-label">Restante</div></div>
+              <div class="compress-stat"><div class="compress-stat-val" id="compressElapsedAVA">0s</div><div class="compress-stat-label">Transcurrido</div></div>
+              <div class="compress-stat"><div class="compress-stat-val" id="compressEtaAVA">—</div><div class="compress-stat-label">Estimado</div></div>
+            </div>
+            <div class="compress-bar-track"><div class="compress-bar-fill" id="compressBarFillAVA"></div></div>
+            <div class="compress-info">
+              <span id="compressInfoAVA">Preparando…</span>
+              <span id="compressDonePctAVA">0% completado</span>
+            </div>
+            <div class="compress-resume-note" id="compressResumeAVA">
+              <span>🔄</span><span>Pausado. Continuará cuando vuelva la conexión.</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Estado ZIP -->
-        <div class="zip-note" id="zipNote">
-          <span>🗜️</span><span id="zipTxt">Preparando compresión…</span>
+        <!-- Lista de archivos -->
+        <div class="attach-file-list" id="fileListAVA"></div>
+
+        <!-- Aviso offline -->
+        <div class="offline-msg" id="offlineMsgAVA">
+          <span>📡</span><span>Sin conexión. La compresión se reanudará automáticamente.</span>
         </div>
 
-        <div class="file-list" id="fList"></div>
+        <!-- Campo oculto con info del ZIP -->
+        <input type="hidden" id="attachHiddenAVA" name="Archivos_adjuntos_info">
       </div>
     </div>
 
@@ -878,7 +1010,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
   </svg>
 </a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ════════════════════════════════════
@@ -1107,170 +1239,307 @@ bSearch.addEventListener('input', function() { buildBrandDrop(this.value); bDrop
 bSearch.addEventListener('blur',  function() { setTimeout(function() { bDrop.classList.remove('open'); }, 160); });
 
 /* ════════════════════════════════════
-   FILE UPLOAD — CORE
+   FILE UPLOAD — ARQUITECTURA GUÍA (JSZip)
 ════════════════════════════════════ */
-var attached = [];  // [{file, id}]
-var zipFile  = null;
-var nid      = 0;
-var zipTimer = null;
+var MAX_ZIP_BYTES = 5 * 1024 * 1024;
 
-function fmt(b) {
-  if (b < 1024)    return b + ' B';
-  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
-  return (b/1048576).toFixed(2) + ' MB';
+/* Estado por instancia */
+var attachState = {
+  'AVA': { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null }
+};
+
+/* Utilidades */
+function fmtBytes(b){
+  if(b<1024) return b+' B';
+  if(b<1048576) return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(2)+' MB';
 }
-function totalSz() { return attached.reduce(function(s,a){ return s+a.file.size; },0); }
-
-/* Update capacity bar — shows raw file sizes */
-function updateBar() {
-  var bw  = document.getElementById('barWrap');
-  var bf  = document.getElementById('barFill');
-  var bl  = document.getElementById('barLabel');
-  var td  = document.getElementById('tlDot');
-  var bt  = document.getElementById('barTxt');
-  if (!attached.length) { bw.className = 'bar-wrap'; return; }
-  bw.className = 'bar-wrap on';
-  var tot = totalSz();
-  var pct = Math.min((tot / MAX_BYTES) * 100, 100);
-  bf.style.width = pct + '%';
-  bl.textContent = fmt(tot);
-  bf.classList.remove('y','r'); td.classList.remove('y','r');
-  var rem = MAX_BYTES - tot;
-  if (pct >= 100) {
-    bf.classList.add('r'); td.classList.add('r');
-    bt.textContent = '⛔ Archivos superan 5 MB — elimina alguno';
-  } else if (pct >= 75) {
-    bf.classList.add('y'); td.classList.add('y');
-    bt.textContent = '⚠️ Casi lleno — quedan ' + fmt(rem);
-  } else {
-    bt.textContent = '✅ Espacio disponible — quedan ' + fmt(rem);
-  }
+function fmtSec(s){ return s<60 ? Math.round(s)+'s' : Math.floor(s/60)+'m '+Math.round(s%60)+'s'; }
+function getFileIcon(name){
+  var ext=name.split('.').pop().toLowerCase();
+  if(['jpg','jpeg','png'].indexOf(ext)>=0) return '🖼️';
+  if(ext==='pdf') return '📄';
+  return '📎';
+}
+function getToday(){
+  var d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
 }
 
-function renderList() {
-  var fl = document.getElementById('fList');
-  fl.innerHTML = '';
-  attached.forEach(function(a) {
-    var ext  = a.file.name.split('.').pop().toLowerCase();
-    var ico  = /pdf/.test(ext) ? '📄' : /zip|rar/.test(ext) ? '🗜️' : '🖼️';
-    var d    = document.createElement('div'); d.className = 'chip';
-    d.innerHTML =
-      '<span class="chip-ico">' + ico + '</span>' +
-      '<span class="chip-name" title="' + esc(a.file.name) + '">' + esc(a.file.name) + '</span>' +
-      '<span class="chip-size">' + fmt(a.file.size) + '</span>' +
-      '<span class="chip-rm" onclick="removeFile(' + a.id + ')" title="Eliminar">✕</span>';
-    fl.appendChild(d);
+/* Drag & Drop */
+function onDragOver(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.add('drag-over'); }
+function onDragLeave(e,type){ document.getElementById('attachDropzone'+type).classList.remove('drag-over'); }
+function onDrop(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.remove('drag-over'); handleFiles(e.dataTransfer.files,type); }
+
+/* Agregar archivos */
+function handleFiles(fileList,type){
+  var state=attachState[type];
+  Array.from(fileList).forEach(function(f){
+    var dup=state.files.some(function(ex){ return ex.name===f.name&&ex.size===f.size; });
+    if(!dup) state.files.push(f);
   });
-  buildSummary();
+  state.zipBlob=null;
+  renderFileList(type);
+  updateCapacityBar(type);
+  if(state.files.length>=1&&typeof JSZip!=='undefined') scheduleCompression(type);
+  updateProgress(); buildSummary();
 }
 
-/* Schedule ZIP compression */
-function scheduleZip() {
-  zipFile = null;
-  if (!attached.length) { document.getElementById('zipNote').className = 'zip-note'; return; }
-  var zn = document.getElementById('zipNote');
-  var zt = document.getElementById('zipTxt');
-  zn.className = 'zip-note on'; zt.textContent = '⏳ Preparando compresión…';
-  clearTimeout(zipTimer);
-  zipTimer = setTimeout(doZip, 300);
-}
-
-function doZip() {
-  if (!attached.length) { document.getElementById('zipNote').className = 'zip-note'; return; }
-  var zt = document.getElementById('zipTxt');
-
-  /* If single ZIP/RAR already, use directly */
-  if (attached.length === 1) {
-    var ext = attached[0].file.name.split('.').pop().toLowerCase();
-    if (ext === 'zip' || ext === 'rar') {
-      zipFile = attached[0].file;
-      if (zipFile.size > MAX_BYTES) {
-        zt.textContent = '⛔ El archivo supera 5 MB (' + fmt(zipFile.size) + ') — no se permitirá el envío';
-        zipFile = null;
-      } else {
-        zt.textContent = '✅ ZIP detectado (' + fmt(zipFile.size) + ') — listo para enviar';
-      }
-      document.getElementById('zipNote').className = 'zip-note on';
-      return;
-    }
+/* Quitar archivo */
+window.removeFile=function(type,idx){
+  var state=attachState[type];
+  state.files.splice(idx,1);
+  state.zipBlob=null;
+  renderFileList(type);
+  hideAttachMsg(type);
+  updateCapacityBar(type);
+  if(state.files.length>=1&&typeof JSZip!=='undefined') scheduleCompression(type);
+  else if(state.files.length===0){
+    updateCapacityBar(type);
+    document.getElementById('compressProgress'+type).classList.remove('show');
   }
+  updateProgress(); buildSummary();
+};
 
-  if (typeof fflate === 'undefined') {
-    zt.textContent = '⚠️ Compresión no disponible — se enviarán archivos originales';
-    document.getElementById('zipNote').className = 'zip-note on';
+/* Renderizar lista */
+function renderFileList(type){
+  var list=document.getElementById('fileList'+type);
+  list.innerHTML='';
+  attachState[type].files.forEach(function(f,i){
+    var item=document.createElement('div');
+    item.className='attach-file-item';
+    item.innerHTML=
+      '<span class="attach-file-icon">'+getFileIcon(f.name)+'</span>'+
+      '<span class="attach-file-name" title="'+f.name+'">'+f.name+'</span>'+
+      '<span class="attach-file-size">'+fmtBytes(f.size)+'</span>'+
+      '<button type="button" class="attach-file-remove" onclick="removeFile(\''+type+'\','+i+')">\u00d7</button>';
+    list.appendChild(item);
+  });
+}
+
+/* Actualizar barra de capacidad */
+function updateCapacityBar(type){
+  var state=attachState[type];
+  var wrap=document.getElementById('capacityWrap'+type);
+  var bar=document.getElementById('attachBar'+type);
+  var valEl=document.getElementById('capacityValue'+type);
+  var dot=document.getElementById('attachDot'+type);
+  var statusTxt=document.getElementById('attachStatusText'+type);
+  var rtStats=document.getElementById('attachRealtime'+type);
+  var rtCount=document.getElementById('attachCount'+type);
+  var rtWeight=document.getElementById('attachWeight'+type);
+  var limitExc=document.getElementById('attachLimitExc'+type);
+
+  if(state.files.length===0){
+    wrap.classList.remove('visible');
+    if(rtStats) rtStats.style.display='none';
+    if(limitExc) limitExc.style.display='none';
+    bar.className='attach-bar-fill green';
+    bar.style.width='0%';
+    return;
+  }
+  wrap.classList.add('visible');
+  if(rtStats) rtStats.style.display='flex';
+  if(rtCount) rtCount.textContent=state.files.length;
+
+  if(!state.zipBlob){
+    bar.className='attach-bar-fill green';
+    bar.style.width='0%';
+    dot.className='attach-status-dot green';
+    statusTxt.textContent=state.compressing?'Comprimiendo archivos…':'En espera de compresión…';
+    valEl.textContent='— de 5 MB (ZIP pendiente)';
+    if(rtWeight) rtWeight.textContent='—';
+    if(limitExc) limitExc.style.display='none';
     return;
   }
 
-  zt.textContent = '🗜️ Comprimiendo…';
-  var fdata = {}; var pending = attached.length; var used = {};
+  var zSize=state.zipBlob.size;
+  var pct=Math.min(100,(zSize/MAX_ZIP_BYTES)*100);
+  var zStr=fmtBytes(zSize);
+  bar.style.width=pct+'%';
+  valEl.textContent=zStr+' de 5 MB (ZIP comprimido)';
+  if(rtWeight) rtWeight.textContent=zStr;
+  bar.className='attach-bar-fill';
+  dot.className='attach-status-dot';
 
-  attached.forEach(function(a) {
-    var rdr = new FileReader();
-    rdr.onload = function(e) {
-      var base = a.file.name.replace(/[^\w.\-]/g,'_');
-      var key  = base; var c = 1;
-      while (used[key]) { key = c + '_' + base; c++; }
-      used[key] = true;
-      fdata[key] = new Uint8Array(e.target.result);
-      if (--pending === 0) finishZip(fdata);
-    };
-    rdr.onerror = function() { if (--pending === 0) finishZip(fdata); };
-    rdr.readAsArrayBuffer(a.file);
-  });
-}
-
-function finishZip(fdata) {
-  var zt = document.getElementById('zipTxt');
-  try {
-    var zipped = fflate.zipSync(fdata, {level:6});
-    var blob   = new Blob([zipped], {type:'application/zip'});
-    var zf     = new File([blob], 'documentos_ava.zip', {type:'application/zip'});
-    if (zf.size > MAX_BYTES) {
-      zipFile = null;
-      zt.textContent = '⛔ ZIP resultante supera 5 MB (' + fmt(zf.size) + ') — envíalo manualmente a info@anpai.com.mx';
-    } else {
-      zipFile = zf;
-      zt.textContent = '✅ ZIP listo: ' + fmt(zf.size) + ' (comprimido de ' + fmt(totalSz()) + ') — se adjuntará al enviar';
-    }
-  } catch(ex) {
-    zipFile = null;
-    zt.textContent = '⚠️ Error al comprimir — se enviarán archivos originales';
+  if(zSize>=MAX_ZIP_BYTES){
+    bar.classList.add('red'); dot.classList.add('red');
+    statusTxt.textContent='ZIP supera 5 MB — elimina archivos';
+    showAttachMsg(type,'El ZIP pesa '+zStr+' y supera el límite. Elimina archivos.');
+    if(limitExc) limitExc.style.display='block';
+  } else if(zSize>=MAX_ZIP_BYTES*0.80){
+    bar.classList.add('yellow'); dot.classList.add('yellow');
+    statusTxt.textContent='Casi lleno — quedan '+fmtBytes(MAX_ZIP_BYTES-zSize)+' en el ZIP';
+    hideAttachMsg(type);
+    if(limitExc) limitExc.style.display='none';
+  } else {
+    bar.classList.add('green'); dot.classList.add('green');
+    statusTxt.textContent='ZIP listo — quedan '+fmtBytes(MAX_ZIP_BYTES-zSize)+' disponibles';
+    hideAttachMsg(type);
+    if(limitExc) limitExc.style.display='none';
   }
-  document.getElementById('zipNote').className = 'zip-note on';
 }
 
-/* Add files */
-function addFiles(files) {
-  var fe = document.getElementById('fErr');
-  fe.className = 'f-err';
-  var errs = [];
+function showAttachMsg(type,msg){
+  var el=document.getElementById('attachErr'+type);
+  var tx=document.getElementById('attachErrText'+type);
+  if(tx) tx.textContent=msg;
+  if(el) el.classList.add('show');
+}
+function hideAttachMsg(type){
+  var el=document.getElementById('attachErr'+type);
+  if(el) el.classList.remove('show');
+}
 
-  Array.from(files).forEach(function(f) {
-    var ext = f.name.split('.').pop().toLowerCase();
-    if (!OK_EXTS.includes(ext)) { errs.push('"' + f.name + '" — formato no permitido.'); return; }
-    var dup = attached.some(function(a){ return a.file.name===f.name && a.file.size===f.size; });
-    if (dup) return;
-    attached.push({file:f, id:nid++});
+/* Online/Offline */
+window.addEventListener('online',function(){
+  Object.keys(attachState).forEach(function(type){
+    var state=attachState[type];
+    var om=document.getElementById('offlineMsg'+type);
+    if(om) om.classList.remove('show');
+    if(state.paused&&state.files.length>=1){ state.paused=false; startCompression(type); }
   });
+});
+window.addEventListener('offline',function(){
+  Object.keys(attachState).forEach(function(type){
+    var state=attachState[type];
+    var om=document.getElementById('offlineMsg'+type);
+    if(om) om.classList.add('show');
+    if(state.compressing){
+      state.paused=true; state.compressing=false;
+      state.elapsed=Date.now()-state.startTime;
+      var cr=document.getElementById('compressResume'+type);
+      if(cr) cr.classList.add('show');
+    }
+  });
+});
 
-  if (errs.length) { fe.textContent = errs.join(' '); fe.className = 'f-err on'; }
-  renderList(); updateBar(); scheduleZip(); updateProgress();
+/* Programar compresión con debounce */
+var compressionTimers={};
+function scheduleCompression(type){
+  clearTimeout(compressionTimers[type]);
+  compressionTimers[type]=setTimeout(function(){ startCompression(type); },80);
 }
 
-window.removeFile = function(id) {
-  attached = attached.filter(function(a){ return a.id !== id; });
-  zipFile  = null;
-  renderList(); updateBar();
-  document.getElementById('fErr').className = 'f-err';
-  if (!attached.length) document.getElementById('zipNote').className = 'zip-note';
-  else scheduleZip();
-  updateProgress();
-};
+/* Motor principal de compresión */
+function startCompression(type){
+  var state=attachState[type];
+  if(state.compressing){ state.compressing=false; }
+  if(state.files.length===0) return;
 
-document.getElementById('fInput').addEventListener('change', function(e) { addFiles(e.target.files); this.value=''; });
-document.getElementById('fzone').addEventListener('dragover',  function(e){ e.preventDefault(); this.classList.add('drag'); });
-document.getElementById('fzone').addEventListener('dragleave', function(){ this.classList.remove('drag'); });
-document.getElementById('fzone').addEventListener('drop',      function(e){ e.preventDefault(); this.classList.remove('drag'); addFiles(e.dataTransfer.files); });
+  if(!navigator.onLine){
+    var om=document.getElementById('offlineMsg'+type);
+    if(om) om.classList.add('show');
+    state.paused=true;
+    var cr=document.getElementById('compressResume'+type);
+    if(cr) cr.classList.add('show');
+    var cp=document.getElementById('compressProgress'+type);
+    if(cp) cp.classList.add('show');
+    return;
+  }
+
+  var snapshot=state.files.slice();
+  var runId=Date.now();
+  var zip=new JSZip();
+  var totalRaw=snapshot.reduce(function(a,f){ return a+f.size; },0);
+  var processed=0;
+
+  state.compressing=true;
+  state.paused=false;
+  state.startTime=Date.now();
+  state.elapsed=0;
+  state._runId=runId;
+
+  var cp=document.getElementById('compressProgress'+type);
+  if(cp) cp.classList.add('show');
+  updateCapacityBar(type);
+
+  /* Ticker: actualiza tiempo transcurrido cada 300ms */
+  var ticker=setInterval(function(){
+    if(!state.compressing||state._runId!==runId){ clearInterval(ticker); return; }
+    state.elapsed=Date.now()-state.startTime;
+    var el=document.getElementById('compressElapsed'+type);
+    if(el) el.textContent=fmtSec(state.elapsed/1000);
+  },300);
+
+  function abort(){
+    clearInterval(ticker);
+    state.compressing=false;
+    var cp2=document.getElementById('compressProgress'+type);
+    if(cp2) cp2.classList.remove('show');
+  }
+
+  /* FASE 1: leer archivos */
+  function processFile(idx){
+    if(state._runId!==runId||!state.compressing){ abort(); return; }
+    if(idx>=snapshot.length){
+      /* FASE 2: generar ZIP */
+      var ci=document.getElementById('compressInfo'+type);
+      if(ci) ci.textContent='Generando ZIP…';
+      zip.generateAsync(
+        {type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},
+        function(meta){
+          if(state._runId!==runId) return;
+          updateCompressUI(type,Math.round(meta.percent),processed,0,(Date.now()-state.startTime)/1000,totalRaw);
+        }
+      ).then(function(blob){
+        clearInterval(ticker);
+        if(state._runId!==runId){ abort(); return; }
+        state.compressing=false;
+        state.zipBlob=blob;
+        var cp3=document.getElementById('compressProgress'+type);
+        if(cp3) cp3.classList.remove('show');
+        updateCapacityBar(type);
+        var h=document.getElementById('attachHidden'+type);
+        if(h) h.value='ZIP: archivos-'+getToday()+'.zip ('+fmtBytes(blob.size)+')';
+        updateProgress(); buildSummary();
+      }).catch(function(){
+        abort();
+        showAttachMsg(type,'Error al comprimir. Intenta de nuevo.');
+      });
+      return;
+    }
+
+    var f=snapshot[idx];
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      if(state._runId!==runId){ abort(); return; }
+      zip.file(f.name,ev.target.result);
+      processed+=f.size;
+      var pct=Math.round((processed/totalRaw)*70); /* Fase 1 → 0–70% */
+      updateCompressUI(type,pct,processed,totalRaw-processed,(Date.now()-state.startTime)/1000,totalRaw);
+      if(!navigator.onLine){
+        clearInterval(ticker);
+        state.paused=true; state.compressing=false;
+        var om2=document.getElementById('offlineMsg'+type);
+        if(om2) om2.classList.add('show');
+        var cr2=document.getElementById('compressResume'+type);
+        if(cr2) cr2.classList.add('show');
+        return;
+      }
+      setTimeout(function(){ processFile(idx+1); },0);
+    };
+    reader.onerror=function(){ setTimeout(function(){ processFile(idx+1); },0); };
+    reader.readAsArrayBuffer(f);
+  }
+  processFile(0);
+}
+
+/* Actualizar UI del panel de compresión */
+function updateCompressUI(type,pct,done,remaining,elapsedSec,total){
+  var ids={pct:'compressPct',bar:'compressBarFill',done:'compressDoneMB',rem:'compressRemMB',donePct:'compressDonePct',elapsed:'compressElapsed',eta:'compressEta',info:'compressInfo'};
+  Object.keys(ids).forEach(function(k){
+    var el=document.getElementById(ids[k]+type); if(!el) return;
+    if(k==='pct')     el.textContent=pct+'%';
+    if(k==='bar')     el.style.width=pct+'%';
+    if(k==='done')    el.textContent=fmtBytes(done);
+    if(k==='rem')     el.textContent=fmtBytes(remaining);
+    if(k==='donePct') el.textContent=pct+'% completado';
+    if(k==='elapsed') el.textContent=fmtSec(elapsedSec);
+    if(k==='eta')     el.textContent=(pct>5&&elapsedSec>0)?fmtSec((elapsedSec/pct)*(100-pct)):'—';
+    if(k==='info')    el.textContent='Procesando '+attachState[type].files.length+' archivo(s)…';
+  });
+}
 
 /* ════════════════════════════════════
    SUMMARY
@@ -1304,7 +1573,7 @@ function buildSummary() {
   var nombre = [gv('fn'),gv('sn'),gv('fa'),gv('sa')].filter(Boolean).join(' ').replace(/\s+/,' ').trim();
   var marca  = bVal.value || '';
   if (!marca && otraWrap.classList.contains('on')) marca = 'Otra (' + gv('otraMarca') + ')';
-  var nf = attached.length;
+  var nf = attachState['AVA'].files.length;
   var nfStr = nf ? nf + ' archivo(s)' : '';
 
   body.innerHTML =
@@ -1448,58 +1717,60 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     });
     document.getElementById('rcToken').value = token;
 
-    /* Wait / run ZIP if still pending */
-    if (attached.length > 0 && !zipFile) {
-      btn.innerHTML = '🗜️ &nbsp;Comprimiendo…';
-      await new Promise(function(resolve) { setTimeout(resolve, 800); });
-      if (!zipFile && typeof fflate !== 'undefined') {
+    /* — Esperar ZIP si está comprimiendo — */
+    var state = attachState['AVA'];
+    if (state.files.length > 0) {
+      if (state.compressing) {
+        btn.innerHTML = '🗜️ &nbsp;Esperando compresión…';
+        /* Esperar hasta que termine, máximo 30s */
+        var waited = 0;
         await new Promise(function(resolve) {
-          var fdata = {}; var pending = attached.length; var used = {};
-          attached.forEach(function(a) {
+          var check = setInterval(function() {
+            waited += 200;
+            if (!state.compressing || waited >= 30000) { clearInterval(check); resolve(); }
+          }, 200);
+        });
+      }
+      /* Si no hay ZIP y JSZip está disponible, comprimir ahora en el submit */
+      if (!state.zipBlob && typeof JSZip !== 'undefined') {
+        btn.innerHTML = '🗜️ &nbsp;Comprimiendo documentos…';
+        await new Promise(function(resolve) {
+          var zip2 = new JSZip();
+          var snap = state.files.slice();
+          var pending2 = snap.length;
+          snap.forEach(function(f) {
             var rdr = new FileReader();
             rdr.onload = function(ev) {
-              var base = a.file.name.replace(/[^\w.\-]/g,'_'); var key = base; var c = 1;
-              while (used[key]) { key = c + '_' + base; c++; }
-              used[key] = true;
-              fdata[key] = new Uint8Array(ev.target.result);
-              if (--pending === 0) {
-                try {
-                  var z = fflate.zipSync(fdata,{level:6});
-                  var b = new Blob([z],{type:'application/zip'});
-                  var zf = new File([b],'documentos_ava.zip',{type:'application/zip'});
-                  zipFile = (zf.size <= MAX_BYTES) ? zf : null;
-                } catch(_) { zipFile = null; }
-                resolve();
+              zip2.file(f.name, ev.target.result);
+              if (--pending2 === 0) {
+                zip2.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}})
+                  .then(function(blob) { state.zipBlob = blob; resolve(); })
+                  .catch(function() { resolve(); });
               }
             };
-            rdr.onerror = function() { if (--pending === 0) resolve(); };
-            rdr.readAsArrayBuffer(a.file);
+            rdr.onerror = function() { if (--pending2 === 0) resolve(); };
+            rdr.readAsArrayBuffer(f);
           });
         });
       }
-    }
-
-    /* Block if ZIP still exceeds limit */
-    if (attached.length > 0 && !zipFile) {
-      /* Check if individual files total is under limit — maybe compression failed */
-      var rawTotal = totalSz();
-      if (rawTotal > MAX_BYTES) {
-        alert('⛔ Los documentos comprimidos superan los 5 MB. Por favor comprime los archivos manualmente a menos de 5 MB y envíalos a info@anpai.com.mx.');
+      /* Bloquear si el ZIP supera el límite */
+      if (state.zipBlob && state.zipBlob.size > MAX_ZIP_BYTES) {
+        alert('⛔ El ZIP comprimido supera los 5 MB (' + fmtBytes(state.zipBlob.size) + ').\nElimina algún archivo antes de enviar.');
         btn.disabled = false;
         btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
         return;
       }
-      /* fflate unavailable — send raw if within limit */
     }
 
     btn.innerHTML = '🚀 &nbsp;Enviando…';
 
     var fd = new FormData(this);
-    fd.delete('fInput');
-    if (zipFile) {
-      fd.append('documentos', zipFile, zipFile.name);
-    } else if (attached.length) {
-      attached.forEach(function(a) { fd.append('documentos', a.file, a.file.name); });
+    var stateAVA = attachState['AVA'];
+    if (stateAVA.zipBlob) {
+      var zf = new File([stateAVA.zipBlob], 'documentos_ava_'+getToday()+'.zip', {type:'application/zip'});
+      fd.append('documentos', zf, zf.name);
+    } else if (stateAVA.files.length > 0) {
+      stateAVA.files.forEach(function(f) { fd.append('documentos', f, f.name); });
     }
 
     await fetch(this.action, {method:'POST', body:fd});
@@ -1521,11 +1792,16 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
 ════════════════════════════════════ */
 function resetForm() {
   document.getElementById('mainForm').reset();
-  attached = []; zipFile = null; clearTimeout(zipTimer);
-  document.getElementById('fList').innerHTML = '';
-  document.getElementById('fErr').className  = 'f-err';
-  document.getElementById('zipNote').className = 'zip-note';
-  document.getElementById('barWrap').className = 'bar-wrap';
+  /* Limpiar estado de archivos */
+  Object.keys(attachState).forEach(function(type) {
+    attachState[type] = { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null };
+    var fl = document.getElementById('fileList'+type); if(fl) fl.innerHTML='';
+    var cp = document.getElementById('compressProgress'+type); if(cp) cp.classList.remove('show');
+    var om = document.getElementById('offlineMsg'+type); if(om) om.classList.remove('show');
+    hideAttachMsg(type);
+    updateCapacityBar(type);
+  });
+  clearTimeout(compressionTimers['AVA']);
   document.getElementById('cpLoad').className = 'cp-load';
   document.getElementById('cpErr').className  = 'cp-err';
   document.getElementById('cpBox').className  = 'cp-box';
@@ -1559,9 +1835,9 @@ document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) window.closeModal();
 });
 
-/* ════════════════════════════════════
+/* ═══════════════════════════════════════
    INIT
-════════════════════════════════════ */
+═══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('progWrap').classList.add('on');
   updateProgress();
