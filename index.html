@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>AVA – Cotizar Seguro de Auto</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://www.google.com/recaptcha/api.js?render=6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
@@ -25,6 +25,7 @@
   --green:  #22c55e;
   --yellow: #eab308;
   --red:    #ef4444;
+  --font-display: 'Outfit', sans-serif;
 }
 
 /* ═══════════════════════════════════
@@ -74,11 +75,6 @@ body.dark .attach-bar-track { background: #1e2d45; }
 body.dark .compress-progress { border-color: #243660; }
 body.dark .compress-body { background: #111f38; }
 body.dark .compress-stat-val { color: #c8d6f0; }
-body.dark .sum-box       { background: #111f38; border-color: #1e2d50; }
-body.dark .sum-row-sep   { border-color: #1e2d50; }
-body.dark .sum-v         { color: #c8d6f0; }
-body.dark .sum-foot      { background: #0e1a30; border-top-color: #1e2d50; }
-body.dark .sum-foot-text strong { color: #c8d6f0; }
 body.dark .decl-wrap     { background: #1a2645; border-color: #243660; }
 body.dark .decl-text     { color: #c8d6f0; }
 body.dark .modal-box     { background: #111827; }
@@ -105,6 +101,18 @@ body.dark .prog-txt strong { color: #78b0ff; }
 body.dark .zip-note      { background: rgba(22,93,255,.07); border-color: rgba(22,93,255,.2); }
 body.dark input.uf       { border-color: #22c55e; background: #0f2a1a; color: #c8d6f0; font-weight: 500; }
 body.dark input.uw       { background: #111827; color: #3a4e70; }
+
+/* ── SUMBOX dark mode ── */
+body.dark .sumbox        { background: #111f38; border-color: #1e2d50; }
+body.dark .sum-grp + .sum-grp { border-top-color: rgba(255,255,255,.06); }
+body.dark .sg-label-ico  { background: rgba(22,93,255,.16); }
+body.dark .sum-row       { background: rgba(255,255,255,.025); }
+body.dark .sum-row:hover { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); }
+body.dark .sum-v         { color: #c8d6f0; }
+body.dark .sum-v.empty   { color: #3a4e70; }
+body.dark .sum-chip.files { color: #4ade80; background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.25); }
+body.dark .sum-footer    { background: rgba(255,255,255,.02); border-top-color: rgba(255,255,255,.06); }
+body.dark .sum-footer-txt strong { color: #c8d6f0; }
 
 /* ═══════════════════════════════════
    THEME TOGGLE
@@ -220,11 +228,9 @@ input:focus, select:focus {
 input::placeholder { color:var(--muted); }
 select { cursor:pointer; }
 
-/* UPPERCASE */
 .up { text-transform:uppercase; }
 .up::placeholder { text-transform:none; }
 
-/* AUTOFILL */
 .uf { border-color:var(--green)!important; background:#f0fdf4!important; color:#166534!important; font-weight:500; }
 .uf:focus { box-shadow:0 0 0 3px rgba(34,197,94,.1)!important; }
 .uw { background:#fafbff!important; color:var(--muted)!important; cursor:not-allowed!important; }
@@ -233,7 +239,6 @@ select { cursor:pointer; }
 .af-dot { width:6px; height:6px; border-radius:50%; background:var(--border); flex-shrink:0; }
 .af-hint.ready .af-dot { background:var(--green); }
 
-/* RFC/CURP HINTS */
 .fhint { font-size:.74rem; margin-top:4px; min-height:16px; display:flex; align-items:center; gap:5px; }
 .fhint.ok  { color:var(--green); font-weight:600; }
 .fhint.err { color:var(--red);   font-weight:600; }
@@ -295,7 +300,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 .otra-wrap.on { display:block; }
 
 /* ═══════════════════════════════════
-   FILE UPLOAD — ARQUITECTURA GUÍA
+   FILE UPLOAD
 ═══════════════════════════════════ */
 .attach-dropzone {
   border: 2.5px dashed var(--border);
@@ -328,7 +333,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
   margin-top: 8px; color: var(--red); font-size: 12.5px; font-weight: 600; display: none;
 }
 
-/* Barra de capacidad */
 .attach-capacity-wrap { margin-top: 16px; display: none; }
 .attach-capacity-wrap.visible { display: block; }
 .attach-capacity-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--navy); }
@@ -365,7 +369,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 }
 .attach-error-msg.show { display: flex; }
 
-/* Lista archivos */
 .attach-file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
 .attach-file-item {
   display: flex; align-items: center; gap: 10px;
@@ -382,7 +385,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 }
 .attach-file-remove:hover { background: #FF4757; color: #fff; }
 
-/* Offline */
 .offline-msg {
   background: rgba(255,71,87,.08); border: 1.5px solid rgba(255,71,87,.25);
   border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: #d93546;
@@ -390,7 +392,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 }
 .offline-msg.show { display: flex; }
 
-/* Panel de compresión */
 .compress-progress { display: none; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 14px; }
 .compress-progress.show { display: block; }
 .compress-header { background: var(--navy); padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
@@ -452,39 +453,172 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 .l-ttl { font-weight:700; font-size:.86rem; margin-bottom:3px; }
 
 /* ═══════════════════════════════════
-   SUMMARY BOX
+   SUMBOX — NUEVO DISEÑO PREMIUM
+   Estructura: .sumbox > .sum-hd + [sum-grp*] + .sum-footer
 ═══════════════════════════════════ */
-.sum-box { background:var(--white); border:1.5px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 2px 14px rgba(10,31,68,.06); margin-top:28px; }
-.sum-head2 {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:1rem 1.4rem; background:linear-gradient(135deg,#0A1F44,#0e2a60);
-  position:relative; overflow:hidden;
+.sumbox {
+  background: var(--white);
+  border: 1.5px solid rgba(22,93,255,.13);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 40px rgba(10,31,68,.13), 0 1px 6px rgba(10,31,68,.06);
+  margin-top: 32px;
+  animation: sumboxReveal .4s ease forwards;
+  transition: background .3s, border-color .3s;
 }
-.sum-head2::before { content:''; position:absolute; top:-30px; right:-30px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle,rgba(91,142,255,.22) 0%,transparent 70%); pointer-events:none; }
-.sh-left { display:flex; align-items:center; gap:.65rem; position:relative; z-index:1; }
-.sh-icon { width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.sh-ttl { font-size:.82rem; font-weight:800; color:#fff; letter-spacing:.07em; text-transform:uppercase; }
-.sh-sub { font-size:.67rem; color:rgba(255,255,255,.5); margin-top:.1rem; }
-.sh-badge { display:inline-flex; align-items:center; gap:.35rem; background:rgba(15,195,115,.16); border:1px solid rgba(15,195,115,.38); border-radius:99px; padding:.26rem .72rem; font-size:.67rem; font-weight:700; color:#6eeabb; letter-spacing:.04em; text-transform:uppercase; position:relative; z-index:1; }
-.sh-bdot { width:6px; height:6px; border-radius:50%; background:#0FC373; animation:pulseDot 2s ease-in-out infinite; }
-@keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
-.sum-grp { padding:.9rem 1.4rem; }
-.sum-grp + .sum-grp { border-top:1px solid #EEF2F7; }
-.sum-row-sep { border-top-color: #EEF2F7; }
-.sg-label { display:flex; align-items:center; gap:.45rem; margin-bottom:.7rem; }
-.sg-label-ico { font-size:.88rem; }
-.sg-label-txt { font-size:.67rem; font-weight:800; color:var(--blue); letter-spacing:.1em; text-transform:uppercase; }
-.sum-row { display:flex; align-items:baseline; gap:.5rem; font-size:.8rem; line-height:1.9; }
-.sum-k { color:var(--muted); font-weight:500; min-width:148px; flex-shrink:0; font-size:.76rem; }
-.sum-v { color:var(--dark); font-weight:600; font-size:.82rem; word-break:break-word; }
-.sum-v--empty { color:#9eadc8; font-weight:400; font-style:italic; }
-.sum-chip { display:inline-flex; align-items:center; background:rgba(22,93,255,.08); color:var(--blue); border:1px solid rgba(22,93,255,.18); border-radius:99px; padding:.15rem .65rem; font-size:.72rem; font-weight:700; }
-.sum-chip.g { background:rgba(34,197,94,.09); color:#166534; border-color:rgba(34,197,94,.25); }
-.sum-foot { border-top:1px solid #EEF2F7; padding:.85rem 1.4rem; background:#FAFBFD; display:flex; align-items:flex-start; gap:.65rem; }
-.sum-foot-ico { font-size:1rem; flex-shrink:0; margin-top:.05rem; }
-.sum-foot-text { font-size:.73rem; color:var(--muted); line-height:1.65; }
-.sum-foot-text strong { color:var(--dark); font-weight:700; }
-@media(max-width:600px){ .sum-k{min-width:unset;} .sum-row{flex-direction:column;gap:.04rem;line-height:1.55;padding:.1rem 0;} }
+
+@keyframes sumboxReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Encabezado del resumen ── */
+.sum-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 1.6rem;
+  background: linear-gradient(120deg,#071430 0%,#0e2a60 55%,#0d3070 100%);
+  position: relative; overflow: hidden;
+}
+.sum-hd::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 80% 50%, rgba(77,138,255,.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 80%, rgba(22,93,255,.12) 0%, transparent 45%);
+}
+.sum-hd::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(-45deg,transparent,transparent 22px,rgba(255,255,255,.015) 22px,rgba(255,255,255,.015) 23px);
+}
+.sum-hd-left {
+  display: flex; align-items: center; gap: .75rem;
+  position: relative; z-index: 1;
+}
+.sum-hd-icon {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.sum-hd-icon svg { width: 18px; height: 18px; fill: #fff; }
+.sum-ttl {
+  font-family: var(--font-display);
+  font-size: .86rem; font-weight: 800; color: #fff;
+  letter-spacing: .07em; text-transform: uppercase; line-height: 1.2;
+}
+.sum-sub { font-size: .67rem; color: rgba(255,255,255,.45); margin-top: .2rem; letter-spacing: .02em; }
+
+/* ── Badge de estado (3 variantes) ── */
+.sum-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 99px; padding: 5px 13px;
+  font-family: var(--font-display);
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .05em; text-transform: uppercase;
+  position: relative; z-index: 1;
+  backdrop-filter: blur(6px);
+  transition: background .4s ease, border-color .4s ease, color .4s ease;
+}
+.sum-badge.pending {
+  background: rgba(107,114,128,.15); border: 1px solid rgba(107,114,128,.35); color: #9CA3AF;
+}
+.sum-badge.pending .badge-dot { background: #9CA3AF; animation: blinkGray 2s ease-in-out infinite; }
+.sum-badge.warn {
+  background: rgba(245,158,11,.16); border: 1px solid rgba(245,158,11,.4); color: #fcd34d;
+}
+.sum-badge.warn .badge-dot { background: #F59E0B; animation: blinkAmber 1.4s ease-in-out infinite; }
+.sum-badge.ok {
+  background: rgba(15,195,115,.18); border: 1px solid rgba(15,195,115,.4); color: #6eeabb;
+}
+.sum-badge.ok .badge-dot { background: #0FC373; animation: blinkGreen 2s ease-in-out infinite; }
+
+.badge-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+@keyframes blinkGray  { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.25;transform:scale(.8)} }
+@keyframes blinkAmber { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.2;transform:scale(.75)} }
+@keyframes blinkGreen { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.85)} }
+
+/* ── Grupos dentro del resumen ── */
+.sum-grp { padding: 1.1rem 1.6rem; position: relative; }
+.sum-grp + .sum-grp { border-top: 1px solid rgba(22,93,255,.07); }
+
+.sum-grp-lbl {
+  display: flex; align-items: center; gap: .5rem; margin-bottom: .85rem;
+}
+.sum-grp-lbl-ico {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: rgba(22,93,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; flex-shrink: 0;
+}
+.sum-grp-lbl-txt {
+  font-family: var(--font-display);
+  font-size: .65rem; font-weight: 900; color: var(--blue);
+  letter-spacing: .12em; text-transform: uppercase;
+}
+
+/* ── Filas clave–valor con hover card ── */
+.sum-row {
+  display: flex; flex-direction: column;
+  gap: .06rem; padding: .42rem .6rem;
+  border-radius: 8px;
+  background: rgba(22,93,255,.025);
+  border: 1px solid transparent;
+  transition: background .18s, border-color .18s;
+  margin-bottom: .25rem;
+}
+.sum-row:last-child { margin-bottom: 0; }
+.sum-row:hover { background: rgba(22,93,255,.055); border-color: rgba(22,93,255,.1); }
+
+/* Animación de flash al actualizar */
+@keyframes rowFlash {
+  0%   { background: rgba(22,93,255,.12); }
+  100% { background: rgba(22,93,255,.025); }
+}
+.sum-row.row-updated { animation: rowFlash .6s ease forwards; }
+
+.sum-k {
+  font-size: .68rem; font-weight: 600; color: var(--muted);
+  letter-spacing: .02em; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+}
+.sum-v {
+  font-size: .84rem; font-weight: 700; color: var(--dark);
+  word-break: break-word; line-height: 1.35; text-transform: uppercase;
+  transition: color .3s;
+}
+.sum-v.empty {
+  font-size: .78rem; font-weight: 400;
+  color: #b0bdd6; font-style: italic; text-transform: none;
+}
+
+/* Chips */
+.sum-chip {
+  display: inline-flex; align-items: center;
+  background: rgba(22,93,255,.09); color: var(--blue);
+  border: 1px solid rgba(22,93,255,.2); border-radius: 6px;
+  padding: .12rem .55rem; font-size: .72rem; font-weight: 700;
+  letter-spacing: .02em; text-transform: none;
+}
+.sum-chip.files {
+  background: rgba(15,195,115,.09); color: #0a7a49;
+  border-color: rgba(15,195,115,.25);
+}
+
+/* ── Footer del resumen ── */
+.sum-footer {
+  border-top: 1px solid rgba(22,93,255,.08);
+  padding: .9rem 1.6rem;
+  background: linear-gradient(90deg, rgba(22,93,255,.03) 0%, transparent 100%);
+  display: flex; align-items: flex-start; gap: .7rem;
+}
+.sum-footer-txt { font-size: .73rem; color: var(--muted); line-height: 1.65; }
+.sum-footer-txt strong { color: var(--dark); font-weight: 700; }
+
+@media(max-width:600px){
+  .sum-grp  { padding: .9rem 1rem; }
+  .sum-footer { padding: .8rem 1rem; }
+  .sum-hd   { padding: 1rem 1.1rem; }
+}
 
 /* ═══════════════════════════════════
    DECLARATION & SUBMIT
@@ -859,7 +993,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           Adjuntar Documentos <span class="req">*</span>
         </label>
 
-        <!-- Zona de arrastre -->
         <div class="attach-dropzone" id="attachDropzoneAVA"
              ondragover="onDragOver(event,'AVA')"
              ondragleave="onDragLeave(event,'AVA')"
@@ -882,7 +1015,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           <input type="file" id="fileInputAVA" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFiles(this.files,'AVA');this.value='';">
         </div>
 
-        <!-- Barra de capacidad -->
         <div class="attach-capacity-wrap" id="capacityWrapAVA">
           <div class="attach-capacity-header">
             <span class="attach-capacity-label">Capacidad utilizada (ZIP)</span>
@@ -901,7 +1033,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           </div>
         </div>
 
-        <!-- Panel de compresión en tiempo real -->
         <div class="compress-progress" id="compressProgressAVA">
           <div class="compress-header">
             <span style="font-size:16px">⚡</span>
@@ -926,39 +1057,146 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           </div>
         </div>
 
-        <!-- Lista de archivos -->
         <div class="attach-file-list" id="fileListAVA"></div>
 
-        <!-- Aviso offline -->
         <div class="offline-msg" id="offlineMsgAVA">
           <span>📡</span><span>Sin conexión. La compresión se reanudará automáticamente.</span>
         </div>
 
-        <!-- Campo oculto con info del ZIP -->
         <input type="hidden" id="attachHiddenAVA" name="Archivos_adjuntos_info">
       </div>
     </div>
 
-    <!-- RESUMEN -->
-    <div class="sum-box" id="sumBox">
-      <div class="sum-head2">
-        <div class="sh-left">
-          <div class="sh-icon">
-            <svg viewBox="0 0 24 24" fill="white" width="17" height="17"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+    <!-- ══════════════════════════════
+         NUEVO RESUMEN DE SOLICITUD
+    ══════════════════════════════ -->
+    <div class="sumbox" id="sumbox">
+
+      <!-- Encabezado con badge de estado dinámico -->
+      <div class="sum-hd">
+        <div class="sum-hd-left">
+          <div class="sum-hd-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
           </div>
-          <div><div class="sh-ttl">Resumen de Solicitud</div><div class="sh-sub">Revisa tus datos antes de enviar</div></div>
+          <div>
+            <div class="sum-ttl">Resumen de Solicitud</div>
+            <div class="sum-sub">Revisa tus datos antes de enviar</div>
+          </div>
         </div>
-        <div class="sh-badge"><span class="sh-bdot"></span> Listo</div>
+        <div class="sum-badge pending" id="sum-badge">
+          <span class="badge-dot"></span>
+          <span id="sum-badge-txt">Pendiente</span>
+        </div>
       </div>
-      <div id="sumBody"></div>
-      <div class="sum-foot">
-        <span class="sum-foot-ico">ℹ️</span>
-        <p class="sum-foot-text"><strong>Verifica la información antes de enviar.</strong> Si detectas algún error, corrige el campo correspondiente.</p>
+
+      <!-- Cuerpo del resumen (grupos generados dinámicamente) -->
+      <div id="sum-body">
+
+        <!-- Grupo: Datos Personales -->
+        <div class="sum-grp">
+          <div class="sum-grp-lbl">
+            <span class="sum-grp-lbl-ico">👤</span>
+            <span class="sum-grp-lbl-txt">Datos Personales</span>
+          </div>
+          <div class="sum-row" id="row-nombre">
+            <span class="sum-k">Nombre completo</span>
+            <span class="sum-v empty" id="val-nombre">—</span>
+          </div>
+          <div class="sum-row" id="row-genero">
+            <span class="sum-k">Género</span>
+            <span class="sum-v empty" id="val-genero">—</span>
+          </div>
+          <div class="sum-row" id="row-fecha">
+            <span class="sum-k">Fecha de nacimiento</span>
+            <span class="sum-v empty" id="val-fecha">—</span>
+          </div>
+          <div class="sum-row" id="row-rfc">
+            <span class="sum-k">RFC</span>
+            <span class="sum-v empty" id="val-rfc">—</span>
+          </div>
+          <div class="sum-row" id="row-curp">
+            <span class="sum-k">CURP</span>
+            <span class="sum-v empty" id="val-curp">—</span>
+          </div>
+        </div>
+
+        <!-- Grupo: Contacto y Domicilio -->
+        <div class="sum-grp">
+          <div class="sum-grp-lbl">
+            <span class="sum-grp-lbl-ico">📞</span>
+            <span class="sum-grp-lbl-txt">Contacto y Domicilio</span>
+          </div>
+          <div class="sum-row" id="row-tel">
+            <span class="sum-k">Teléfono</span>
+            <span class="sum-v empty" id="val-tel">—</span>
+          </div>
+          <div class="sum-row" id="row-email">
+            <span class="sum-k">Correo electrónico</span>
+            <span class="sum-v empty" id="val-email">—</span>
+          </div>
+          <div class="sum-row" id="row-cp">
+            <span class="sum-k">C.P. / Municipio</span>
+            <span class="sum-v empty" id="val-cp">—</span>
+          </div>
+          <div class="sum-row" id="row-colonia">
+            <span class="sum-k">Colonia / Estado</span>
+            <span class="sum-v empty" id="val-colonia">—</span>
+          </div>
+        </div>
+
+        <!-- Grupo: Vehículo -->
+        <div class="sum-grp">
+          <div class="sum-grp-lbl">
+            <span class="sum-grp-lbl-ico">🚗</span>
+            <span class="sum-grp-lbl-txt">Vehículo</span>
+          </div>
+          <div class="sum-row" id="row-tipo">
+            <span class="sum-k">Condición</span>
+            <span class="sum-v empty" id="val-tipo">—</span>
+          </div>
+          <div class="sum-row" id="row-marca">
+            <span class="sum-k">Marca</span>
+            <span class="sum-v empty" id="val-marca">—</span>
+          </div>
+          <div class="sum-row" id="row-anio">
+            <span class="sum-k">Año / Versión</span>
+            <span class="sum-v empty" id="val-anio">—</span>
+          </div>
+          <div class="sum-row" id="row-vin">
+            <span class="sum-k">Núm. de Serie (NIV)</span>
+            <span class="sum-v empty" id="val-vin">—</span>
+          </div>
+        </div>
+
+        <!-- Grupo: Documentos -->
+        <div class="sum-grp">
+          <div class="sum-grp-lbl">
+            <span class="sum-grp-lbl-ico">📎</span>
+            <span class="sum-grp-lbl-txt">Documentos</span>
+          </div>
+          <div class="sum-row" id="row-archivos">
+            <span class="sum-k">Archivos adjuntos</span>
+            <span class="sum-v empty" id="val-archivos">—</span>
+          </div>
+        </div>
+
       </div>
+      <!-- /sum-body -->
+
+      <!-- Footer informativo -->
+      <div class="sum-footer">
+        <span style="font-size:16px">ℹ️</span>
+        <p class="sum-footer-txt">
+          <strong>Verifica la información antes de enviar.</strong>
+          Si detectas algún error, corrige el campo correspondiente.
+        </p>
+      </div>
+
     </div>
+    <!-- /sumbox -->
 
     <!-- ══════════════════════════════════════════
-         DECLARACIÓN — TEXTO ACTUALIZADO
+         DECLARACIÓN
     ══════════════════════════════════════════ -->
     <label class="decl-wrap" for="declCheck">
       <input type="checkbox" id="declCheck">
@@ -1243,7 +1481,7 @@ bSearch.addEventListener('input', function() { buildBrandDrop(this.value); bDrop
 bSearch.addEventListener('blur',  function() { setTimeout(function() { bDrop.classList.remove('open'); }, 160); });
 
 /* ════════════════════════════════════
-   FILE UPLOAD — ARQUITECTURA GUÍA (JSZip)
+   FILE UPLOAD (JSZip)
 ════════════════════════════════════ */
 var MAX_ZIP_BYTES = 5 * 1024 * 1024;
 
@@ -1532,68 +1770,104 @@ function updateCompressUI(type,pct,done,remaining,elapsedSec,total){
 }
 
 /* ════════════════════════════════════
-   SUMMARY
+   SUMMARY — nuevo sistema con updateRow / updateRowChip / setBadgeState
 ════════════════════════════════════ */
-function gv(id) { var e=document.getElementById(id); return e?e.value:''; }
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* Actualiza el badge de estado del resumen */
+function setBadgeState(state) {
+  var badge    = document.getElementById('sum-badge');
+  var badgeTxt = document.getElementById('sum-badge-txt');
+  if (!badge || !badgeTxt) return;
+  badge.classList.remove('pending','warn','ok');
+  badge.classList.add(state);
+  var labels = { pending:'Pendiente', warn:'Incompleto', ok:'Listo' };
+  badgeTxt.textContent = labels[state] || state;
 }
 
-function row(k, v, chip) {
-  var empty = !v || !String(v).trim();
-  var vhtml = empty
-    ? '<span class="sum-v sum-v--empty">—</span>'
-    : chip
-      ? '<span class="sum-chip' + (chip==='g'?' g':'') + '">' + esc(v) + '</span>'
-      : '<span class="sum-v">' + esc(v) + '</span>';
-  return '<div class="sum-row"><span class="sum-k">' + esc(k) + ':</span>' + vhtml + '</div>';
+/* Actualiza el texto de un valor en el resumen con animación de flash */
+function updateRow(id, value) {
+  var el = document.getElementById('val-' + id);
+  if (!el) return;
+  var empty = !value || !String(value).trim();
+  el.textContent = empty ? '—' : String(value);
+  el.className   = 'sum-v' + (empty ? ' empty' : '');
+  var row = el.closest('.sum-row');
+  if (row && !empty) {
+    row.classList.remove('row-updated');
+    void row.offsetWidth;
+    row.classList.add('row-updated');
+  }
 }
 
-function grp(ico, ttl, rows) {
-  return '<div class="sum-grp">'
-    + '<div class="sg-label"><span class="sg-label-ico">' + ico + '</span>'
-    + '<span class="sg-label-txt">' + esc(ttl) + '</span></div>'
-    + rows + '</div>';
+/* Actualiza un valor con chip de color */
+function updateRowChip(id, value, chipClass) {
+  var container = document.getElementById('val-' + id);
+  if (!container) return;
+  var empty  = !value || !String(value).trim();
+  var parent = container.parentNode;
+  var newEl  = document.createElement('span');
+  newEl.id   = 'val-' + id;
+  if (empty) {
+    newEl.className   = 'sum-v empty';
+    newEl.textContent = '—';
+  } else {
+    newEl.className   = 'sum-chip' + (chipClass ? ' ' + chipClass : '');
+    newEl.textContent = value;
+  }
+  parent.replaceChild(newEl, container);
+  var row = newEl.closest('.sum-row');
+  if (row && !empty) {
+    row.classList.remove('row-updated');
+    void row.offsetWidth;
+    row.classList.add('row-updated');
+  }
 }
+
+function gv(id) { var e=document.getElementById(id); return e?e.value.trim():''; }
 
 function buildSummary() {
-  var body = document.getElementById('sumBody');
-  if (!body) return;
+  /* ── Datos Personales ── */
+  var nombre = [gv('fn'),gv('sn'),gv('fa'),gv('sa')].filter(Boolean).join(' ').trim();
+  updateRow('nombre', nombre);
+  updateRow('genero', gv('gen'));
+  updateRow('fecha',  gv('dob'));
+  updateRow('rfc',    gv('rfc'));
+  updateRow('curp',   gv('curp'));
 
-  var nombre = [gv('fn'),gv('sn'),gv('fa'),gv('sa')].filter(Boolean).join(' ').replace(/\s+/,' ').trim();
-  var marca  = bVal.value || '';
+  /* ── Contacto y Domicilio ── */
+  updateRow('tel',   gv('tel'));
+  updateRow('email', gv('email'));
+  var cpMun = gv('cp') && gv('mun') ? 'CP ' + gv('cp') + ' — ' + gv('mun') : (gv('cp') || '');
+  updateRow('cp',      cpMun);
+  var coloniaEst = gv('colSel') && gv('estado') ? gv('colSel') + ' / ' + gv('estado') : (gv('estado') || gv('colSel') || '');
+  updateRow('colonia', coloniaEst);
+
+  /* ── Vehículo ── */
+  updateRowChip('tipo',  gv('cond'), '');
+  var marca = bVal.value || '';
   if (!marca && otraWrap.classList.contains('on')) marca = 'Otra (' + gv('otraMarca') + ')';
-  var nf = attachState['AVA'].files.length;
-  var nfStr = nf ? nf + ' archivo(s)' : '';
+  updateRowChip('marca', marca, '');
+  var anioVer = gv('anio') && gv('ver') ? gv('anio') + ' — ' + gv('ver') : (gv('anio') || gv('ver') || '');
+  updateRow('anio', anioVer);
+  updateRow('vin',  gv('niv'));
 
-  body.innerHTML =
-    grp('👤','Datos Personales',
-      row('Nombre',          nombre) +
-      row('Género',          gv('gen')) +
-      row('Fecha de nac.',   gv('dob')) +
-      row('RFC',             gv('rfc')) +
-      row('CURP',            gv('curp')) +
-      row('Teléfono',        gv('tel')) +
-      row('Correo',          gv('email'))
-    ) +
-    grp('📍','Domicilio',
-      row('C.P.',     gv('cp')) +
-      row('Colonia',  gv('colSel')) +
-      row('Municipio',gv('mun')) +
-      row('Estado',   gv('estado'))
-    ) +
-    grp('🚗','Vehículo',
-      row('Condición',      gv('cond')) +
-      row('Marca',          marca, marca?'':'') +
-      row('Versión',        gv('ver')) +
-      row('Año',            gv('anio')) +
-      row('Núm. Serie',     gv('niv')) +
-      row('Núm. Motor',     gv('motor')) +
-      row('Clave Vehicular',gv('clave'))
-    ) +
-    grp('📎','Documentos',
-      row('Archivos', nfStr, nf?'g':'')
-    );
+  /* ── Documentos ── */
+  var nf = attachState['AVA'].files.length;
+  var zipInfo = attachState['AVA'].zipBlob ? ' — ZIP: ' + fmtBytes(attachState['AVA'].zipBlob.size) : '';
+  updateRowChip('archivos', nf ? nf + ' archivo(s)' + zipInfo : '', 'files');
+
+  /* ── Badge de estado ── */
+  var requiredFilled = [nombre, gv('gen'), gv('dob'), gv('rfc'), gv('curp'), gv('tel'), gv('email'),
+                        gv('cp'), gv('estado'), gv('cond'), marca, gv('ver'), gv('anio'), gv('niv')];
+  var allFilled = requiredFilled.every(function(v){ return v && v.trim(); });
+
+  if (allFilled) {
+    setBadgeState('ok');
+  } else if (requiredFilled.some(function(v){ return v && v.trim(); })) {
+    setBadgeState('warn');
+  } else {
+    setBadgeState('pending');
+  }
 }
 
 /* ════════════════════════════════════
@@ -1800,6 +2074,7 @@ function resetForm() {
   });
   document.getElementById('declCheck').checked = false;
   document.getElementById('btnSub').disabled = true;
+  setBadgeState('pending');
   updateProgress(); buildSummary();
 }
 
@@ -1818,11 +2093,12 @@ document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) window.closeModal();
 });
 
-/* ═══════════════════════════════════════
+/* ════════════════════════════════════
    INIT
-═══════════════════════════════════════ */
+════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('progWrap').classList.add('on');
+  setBadgeState('pending');
   updateProgress();
   buildSummary();
 });
