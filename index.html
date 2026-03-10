@@ -453,8 +453,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 .l-ttl { font-weight:700; font-size:.86rem; margin-bottom:3px; }
 
 /* ═══════════════════════════════════
-   SUMBOX — NUEVO DISEÑO PREMIUM
-   Estructura: .sumbox > .sum-hd + [sum-grp*] + .sum-footer
+   SUMBOX — PREMIUM DESIGN
 ═══════════════════════════════════ */
 .sumbox {
   background: var(--white);
@@ -466,13 +465,10 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
   animation: sumboxReveal .4s ease forwards;
   transition: background .3s, border-color .3s;
 }
-
 @keyframes sumboxReveal {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-/* ── Encabezado del resumen ── */
 .sum-hd {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.2rem 1.6rem;
@@ -489,136 +485,57 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image: repeating-linear-gradient(-45deg,transparent,transparent 22px,rgba(255,255,255,.015) 22px,rgba(255,255,255,.015) 23px);
 }
-.sum-hd-left {
-  display: flex; align-items: center; gap: .75rem;
-  position: relative; z-index: 1;
-}
+.sum-hd-left { display: flex; align-items: center; gap: .75rem; position: relative; z-index: 1; }
 .sum-hd-icon {
   width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-  background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.15);
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
 }
 .sum-hd-icon svg { width: 18px; height: 18px; fill: #fff; }
-.sum-ttl {
-  font-family: var(--font-display);
-  font-size: .86rem; font-weight: 800; color: #fff;
-  letter-spacing: .07em; text-transform: uppercase; line-height: 1.2;
-}
+.sum-ttl { font-family: var(--font-display); font-size: .86rem; font-weight: 800; color: #fff; letter-spacing: .07em; text-transform: uppercase; line-height: 1.2; }
 .sum-sub { font-size: .67rem; color: rgba(255,255,255,.45); margin-top: .2rem; letter-spacing: .02em; }
-
-/* ── Badge de estado (3 variantes) ── */
 .sum-badge {
   display: inline-flex; align-items: center; gap: 6px;
   border-radius: 99px; padding: 5px 13px;
   font-family: var(--font-display);
   font-size: .68rem; font-weight: 800;
   letter-spacing: .05em; text-transform: uppercase;
-  position: relative; z-index: 1;
-  backdrop-filter: blur(6px);
+  position: relative; z-index: 1; backdrop-filter: blur(6px);
   transition: background .4s ease, border-color .4s ease, color .4s ease;
 }
-.sum-badge.pending {
-  background: rgba(107,114,128,.15); border: 1px solid rgba(107,114,128,.35); color: #9CA3AF;
-}
+.sum-badge.pending { background: rgba(107,114,128,.15); border: 1px solid rgba(107,114,128,.35); color: #9CA3AF; }
 .sum-badge.pending .badge-dot { background: #9CA3AF; animation: blinkGray 2s ease-in-out infinite; }
-.sum-badge.warn {
-  background: rgba(245,158,11,.16); border: 1px solid rgba(245,158,11,.4); color: #fcd34d;
-}
+.sum-badge.warn { background: rgba(245,158,11,.16); border: 1px solid rgba(245,158,11,.4); color: #fcd34d; }
 .sum-badge.warn .badge-dot { background: #F59E0B; animation: blinkAmber 1.4s ease-in-out infinite; }
-.sum-badge.ok {
-  background: rgba(15,195,115,.18); border: 1px solid rgba(15,195,115,.4); color: #6eeabb;
-}
+.sum-badge.ok { background: rgba(15,195,115,.18); border: 1px solid rgba(15,195,115,.4); color: #6eeabb; }
 .sum-badge.ok .badge-dot { background: #0FC373; animation: blinkGreen 2s ease-in-out infinite; }
-
 .badge-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 @keyframes blinkGray  { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.25;transform:scale(.8)} }
 @keyframes blinkAmber { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.2;transform:scale(.75)} }
 @keyframes blinkGreen { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.85)} }
-
-/* ── Grupos dentro del resumen ── */
 .sum-grp { padding: 1.1rem 1.6rem; position: relative; }
 .sum-grp + .sum-grp { border-top: 1px solid rgba(22,93,255,.07); }
-
-.sum-grp-lbl {
-  display: flex; align-items: center; gap: .5rem; margin-bottom: .85rem;
-}
-.sum-grp-lbl-ico {
-  width: 26px; height: 26px; border-radius: 7px;
-  background: rgba(22,93,255,.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .82rem; flex-shrink: 0;
-}
-.sum-grp-lbl-txt {
-  font-family: var(--font-display);
-  font-size: .65rem; font-weight: 900; color: var(--blue);
-  letter-spacing: .12em; text-transform: uppercase;
-}
-
-/* ── Filas clave–valor con hover card ── */
+.sum-grp-lbl { display: flex; align-items: center; gap: .5rem; margin-bottom: .85rem; }
+.sum-grp-lbl-ico { width: 26px; height: 26px; border-radius: 7px; background: rgba(22,93,255,.08); display: flex; align-items: center; justify-content: center; font-size: .82rem; flex-shrink: 0; }
+.sum-grp-lbl-txt { font-family: var(--font-display); font-size: .65rem; font-weight: 900; color: var(--blue); letter-spacing: .12em; text-transform: uppercase; }
 .sum-row {
-  display: flex; flex-direction: column;
-  gap: .06rem; padding: .42rem .6rem;
-  border-radius: 8px;
-  background: rgba(22,93,255,.025);
-  border: 1px solid transparent;
-  transition: background .18s, border-color .18s;
-  margin-bottom: .25rem;
+  display: flex; flex-direction: column; gap: .06rem; padding: .42rem .6rem;
+  border-radius: 8px; background: rgba(22,93,255,.025); border: 1px solid transparent;
+  transition: background .18s, border-color .18s; margin-bottom: .25rem;
 }
 .sum-row:last-child { margin-bottom: 0; }
 .sum-row:hover { background: rgba(22,93,255,.055); border-color: rgba(22,93,255,.1); }
-
-/* Animación de flash al actualizar */
-@keyframes rowFlash {
-  0%   { background: rgba(22,93,255,.12); }
-  100% { background: rgba(22,93,255,.025); }
-}
+@keyframes rowFlash { 0%{background:rgba(22,93,255,.12)} 100%{background:rgba(22,93,255,.025)} }
 .sum-row.row-updated { animation: rowFlash .6s ease forwards; }
-
-.sum-k {
-  font-size: .68rem; font-weight: 600; color: var(--muted);
-  letter-spacing: .02em; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
-}
-.sum-v {
-  font-size: .84rem; font-weight: 700; color: var(--dark);
-  word-break: break-word; line-height: 1.35; text-transform: uppercase;
-  transition: color .3s;
-}
-.sum-v.empty {
-  font-size: .78rem; font-weight: 400;
-  color: #b0bdd6; font-style: italic; text-transform: none;
-}
-
-/* Chips */
-.sum-chip {
-  display: inline-flex; align-items: center;
-  background: rgba(22,93,255,.09); color: var(--blue);
-  border: 1px solid rgba(22,93,255,.2); border-radius: 6px;
-  padding: .12rem .55rem; font-size: .72rem; font-weight: 700;
-  letter-spacing: .02em; text-transform: none;
-}
-.sum-chip.files {
-  background: rgba(15,195,115,.09); color: #0a7a49;
-  border-color: rgba(15,195,115,.25);
-}
-
-/* ── Footer del resumen ── */
-.sum-footer {
-  border-top: 1px solid rgba(22,93,255,.08);
-  padding: .9rem 1.6rem;
-  background: linear-gradient(90deg, rgba(22,93,255,.03) 0%, transparent 100%);
-  display: flex; align-items: flex-start; gap: .7rem;
-}
+.sum-k { font-size: .68rem; font-weight: 600; color: var(--muted); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.sum-v { font-size: .84rem; font-weight: 700; color: var(--dark); word-break: break-word; line-height: 1.35; text-transform: uppercase; transition: color .3s; }
+.sum-v.empty { font-size: .78rem; font-weight: 400; color: #b0bdd6; font-style: italic; text-transform: none; }
+.sum-chip { display: inline-flex; align-items: center; background: rgba(22,93,255,.09); color: var(--blue); border: 1px solid rgba(22,93,255,.2); border-radius: 6px; padding: .12rem .55rem; font-size: .72rem; font-weight: 700; letter-spacing: .02em; text-transform: none; }
+.sum-chip.files { background: rgba(15,195,115,.09); color: #0a7a49; border-color: rgba(15,195,115,.25); }
+.sum-footer { border-top: 1px solid rgba(22,93,255,.08); padding: .9rem 1.6rem; background: linear-gradient(90deg,rgba(22,93,255,.03) 0%,transparent 100%); display: flex; align-items: flex-start; gap: .7rem; }
 .sum-footer-txt { font-size: .73rem; color: var(--muted); line-height: 1.65; }
 .sum-footer-txt strong { color: var(--dark); font-weight: 700; }
-
-@media(max-width:600px){
-  .sum-grp  { padding: .9rem 1rem; }
-  .sum-footer { padding: .8rem 1rem; }
-  .sum-hd   { padding: 1rem 1.1rem; }
-}
+@media(max-width:600px){ .sum-grp { padding: .9rem 1rem; } .sum-footer { padding: .8rem 1rem; } .sum-hd { padding: 1rem 1.1rem; } }
 
 /* ═══════════════════════════════════
    DECLARATION & SUBMIT
@@ -1067,11 +984,8 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
       </div>
     </div>
 
-    <!-- ══════════════════════════════
-         RESUMEN DE SOLICITUD
-    ══════════════════════════════ -->
+    <!-- RESUMEN DE SOLICITUD -->
     <div class="sumbox" id="sumbox">
-
       <div class="sum-hd">
         <div class="sum-hd-left">
           <div class="sum-hd-icon">
@@ -1089,103 +1003,39 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
       </div>
 
       <div id="sum-body">
-
         <div class="sum-grp">
-          <div class="sum-grp-lbl">
-            <span class="sum-grp-lbl-ico">👤</span>
-            <span class="sum-grp-lbl-txt">Datos Personales</span>
-          </div>
-          <div class="sum-row" id="row-nombre">
-            <span class="sum-k">Nombre completo</span>
-            <span class="sum-v empty" id="val-nombre">—</span>
-          </div>
-          <div class="sum-row" id="row-genero">
-            <span class="sum-k">Género</span>
-            <span class="sum-v empty" id="val-genero">—</span>
-          </div>
-          <div class="sum-row" id="row-fecha">
-            <span class="sum-k">Fecha de nacimiento</span>
-            <span class="sum-v empty" id="val-fecha">—</span>
-          </div>
-          <div class="sum-row" id="row-rfc">
-            <span class="sum-k">RFC</span>
-            <span class="sum-v empty" id="val-rfc">—</span>
-          </div>
-          <div class="sum-row" id="row-curp">
-            <span class="sum-k">CURP</span>
-            <span class="sum-v empty" id="val-curp">—</span>
-          </div>
+          <div class="sum-grp-lbl"><span class="sum-grp-lbl-ico">👤</span><span class="sum-grp-lbl-txt">Datos Personales</span></div>
+          <div class="sum-row"><span class="sum-k">Nombre completo</span><span class="sum-v empty" id="val-nombre">—</span></div>
+          <div class="sum-row"><span class="sum-k">Género</span><span class="sum-v empty" id="val-genero">—</span></div>
+          <div class="sum-row"><span class="sum-k">Fecha de nacimiento</span><span class="sum-v empty" id="val-fecha">—</span></div>
+          <div class="sum-row"><span class="sum-k">RFC</span><span class="sum-v empty" id="val-rfc">—</span></div>
+          <div class="sum-row"><span class="sum-k">CURP</span><span class="sum-v empty" id="val-curp">—</span></div>
         </div>
-
         <div class="sum-grp">
-          <div class="sum-grp-lbl">
-            <span class="sum-grp-lbl-ico">📞</span>
-            <span class="sum-grp-lbl-txt">Contacto y Domicilio</span>
-          </div>
-          <div class="sum-row" id="row-tel">
-            <span class="sum-k">Teléfono</span>
-            <span class="sum-v empty" id="val-tel">—</span>
-          </div>
-          <div class="sum-row" id="row-email">
-            <span class="sum-k">Correo electrónico</span>
-            <span class="sum-v empty" id="val-email">—</span>
-          </div>
-          <div class="sum-row" id="row-cp">
-            <span class="sum-k">C.P. / Municipio</span>
-            <span class="sum-v empty" id="val-cp">—</span>
-          </div>
-          <div class="sum-row" id="row-colonia">
-            <span class="sum-k">Colonia / Estado</span>
-            <span class="sum-v empty" id="val-colonia">—</span>
-          </div>
+          <div class="sum-grp-lbl"><span class="sum-grp-lbl-ico">📞</span><span class="sum-grp-lbl-txt">Contacto y Domicilio</span></div>
+          <div class="sum-row"><span class="sum-k">Teléfono</span><span class="sum-v empty" id="val-tel">—</span></div>
+          <div class="sum-row"><span class="sum-k">Correo electrónico</span><span class="sum-v empty" id="val-email">—</span></div>
+          <div class="sum-row"><span class="sum-k">C.P. / Municipio</span><span class="sum-v empty" id="val-cp">—</span></div>
+          <div class="sum-row"><span class="sum-k">Colonia / Estado</span><span class="sum-v empty" id="val-colonia">—</span></div>
         </div>
-
         <div class="sum-grp">
-          <div class="sum-grp-lbl">
-            <span class="sum-grp-lbl-ico">🚗</span>
-            <span class="sum-grp-lbl-txt">Vehículo</span>
-          </div>
-          <div class="sum-row" id="row-tipo">
-            <span class="sum-k">Condición</span>
-            <span class="sum-v empty" id="val-tipo">—</span>
-          </div>
-          <div class="sum-row" id="row-marca">
-            <span class="sum-k">Marca</span>
-            <span class="sum-v empty" id="val-marca">—</span>
-          </div>
-          <div class="sum-row" id="row-anio">
-            <span class="sum-k">Año / Versión</span>
-            <span class="sum-v empty" id="val-anio">—</span>
-          </div>
-          <div class="sum-row" id="row-vin">
-            <span class="sum-k">Núm. de Serie (NIV)</span>
-            <span class="sum-v empty" id="val-vin">—</span>
-          </div>
+          <div class="sum-grp-lbl"><span class="sum-grp-lbl-ico">🚗</span><span class="sum-grp-lbl-txt">Vehículo</span></div>
+          <div class="sum-row"><span class="sum-k">Condición</span><span class="sum-v empty" id="val-tipo">—</span></div>
+          <div class="sum-row"><span class="sum-k">Marca</span><span class="sum-v empty" id="val-marca">—</span></div>
+          <div class="sum-row"><span class="sum-k">Año / Versión</span><span class="sum-v empty" id="val-anio">—</span></div>
+          <div class="sum-row"><span class="sum-k">Núm. de Serie (NIV)</span><span class="sum-v empty" id="val-vin">—</span></div>
         </div>
-
         <div class="sum-grp">
-          <div class="sum-grp-lbl">
-            <span class="sum-grp-lbl-ico">📎</span>
-            <span class="sum-grp-lbl-txt">Documentos</span>
-          </div>
-          <div class="sum-row" id="row-archivos">
-            <span class="sum-k">Archivos adjuntos</span>
-            <span class="sum-v empty" id="val-archivos">—</span>
-          </div>
+          <div class="sum-grp-lbl"><span class="sum-grp-lbl-ico">📎</span><span class="sum-grp-lbl-txt">Documentos</span></div>
+          <div class="sum-row"><span class="sum-k">Archivos adjuntos</span><span class="sum-v empty" id="val-archivos">—</span></div>
         </div>
-
       </div>
 
       <div class="sum-footer">
         <span style="font-size:16px">ℹ️</span>
-        <p class="sum-footer-txt">
-          <strong>Verifica la información antes de enviar.</strong>
-          Si detectas algún error, corrige el campo correspondiente.
-        </p>
+        <p class="sum-footer-txt"><strong>Verifica la información antes de enviar.</strong> Si detectas algún error, corrige el campo correspondiente.</p>
       </div>
-
     </div>
-    <!-- /sumbox -->
 
     <!-- DECLARACIÓN -->
     <label class="decl-wrap" for="declCheck">
@@ -1246,30 +1096,33 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 'use strict';
 
 /* ════════════════════════════════════
-   CONSTANTS
-   — Copomex eliminado; integración codigos.zip
+   CONFIGURACIÓN GLOBAL
+   Integración: codigos.zip API v1
+   Docs: https://codigos.zip/docs
+   Endpoint: GET https://api.codigos.zip/api/zip/:cp?pais=MX
+   Auth: Header X-API-Key
+   Respuesta: { estado, municipio, colonias: string[] }
 ════════════════════════════════════ */
-var SITE_KEY          = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
-var CODIGOS_ZIP_KEY   = 'zp_0611bf837f9dc465afa2b1003e0cd0ab278ff2b94a51f73d';
-var CODIGOS_ZIP_URL   = 'https://api.codigos.zip/api/zip/';
-var MAX_BYTES         = 5 * 1024 * 1024;
-var OK_EXTS           = ['pdf','jpg','jpeg','png'];
+var SITE_KEY        = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
+var CZ_API_KEY      = 'zp_0611bf837f9dc465afa2b1003e0cd0ab278ff2b94a51f73d';
+var CZ_BASE_URL     = 'https://api.codigos.zip/api/zip/';
+var MAX_ZIP_BYTES   = 5 * 1024 * 1024;   /* 5 MB límite ZIP */
 
 /* ════════════════════════════════════
    DARK MODE
 ════════════════════════════════════ */
-(function() {
-  try { if (localStorage.getItem('ava-theme') === 'dark') document.body.classList.add('dark'); } catch(e) {}
-  document.getElementById('themeBtn').addEventListener('click', function() {
+(function () {
+  try { if (localStorage.getItem('ava-theme') === 'dark') document.body.classList.add('dark'); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
     var d = document.body.classList.toggle('dark');
-    try { localStorage.setItem('ava-theme', d ? 'dark' : 'light'); } catch(e) {}
+    try { localStorage.setItem('ava-theme', d ? 'dark' : 'light'); } catch (e) {}
   });
 })();
 
 /* ════════════════════════════════════
    YEAR DROPDOWN
 ════════════════════════════════════ */
-(function() {
+(function () {
   var sel = document.getElementById('anio');
   var yr  = new Date().getFullYear();
   for (var y = yr + 1; y >= 1990; y--) {
@@ -1282,11 +1135,11 @@ var OK_EXTS           = ['pdf','jpg','jpeg','png'];
 /* ════════════════════════════════════
    UPPERCASE INPUTS
 ════════════════════════════════════ */
-document.querySelectorAll('input.up').forEach(function(el) {
-  el.addEventListener('input', function() {
+document.querySelectorAll('input.up').forEach(function (el) {
+  el.addEventListener('input', function () {
     var s = this.selectionStart, e = this.selectionEnd;
     this.value = this.value.toUpperCase();
-    try { this.setSelectionRange(s, e); } catch(_) {}
+    try { this.setSelectionRange(s, e); } catch (_) {}
   });
 });
 
@@ -1300,30 +1153,23 @@ function validateField(id, regex, hintId, minLen, exactLen, name) {
   var el   = document.getElementById(id);
   var hint = document.getElementById(hintId);
   var val  = el.value.trim();
-  if (!val) {
-    el.classList.remove('field-ok','field-err');
-    hint.textContent = ''; hint.className = 'fhint'; return;
-  }
+  if (!val) { el.classList.remove('field-ok', 'field-err'); hint.textContent = ''; hint.className = 'fhint'; return; }
   if (regex.test(val)) {
     el.classList.add('field-ok'); el.classList.remove('field-err');
     hint.textContent = '✓ ' + name + ' válido'; hint.className = 'fhint ok';
   } else {
     el.classList.add('field-err'); el.classList.remove('field-ok');
     var len = val.length;
-    if (len < minLen) hint.textContent = 'Faltan ' + (minLen - len) + ' caracteres (mín. ' + minLen + ')';
+    if (len < minLen)            hint.textContent = 'Faltan ' + (minLen - len) + ' caracteres (mín. ' + minLen + ')';
     else if (exactLen && len > exactLen) hint.textContent = 'Máximo ' + exactLen + ' caracteres';
-    else hint.textContent = 'Formato incorrecto';
+    else                         hint.textContent = 'Formato incorrecto';
     hint.className = 'fhint err';
   }
   buildSummary();
 }
 
-document.getElementById('rfc').addEventListener('input', function() {
-  validateField('rfc', RFC_RE, 'rfcHint', 12, 13, 'RFC');
-});
-document.getElementById('curp').addEventListener('input', function() {
-  validateField('curp', CURP_RE, 'curpHint', 18, 18, 'CURP');
-});
+document.getElementById('rfc').addEventListener('input',  function () { validateField('rfc',  RFC_RE,  'rfcHint',  12, 13, 'RFC');  });
+document.getElementById('curp').addEventListener('input', function () { validateField('curp', CURP_RE, 'curpHint', 18, 18, 'CURP'); });
 
 /* ════════════════════════════════════
    AUTOFILL HELPERS
@@ -1345,13 +1191,29 @@ function setAF(id, hintId, value) {
 }
 
 /* ════════════════════════════════════
-   CÓDIGO POSTAL — codigos.zip
-   Endpoint: GET /api/zip/:codigo?pais=MX
-   Auth:     Header X-API-Key
-   Response: { estado, municipio, colonias: [...] }
+   CÓDIGO POSTAL — codigos.zip API
+   ─────────────────────────────────
+   GET https://api.codigos.zip/api/zip/{cp}?pais=MX
+   Header: X-API-Key: <CZ_API_KEY>
+
+   Respuesta 200:
+   {
+     "estado":    "Ciudad de México",
+     "municipio": "Cuauhtémoc",
+     "colonias":  ["Colonia Roma Norte", "Colonia Roma Sur", ...]
+   }
+
+   Errores manejados:
+   • 401 → API Key inválida
+   • 404 → CP no encontrado
+   • 429 → Rate limit excedido
+   • 5xx → Error de servidor
+   • Sin red → mensaje de conexión
 ════════════════════════════════════ */
-document.getElementById('cp').addEventListener('input', function() {
-  var val = this.value.replace(/\D/g,'');
+var _cpTimer = null;   /* debounce handle */
+
+document.getElementById('cp').addEventListener('input', function () {
+  var val  = this.value.replace(/\D/g, '');
   this.value = val;
 
   var load = document.getElementById('cpLoad');
@@ -1361,92 +1223,128 @@ document.getElementById('cp').addEventListener('input', function() {
   var cs   = document.getElementById('colSel');
   var cb   = document.getElementById('colBadge');
 
-  /* Reset UI */
+  /* Resetear UI */
   load.className = 'cp-load';
   err.className  = 'cp-err';
   box.className  = 'cp-box';
   cw.className   = 'col-wrap';
+  clearTimeout(_cpTimer);
 
   if (val.length !== 5) {
-    setAF('estado','estHint','');
-    setAF('mun','munHint','');
+    setAF('estado', 'estHint', '');
+    setAF('mun', 'munHint', '');
     updateProgress(); buildSummary(); return;
   }
 
+  /* Debounce 350 ms para evitar peticiones en cada tecla */
+  _cpTimer = setTimeout(function () { fetchCP(val); }, 350);
+});
+
+function fetchCP(cp) {
+  var load = document.getElementById('cpLoad');
+  var err  = document.getElementById('cpErr');
+  var box  = document.getElementById('cpBox');
+  var cw   = document.getElementById('colWrap');
+  var cs   = document.getElementById('colSel');
+  var cb   = document.getElementById('colBadge');
+
   load.className = 'cp-load on';
 
-  fetch(CODIGOS_ZIP_URL + val + '?pais=MX', {
-    headers: { 'X-API-Key': CODIGOS_ZIP_KEY }
+  fetch(CZ_BASE_URL + cp + '?pais=MX', {
+    method:  'GET',
+    headers: { 'X-API-Key': CZ_API_KEY }
   })
-    .then(function(r) {
-      if (!r.ok) {
-        /* 404 → CP no encontrado; otros → error de servidor */
-        return r.json().then(function(body) {
-          var msg = (body && (body.message || body.error)) || 'Código postal no encontrado.';
-          throw new Error(msg);
-        }).catch(function() {
-          throw new Error(r.status === 404
-            ? 'Código postal no encontrado.'
-            : 'Error del servidor (' + r.status + '). Intenta de nuevo.');
-        });
-      }
-      return r.json();
+    .then(function (response) {
+      /* Intentar leer el body JSON sin importar el status */
+      return response.json().then(function (body) {
+        return { status: response.status, ok: response.ok, body: body };
+      }).catch(function () {
+        return { status: response.status, ok: response.ok, body: null };
+      });
     })
-    .then(function(data) {
+    .then(function (res) {
       load.className = 'cp-load';
 
-      /* ── Mapeo de la respuesta de codigos.zip ──
-         data.estado    → nombre del estado
-         data.municipio → nombre del municipio/alcaldía
-         data.colonias  → array de strings con nombres de colonias
+      if (!res.ok) {
+        /* ── Manejo granular de errores HTTP ── */
+        var msg = '';
+        if (res.status === 401) {
+          msg = 'Error de autenticación con el servicio de CP. Contacta al administrador.';
+        } else if (res.status === 404) {
+          msg = 'Código postal no encontrado. Verifica los 5 dígitos ingresados.';
+        } else if (res.status === 429) {
+          msg = 'Límite de consultas alcanzado. Intenta en unos minutos.';
+        } else if (res.status >= 500) {
+          msg = 'El servicio de códigos postales no está disponible. Intenta más tarde.';
+        } else {
+          msg = (res.body && (res.body.message || res.body.error)) || 'Error desconocido (código ' + res.status + ').';
+        }
+        showCPError(msg); return;
+      }
+
+      /* ── Respuesta exitosa ──
+         Estructura esperada de codigos.zip:
+         { estado: string, municipio: string, colonias: string[] }
       ── */
-      var estado   = (data.estado   || '').trim();
+      var data = res.body;
+      if (!data) { showCPError('Respuesta inesperada del servidor.'); return; }
+
+      var estado    = (data.estado    || '').trim();
       var municipio = (data.municipio || '').trim();
       var colonias  = Array.isArray(data.colonias)
-        ? data.colonias.slice().sort(function(a,b){ return a.localeCompare(b,'es'); })
+        ? data.colonias.slice().sort(function (a, b) { return a.localeCompare(b, 'es'); })
         : [];
 
       if (!estado && !municipio) {
-        err.textContent = 'Código postal no encontrado.';
-        err.className   = 'cp-err on';
-        setAF('estado','estHint','');
-        setAF('mun','munHint','');
-        updateProgress(); buildSummary(); return;
+        showCPError('Código postal no encontrado. Verifica los 5 dígitos ingresados.');
+        return;
       }
 
-      setAF('estado','estHint', estado);
-      setAF('mun','munHint', municipio);
+      /* Autocompletar Estado y Municipio */
+      setAF('estado', 'estHint', estado);
+      setAF('mun',    'munHint', municipio);
 
-      box.innerHTML = '<span class="cp-badge">CP ' + val + '</span>'
+      /* Caja informativa */
+      box.innerHTML = '<span class="cp-badge">CP ' + cp + '</span>'
         + '<strong>' + municipio + '</strong>, ' + estado;
       box.className = 'cp-box on';
 
+      /* Selector de colonias */
       if (colonias.length > 1) {
         cs.innerHTML = '<option value="">Elige tu colonia…</option>';
-        colonias.forEach(function(c) {
+        colonias.forEach(function (c) {
           var o = document.createElement('option');
           o.value = o.textContent = c;
           cs.appendChild(o);
         });
         cb.textContent = colonias.length + ' opciones';
-        cw.className = 'col-wrap on';
+        cw.className   = 'col-wrap on';
       } else if (colonias.length === 1) {
+        /* Una sola colonia: preseleccionar */
         cs.innerHTML = '<option value="' + colonias[0] + '" selected>' + colonias[0] + '</option>';
       }
 
       updateProgress(); buildSummary();
     })
-    .catch(function(e) {
+    .catch(function (networkErr) {
+      /* Error de red / CORS / sin conexión */
       load.className = 'cp-load';
-      err.textContent = e && e.message
-        ? e.message
-        : 'No se pudo consultar el código postal. Verifica tu conexión.';
-      err.className = 'cp-err on';
-      setAF('estado','estHint','');
-      setAF('mun','munHint','');
-      updateProgress(); buildSummary();
+      var msg = navigator.onLine
+        ? 'No se pudo consultar el código postal. Intenta de nuevo.'
+        : 'Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+      showCPError(msg);
+      console.warn('[codigos.zip] fetchCP error:', networkErr);
     });
-});
+}
+
+function showCPError(msg) {
+  var err = document.getElementById('cpErr');
+  err.textContent = msg;
+  err.className   = 'cp-err on';
+  setAF('estado', 'estHint', '');
+  setAF('mun',    'munHint', '');
+  updateProgress(); buildSummary();
+}
 
 /* ════════════════════════════════════
    BRAND SELECTOR
@@ -1469,23 +1367,23 @@ function buildBrandDrop(q) {
   q = (q || '').toLowerCase();
   bDrop.innerHTML = '';
   var found = false;
-  Object.keys(BRANDS).forEach(function(cat) {
-    var items = BRANDS[cat].filter(function(b) { return b.n.toLowerCase().includes(q); });
+  Object.keys(BRANDS).forEach(function (cat) {
+    var items = BRANDS[cat].filter(function (b) { return b.n.toLowerCase().includes(q); });
     if (!items.length) return;
     found = true;
     var c = document.createElement('div'); c.className = 'brand-cat'; c.textContent = cat;
     bDrop.appendChild(c);
-    items.forEach(function(b) {
+    items.forEach(function (b) {
       var el = document.createElement('div'); el.className = 'brand-item';
       el.innerHTML = '<span class="brand-flag">' + b.f + '</span>' + b.n;
-      el.addEventListener('mousedown', function(e) { e.preventDefault(); selectBrand(b.n); });
+      el.addEventListener('mousedown', function (e) { e.preventDefault(); selectBrand(b.n); });
       bDrop.appendChild(el);
     });
   });
   if (!found || q === '' || 'otra'.includes(q)) {
     var el = document.createElement('div'); el.className = 'brand-item';
     el.innerHTML = '<span class="brand-flag">🔍</span>Otra marca…';
-    el.addEventListener('mousedown', function(e) { e.preventDefault(); selectBrand('__otra__'); });
+    el.addEventListener('mousedown', function (e) { e.preventDefault(); selectBrand('__otra__'); });
     bDrop.appendChild(el);
   }
 }
@@ -1502,296 +1400,299 @@ function selectBrand(name) {
   updateProgress(); buildSummary();
 }
 
-bSearch.addEventListener('focus', function() { buildBrandDrop(this.value); bDrop.classList.add('open'); });
-bSearch.addEventListener('input', function() { buildBrandDrop(this.value); bDrop.classList.add('open'); updateProgress(); buildSummary(); });
-bSearch.addEventListener('blur',  function() { setTimeout(function() { bDrop.classList.remove('open'); }, 160); });
+bSearch.addEventListener('focus', function () { buildBrandDrop(this.value); bDrop.classList.add('open'); });
+bSearch.addEventListener('input', function () { buildBrandDrop(this.value); bDrop.classList.add('open'); updateProgress(); buildSummary(); });
+bSearch.addEventListener('blur',  function () { setTimeout(function () { bDrop.classList.remove('open'); }, 160); });
 
 /* ════════════════════════════════════
    FILE UPLOAD (JSZip)
 ════════════════════════════════════ */
-var MAX_ZIP_BYTES = 5 * 1024 * 1024;
-
 var attachState = {
-  'AVA': { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null }
+  'AVA': { files: [], zipBlob: null, compressing: false, paused: false, startTime: null, elapsed: 0, _runId: null }
 };
 
-function fmtBytes(b){
-  if(b<1024) return b+' B';
-  if(b<1048576) return (b/1024).toFixed(1)+' KB';
-  return (b/1048576).toFixed(2)+' MB';
+function fmtBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(2) + ' MB';
 }
-function fmtSec(s){ return s<60 ? Math.round(s)+'s' : Math.floor(s/60)+'m '+Math.round(s%60)+'s'; }
-function getFileIcon(name){
-  var ext=name.split('.').pop().toLowerCase();
-  if(['jpg','jpeg','png'].indexOf(ext)>=0) return '🖼️';
-  if(ext==='pdf') return '📄';
+function fmtSec(s) { return s < 60 ? Math.round(s) + 's' : Math.floor(s / 60) + 'm ' + Math.round(s % 60) + 's'; }
+function getFileIcon(name) {
+  var ext = name.split('.').pop().toLowerCase();
+  if (['jpg', 'jpeg', 'png'].indexOf(ext) >= 0) return '🖼️';
+  if (ext === 'pdf') return '📄';
   return '📎';
 }
-function getToday(){
-  var d=new Date();
-  return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
+function getToday() {
+  var d = new Date();
+  return d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
 }
 
-function onDragOver(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.add('drag-over'); }
-function onDragLeave(e,type){ document.getElementById('attachDropzone'+type).classList.remove('drag-over'); }
-function onDrop(e,type){ e.preventDefault(); document.getElementById('attachDropzone'+type).classList.remove('drag-over'); handleFiles(e.dataTransfer.files,type); }
+function onDragOver(e, type)  { e.preventDefault(); document.getElementById('attachDropzone' + type).classList.add('drag-over'); }
+function onDragLeave(e, type) { document.getElementById('attachDropzone' + type).classList.remove('drag-over'); }
+function onDrop(e, type)      { e.preventDefault(); document.getElementById('attachDropzone' + type).classList.remove('drag-over'); handleFiles(e.dataTransfer.files, type); }
 
-function handleFiles(fileList,type){
-  var state=attachState[type];
-  Array.from(fileList).forEach(function(f){
-    var dup=state.files.some(function(ex){ return ex.name===f.name&&ex.size===f.size; });
-    if(!dup) state.files.push(f);
+function handleFiles(fileList, type) {
+  var state = attachState[type];
+  Array.from(fileList).forEach(function (f) {
+    var dup = state.files.some(function (ex) { return ex.name === f.name && ex.size === f.size; });
+    if (!dup) state.files.push(f);
   });
-  state.zipBlob=null;
+  state.zipBlob = null;
   renderFileList(type);
   updateCapacityBar(type);
-  if(state.files.length>=1&&typeof JSZip!=='undefined') scheduleCompression(type);
+  if (state.files.length >= 1 && typeof JSZip !== 'undefined') scheduleCompression(type);
   updateProgress(); buildSummary();
 }
 
-window.removeFile=function(type,idx){
-  var state=attachState[type];
-  state.files.splice(idx,1);
-  state.zipBlob=null;
+window.removeFile = function (type, idx) {
+  var state = attachState[type];
+  state.files.splice(idx, 1);
+  state.zipBlob = null;
   renderFileList(type);
   hideAttachMsg(type);
   updateCapacityBar(type);
-  if(state.files.length>=1&&typeof JSZip!=='undefined') scheduleCompression(type);
-  else if(state.files.length===0){
+  if (state.files.length >= 1 && typeof JSZip !== 'undefined') scheduleCompression(type);
+  else if (state.files.length === 0) {
     updateCapacityBar(type);
-    document.getElementById('compressProgress'+type).classList.remove('show');
+    document.getElementById('compressProgress' + type).classList.remove('show');
   }
   updateProgress(); buildSummary();
 };
 
-function renderFileList(type){
-  var list=document.getElementById('fileList'+type);
-  list.innerHTML='';
-  attachState[type].files.forEach(function(f,i){
-    var item=document.createElement('div');
-    item.className='attach-file-item';
-    item.innerHTML=
-      '<span class="attach-file-icon">'+getFileIcon(f.name)+'</span>'+
-      '<span class="attach-file-name" title="'+f.name+'">'+f.name+'</span>'+
-      '<span class="attach-file-size">'+fmtBytes(f.size)+'</span>'+
-      '<button type="button" class="attach-file-remove" onclick="removeFile(\''+type+'\','+i+')">\u00d7</button>';
+function renderFileList(type) {
+  var list = document.getElementById('fileList' + type);
+  list.innerHTML = '';
+  attachState[type].files.forEach(function (f, i) {
+    var item = document.createElement('div');
+    item.className = 'attach-file-item';
+    item.innerHTML =
+      '<span class="attach-file-icon">' + getFileIcon(f.name) + '</span>' +
+      '<span class="attach-file-name" title="' + f.name + '">' + f.name + '</span>' +
+      '<span class="attach-file-size">' + fmtBytes(f.size) + '</span>' +
+      '<button type="button" class="attach-file-remove" onclick="removeFile(\'' + type + '\',' + i + ')">\u00d7</button>';
     list.appendChild(item);
   });
 }
 
-function updateCapacityBar(type){
-  var state=attachState[type];
-  var wrap=document.getElementById('capacityWrap'+type);
-  var bar=document.getElementById('attachBar'+type);
-  var valEl=document.getElementById('capacityValue'+type);
-  var dot=document.getElementById('attachDot'+type);
-  var statusTxt=document.getElementById('attachStatusText'+type);
-  var rtStats=document.getElementById('attachRealtime'+type);
-  var rtCount=document.getElementById('attachCount'+type);
-  var rtWeight=document.getElementById('attachWeight'+type);
-  var limitExc=document.getElementById('attachLimitExc'+type);
+function updateCapacityBar(type) {
+  var state      = attachState[type];
+  var wrap       = document.getElementById('capacityWrap' + type);
+  var bar        = document.getElementById('attachBar' + type);
+  var valEl      = document.getElementById('capacityValue' + type);
+  var dot        = document.getElementById('attachDot' + type);
+  var statusTxt  = document.getElementById('attachStatusText' + type);
+  var rtStats    = document.getElementById('attachRealtime' + type);
+  var rtCount    = document.getElementById('attachCount' + type);
+  var rtWeight   = document.getElementById('attachWeight' + type);
+  var limitExc   = document.getElementById('attachLimitExc' + type);
 
-  if(state.files.length===0){
+  if (state.files.length === 0) {
     wrap.classList.remove('visible');
-    if(rtStats) rtStats.style.display='none';
-    if(limitExc) limitExc.style.display='none';
-    bar.className='attach-bar-fill green';
-    bar.style.width='0%';
+    if (rtStats)   rtStats.style.display = 'none';
+    if (limitExc)  limitExc.style.display = 'none';
+    bar.className  = 'attach-bar-fill green';
+    bar.style.width = '0%';
     return;
   }
+
   wrap.classList.add('visible');
-  if(rtStats) rtStats.style.display='flex';
-  if(rtCount) rtCount.textContent=state.files.length;
+  if (rtStats)  rtStats.style.display = 'flex';
+  if (rtCount)  rtCount.textContent = state.files.length;
 
-  if(!state.zipBlob){
-    bar.className='attach-bar-fill green';
-    bar.style.width='0%';
-    dot.className='attach-status-dot green';
-    statusTxt.textContent=state.compressing?'Comprimiendo archivos…':'En espera de compresión…';
-    valEl.textContent='— de 5 MB (ZIP pendiente)';
-    if(rtWeight) rtWeight.textContent='—';
-    if(limitExc) limitExc.style.display='none';
+  if (!state.zipBlob) {
+    bar.className  = 'attach-bar-fill green';
+    bar.style.width = '0%';
+    dot.className  = 'attach-status-dot green';
+    statusTxt.textContent = state.compressing ? 'Comprimiendo archivos…' : 'En espera de compresión…';
+    valEl.textContent     = '— de 5 MB (ZIP pendiente)';
+    if (rtWeight)  rtWeight.textContent = '—';
+    if (limitExc)  limitExc.style.display = 'none';
     return;
   }
 
-  var zSize=state.zipBlob.size;
-  var pct=Math.min(100,(zSize/MAX_ZIP_BYTES)*100);
-  var zStr=fmtBytes(zSize);
-  bar.style.width=pct+'%';
-  valEl.textContent=zStr+' de 5 MB (ZIP comprimido)';
-  if(rtWeight) rtWeight.textContent=zStr;
-  bar.className='attach-bar-fill';
-  dot.className='attach-status-dot';
+  var zSize = state.zipBlob.size;
+  var pct   = Math.min(100, (zSize / MAX_ZIP_BYTES) * 100);
+  var zStr  = fmtBytes(zSize);
+  bar.style.width = pct + '%';
+  valEl.textContent = zStr + ' de 5 MB (ZIP comprimido)';
+  if (rtWeight) rtWeight.textContent = zStr;
+  bar.className = 'attach-bar-fill';
+  dot.className = 'attach-status-dot';
 
-  if(zSize>=MAX_ZIP_BYTES){
+  if (zSize >= MAX_ZIP_BYTES) {
     bar.classList.add('red'); dot.classList.add('red');
-    statusTxt.textContent='ZIP supera 5 MB — elimina archivos';
-    showAttachMsg(type,'El ZIP pesa '+zStr+' y supera el límite. Elimina archivos.');
-    if(limitExc) limitExc.style.display='block';
-  } else if(zSize>=MAX_ZIP_BYTES*0.80){
+    statusTxt.textContent = 'ZIP supera 5 MB — elimina archivos';
+    showAttachMsg(type, 'El ZIP pesa ' + zStr + ' y supera el límite. Elimina archivos.');
+    if (limitExc) limitExc.style.display = 'block';
+  } else if (zSize >= MAX_ZIP_BYTES * 0.80) {
     bar.classList.add('yellow'); dot.classList.add('yellow');
-    statusTxt.textContent='Casi lleno — quedan '+fmtBytes(MAX_ZIP_BYTES-zSize)+' en el ZIP';
+    statusTxt.textContent = 'Casi lleno — quedan ' + fmtBytes(MAX_ZIP_BYTES - zSize) + ' en el ZIP';
     hideAttachMsg(type);
-    if(limitExc) limitExc.style.display='none';
+    if (limitExc) limitExc.style.display = 'none';
   } else {
     bar.classList.add('green'); dot.classList.add('green');
-    statusTxt.textContent='ZIP listo — quedan '+fmtBytes(MAX_ZIP_BYTES-zSize)+' disponibles';
+    statusTxt.textContent = 'ZIP listo — quedan ' + fmtBytes(MAX_ZIP_BYTES - zSize) + ' disponibles';
     hideAttachMsg(type);
-    if(limitExc) limitExc.style.display='none';
+    if (limitExc) limitExc.style.display = 'none';
   }
 }
 
-function showAttachMsg(type,msg){
-  var el=document.getElementById('attachErr'+type);
-  var tx=document.getElementById('attachErrText'+type);
-  if(tx) tx.textContent=msg;
-  if(el) el.classList.add('show');
+function showAttachMsg(type, msg) {
+  var el = document.getElementById('attachErr' + type);
+  var tx = document.getElementById('attachErrText' + type);
+  if (tx) tx.textContent = msg;
+  if (el) el.classList.add('show');
 }
-function hideAttachMsg(type){
-  var el=document.getElementById('attachErr'+type);
-  if(el) el.classList.remove('show');
+function hideAttachMsg(type) {
+  var el = document.getElementById('attachErr' + type);
+  if (el) el.classList.remove('show');
 }
 
-window.addEventListener('online',function(){
-  Object.keys(attachState).forEach(function(type){
-    var state=attachState[type];
-    var om=document.getElementById('offlineMsg'+type);
-    if(om) om.classList.remove('show');
-    if(state.paused&&state.files.length>=1){ state.paused=false; startCompression(type); }
+window.addEventListener('online', function () {
+  Object.keys(attachState).forEach(function (type) {
+    var state = attachState[type];
+    var om = document.getElementById('offlineMsg' + type);
+    if (om) om.classList.remove('show');
+    if (state.paused && state.files.length >= 1) { state.paused = false; startCompression(type); }
   });
 });
-window.addEventListener('offline',function(){
-  Object.keys(attachState).forEach(function(type){
-    var state=attachState[type];
-    var om=document.getElementById('offlineMsg'+type);
-    if(om) om.classList.add('show');
-    if(state.compressing){
-      state.paused=true; state.compressing=false;
-      state.elapsed=Date.now()-state.startTime;
-      var cr=document.getElementById('compressResume'+type);
-      if(cr) cr.classList.add('show');
+window.addEventListener('offline', function () {
+  Object.keys(attachState).forEach(function (type) {
+    var state = attachState[type];
+    var om = document.getElementById('offlineMsg' + type);
+    if (om) om.classList.add('show');
+    if (state.compressing) {
+      state.paused = true; state.compressing = false;
+      state.elapsed = Date.now() - state.startTime;
+      var cr = document.getElementById('compressResume' + type);
+      if (cr) cr.classList.add('show');
     }
   });
 });
 
-var compressionTimers={};
-function scheduleCompression(type){
+var compressionTimers = {};
+function scheduleCompression(type) {
   clearTimeout(compressionTimers[type]);
-  compressionTimers[type]=setTimeout(function(){ startCompression(type); },80);
+  compressionTimers[type] = setTimeout(function () { startCompression(type); }, 80);
 }
 
-function startCompression(type){
-  var state=attachState[type];
-  if(state.compressing){ state.compressing=false; }
-  if(state.files.length===0) return;
+function startCompression(type) {
+  var state = attachState[type];
+  if (state.compressing) { state.compressing = false; }
+  if (state.files.length === 0) return;
 
-  if(!navigator.onLine){
-    var om=document.getElementById('offlineMsg'+type);
-    if(om) om.classList.add('show');
-    state.paused=true;
-    var cr=document.getElementById('compressResume'+type);
-    if(cr) cr.classList.add('show');
-    var cp=document.getElementById('compressProgress'+type);
-    if(cp) cp.classList.add('show');
+  if (!navigator.onLine) {
+    var om = document.getElementById('offlineMsg' + type);
+    if (om) om.classList.add('show');
+    state.paused = true;
+    var cr = document.getElementById('compressResume' + type);
+    if (cr) cr.classList.add('show');
+    var cp = document.getElementById('compressProgress' + type);
+    if (cp) cp.classList.add('show');
     return;
   }
 
-  var snapshot=state.files.slice();
-  var runId=Date.now();
-  var zip=new JSZip();
-  var totalRaw=snapshot.reduce(function(a,f){ return a+f.size; },0);
-  var processed=0;
+  var snapshot  = state.files.slice();
+  var runId     = Date.now();
+  var zip       = new JSZip();
+  var totalRaw  = snapshot.reduce(function (a, f) { return a + f.size; }, 0);
+  var processed = 0;
 
-  state.compressing=true;
-  state.paused=false;
-  state.startTime=Date.now();
-  state.elapsed=0;
-  state._runId=runId;
+  state.compressing = true;
+  state.paused      = false;
+  state.startTime   = Date.now();
+  state.elapsed     = 0;
+  state._runId      = runId;
 
-  var cp=document.getElementById('compressProgress'+type);
-  if(cp) cp.classList.add('show');
+  var cp = document.getElementById('compressProgress' + type);
+  if (cp) cp.classList.add('show');
   updateCapacityBar(type);
 
-  var ticker=setInterval(function(){
-    if(!state.compressing||state._runId!==runId){ clearInterval(ticker); return; }
-    state.elapsed=Date.now()-state.startTime;
-    var el=document.getElementById('compressElapsed'+type);
-    if(el) el.textContent=fmtSec(state.elapsed/1000);
-  },300);
+  var ticker = setInterval(function () {
+    if (!state.compressing || state._runId !== runId) { clearInterval(ticker); return; }
+    state.elapsed = Date.now() - state.startTime;
+    var el = document.getElementById('compressElapsed' + type);
+    if (el) el.textContent = fmtSec(state.elapsed / 1000);
+  }, 300);
 
-  function abort(){
+  function abort() {
     clearInterval(ticker);
-    state.compressing=false;
-    var cp2=document.getElementById('compressProgress'+type);
-    if(cp2) cp2.classList.remove('show');
+    state.compressing = false;
+    var cp2 = document.getElementById('compressProgress' + type);
+    if (cp2) cp2.classList.remove('show');
   }
 
-  function processFile(idx){
-    if(state._runId!==runId||!state.compressing){ abort(); return; }
-    if(idx>=snapshot.length){
-      var ci=document.getElementById('compressInfo'+type);
-      if(ci) ci.textContent='Generando ZIP…';
+  function processFile(idx) {
+    if (state._runId !== runId || !state.compressing) { abort(); return; }
+    if (idx >= snapshot.length) {
+      var ci = document.getElementById('compressInfo' + type);
+      if (ci) ci.textContent = 'Generando ZIP…';
       zip.generateAsync(
-        {type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},
-        function(meta){
-          if(state._runId!==runId) return;
-          updateCompressUI(type,Math.round(meta.percent),processed,0,(Date.now()-state.startTime)/1000,totalRaw);
+        { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+        function (meta) {
+          if (state._runId !== runId) return;
+          updateCompressUI(type, Math.round(meta.percent), processed, 0, (Date.now() - state.startTime) / 1000, totalRaw);
         }
-      ).then(function(blob){
+      ).then(function (blob) {
         clearInterval(ticker);
-        if(state._runId!==runId){ abort(); return; }
-        state.compressing=false;
-        state.zipBlob=blob;
-        var cp3=document.getElementById('compressProgress'+type);
-        if(cp3) cp3.classList.remove('show');
+        if (state._runId !== runId) { abort(); return; }
+        state.compressing = false;
+        state.zipBlob     = blob;
+        var cp3 = document.getElementById('compressProgress' + type);
+        if (cp3) cp3.classList.remove('show');
         updateCapacityBar(type);
-        var h=document.getElementById('attachHidden'+type);
-        if(h) h.value='ZIP: archivos-'+getToday()+'.zip ('+fmtBytes(blob.size)+')';
+        var h = document.getElementById('attachHidden' + type);
+        if (h) h.value = 'ZIP: archivos-' + getToday() + '.zip (' + fmtBytes(blob.size) + ')';
         updateProgress(); buildSummary();
-      }).catch(function(){
+      }).catch(function () {
         abort();
-        showAttachMsg(type,'Error al comprimir. Intenta de nuevo.');
+        showAttachMsg(type, 'Error al comprimir. Intenta de nuevo.');
       });
       return;
     }
 
-    var f=snapshot[idx];
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      if(state._runId!==runId){ abort(); return; }
-      zip.file(f.name,ev.target.result);
-      processed+=f.size;
-      var pct=Math.round((processed/totalRaw)*70);
-      updateCompressUI(type,pct,processed,totalRaw-processed,(Date.now()-state.startTime)/1000,totalRaw);
-      if(!navigator.onLine){
+    var f = snapshot[idx];
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      if (state._runId !== runId) { abort(); return; }
+      zip.file(f.name, ev.target.result);
+      processed += f.size;
+      var pct = Math.round((processed / totalRaw) * 70);
+      updateCompressUI(type, pct, processed, totalRaw - processed, (Date.now() - state.startTime) / 1000, totalRaw);
+      if (!navigator.onLine) {
         clearInterval(ticker);
-        state.paused=true; state.compressing=false;
-        var om2=document.getElementById('offlineMsg'+type);
-        if(om2) om2.classList.add('show');
-        var cr2=document.getElementById('compressResume'+type);
-        if(cr2) cr2.classList.add('show');
+        state.paused = true; state.compressing = false;
+        var om2 = document.getElementById('offlineMsg' + type);
+        if (om2) om2.classList.add('show');
+        var cr2 = document.getElementById('compressResume' + type);
+        if (cr2) cr2.classList.add('show');
         return;
       }
-      setTimeout(function(){ processFile(idx+1); },0);
+      setTimeout(function () { processFile(idx + 1); }, 0);
     };
-    reader.onerror=function(){ setTimeout(function(){ processFile(idx+1); },0); };
+    reader.onerror = function () { setTimeout(function () { processFile(idx + 1); }, 0); };
     reader.readAsArrayBuffer(f);
   }
   processFile(0);
 }
 
-function updateCompressUI(type,pct,done,remaining,elapsedSec,total){
-  var ids={pct:'compressPct',bar:'compressBarFill',done:'compressDoneMB',rem:'compressRemMB',donePct:'compressDonePct',elapsed:'compressElapsed',eta:'compressEta',info:'compressInfo'};
-  Object.keys(ids).forEach(function(k){
-    var el=document.getElementById(ids[k]+type); if(!el) return;
-    if(k==='pct')     el.textContent=pct+'%';
-    if(k==='bar')     el.style.width=pct+'%';
-    if(k==='done')    el.textContent=fmtBytes(done);
-    if(k==='rem')     el.textContent=fmtBytes(remaining);
-    if(k==='donePct') el.textContent=pct+'% completado';
-    if(k==='elapsed') el.textContent=fmtSec(elapsedSec);
-    if(k==='eta')     el.textContent=(pct>5&&elapsedSec>0)?fmtSec((elapsedSec/pct)*(100-pct)):'—';
-    if(k==='info')    el.textContent='Procesando '+attachState[type].files.length+' archivo(s)…';
+function updateCompressUI(type, pct, done, remaining, elapsedSec, total) {
+  var ids = {
+    pct: 'compressPct', bar: 'compressBarFill', done: 'compressDoneMB',
+    rem: 'compressRemMB', donePct: 'compressDonePct',
+    elapsed: 'compressElapsed', eta: 'compressEta', info: 'compressInfo'
+  };
+  Object.keys(ids).forEach(function (k) {
+    var el = document.getElementById(ids[k] + type); if (!el) return;
+    if (k === 'pct')     el.textContent = pct + '%';
+    if (k === 'bar')     el.style.width = pct + '%';
+    if (k === 'done')    el.textContent = fmtBytes(done);
+    if (k === 'rem')     el.textContent = fmtBytes(remaining);
+    if (k === 'donePct') el.textContent = pct + '% completado';
+    if (k === 'elapsed') el.textContent = fmtSec(elapsedSec);
+    if (k === 'eta')     el.textContent = (pct > 5 && elapsedSec > 0) ? fmtSec((elapsedSec / pct) * (100 - pct)) : '—';
+    if (k === 'info')    el.textContent = 'Procesando ' + attachState[type].files.length + ' archivo(s)…';
   });
 }
 
@@ -1802,9 +1703,9 @@ function setBadgeState(state) {
   var badge    = document.getElementById('sum-badge');
   var badgeTxt = document.getElementById('sum-badge-txt');
   if (!badge || !badgeTxt) return;
-  badge.classList.remove('pending','warn','ok');
+  badge.classList.remove('pending', 'warn', 'ok');
   badge.classList.add(state);
-  var labels = { pending:'Pendiente', warn:'Incompleto', ok:'Listo' };
+  var labels = { pending: 'Pendiente', warn: 'Incompleto', ok: 'Listo' };
   badgeTxt.textContent = labels[state] || state;
 }
 
@@ -1815,11 +1716,7 @@ function updateRow(id, value) {
   el.textContent = empty ? '—' : String(value);
   el.className   = 'sum-v' + (empty ? ' empty' : '');
   var row = el.closest('.sum-row');
-  if (row && !empty) {
-    row.classList.remove('row-updated');
-    void row.offsetWidth;
-    row.classList.add('row-updated');
-  }
+  if (row && !empty) { row.classList.remove('row-updated'); void row.offsetWidth; row.classList.add('row-updated'); }
 }
 
 function updateRowChip(id, value, chipClass) {
@@ -1838,17 +1735,13 @@ function updateRowChip(id, value, chipClass) {
   }
   parent.replaceChild(newEl, container);
   var row = newEl.closest('.sum-row');
-  if (row && !empty) {
-    row.classList.remove('row-updated');
-    void row.offsetWidth;
-    row.classList.add('row-updated');
-  }
+  if (row && !empty) { row.classList.remove('row-updated'); void row.offsetWidth; row.classList.add('row-updated'); }
 }
 
-function gv(id) { var e=document.getElementById(id); return e?e.value.trim():''; }
+function gv(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
 
 function buildSummary() {
-  var nombre = [gv('fn'),gv('sn'),gv('fa'),gv('sa')].filter(Boolean).join(' ').trim();
+  var nombre = [gv('fn'), gv('sn'), gv('fa'), gv('sa')].filter(Boolean).join(' ').trim();
   updateRow('nombre', nombre);
   updateRow('genero', gv('gen'));
   updateRow('fecha',  gv('dob'));
@@ -1858,11 +1751,13 @@ function buildSummary() {
   updateRow('tel',   gv('tel'));
   updateRow('email', gv('email'));
   var cpMun = gv('cp') && gv('mun') ? 'CP ' + gv('cp') + ' — ' + gv('mun') : (gv('cp') || '');
-  updateRow('cp',      cpMun);
-  var coloniaEst = gv('colSel') && gv('estado') ? gv('colSel') + ' / ' + gv('estado') : (gv('estado') || gv('colSel') || '');
+  updateRow('cp', cpMun);
+  var coloniaEst = gv('colSel') && gv('estado')
+    ? gv('colSel') + ' / ' + gv('estado')
+    : (gv('estado') || gv('colSel') || '');
   updateRow('colonia', coloniaEst);
 
-  updateRowChip('tipo',  gv('cond'), '');
+  updateRowChip('tipo', gv('cond'), '');
   var marca = bVal.value || '';
   if (!marca && otraWrap.classList.contains('on')) marca = 'Otra (' + gv('otraMarca') + ')';
   updateRowChip('marca', marca, '');
@@ -1870,17 +1765,20 @@ function buildSummary() {
   updateRow('anio', anioVer);
   updateRow('vin',  gv('niv'));
 
-  var nf = attachState['AVA'].files.length;
+  var nf      = attachState['AVA'].files.length;
   var zipInfo = attachState['AVA'].zipBlob ? ' — ZIP: ' + fmtBytes(attachState['AVA'].zipBlob.size) : '';
   updateRowChip('archivos', nf ? nf + ' archivo(s)' + zipInfo : '', 'files');
 
-  var requiredFilled = [nombre, gv('gen'), gv('dob'), gv('rfc'), gv('curp'), gv('tel'), gv('email'),
-                        gv('cp'), gv('estado'), gv('cond'), marca, gv('ver'), gv('anio'), gv('niv')];
-  var allFilled = requiredFilled.every(function(v){ return v && v.trim(); });
+  var requiredFilled = [
+    nombre, gv('gen'), gv('dob'), gv('rfc'), gv('curp'),
+    gv('tel'), gv('email'), gv('cp'), gv('estado'), gv('cond'),
+    marca, gv('ver'), gv('anio'), gv('niv')
+  ];
+  var allFilled = requiredFilled.every(function (v) { return v && v.trim(); });
 
   if (allFilled) {
     setBadgeState('ok');
-  } else if (requiredFilled.some(function(v){ return v && v.trim(); })) {
+  } else if (requiredFilled.some(function (v) { return v && v.trim(); })) {
     setBadgeState('warn');
   } else {
     setBadgeState('pending');
@@ -1890,7 +1788,7 @@ function buildSummary() {
 /* ════════════════════════════════════
    PROGRESS BAR
 ════════════════════════════════════ */
-var REQUIRED_IDS = ['fn','fa','sa','gen','dob','rfc','curp','cp','tel','email','cond','ver','anio','niv'];
+var REQUIRED_IDS = ['fn', 'fa', 'sa', 'gen', 'dob', 'rfc', 'curp', 'cp', 'tel', 'email', 'cond', 'ver', 'anio', 'niv'];
 
 function isFilledById(id) {
   if (id === 'estado' || id === 'mun') {
@@ -1902,13 +1800,13 @@ function isFilledById(id) {
 }
 
 function updateProgress() {
-  var ids   = REQUIRED_IDS.concat(['estado','mun']);
-  var total = ids.length + 1;
+  var ids   = REQUIRED_IDS.concat(['estado', 'mun']);
+  var total = ids.length + 1;   /* +1 por marca */
   var done  = 0;
-  ids.forEach(function(id) { if (isFilledById(id)) done++; });
+  ids.forEach(function (id) { if (isFilledById(id)) done++; });
   if (bVal.value.trim()) done++;
-  var pct = total > 0 ? (done/total)*100 : 0;
-  document.getElementById('progFill').style.width = pct + '%';
+  var pct = total > 0 ? (done / total) * 100 : 0;
+  document.getElementById('progFill').style.width  = pct + '%';
   document.getElementById('progDone').textContent  = done;
   document.getElementById('progTotal').textContent = total;
 }
@@ -1916,122 +1814,126 @@ function updateProgress() {
 /* ════════════════════════════════════
    DECLARATION → ENABLE BUTTON
 ════════════════════════════════════ */
-document.getElementById('declCheck').addEventListener('change', function() {
+document.getElementById('declCheck').addEventListener('change', function () {
   document.getElementById('btnSub').disabled = !this.checked;
 });
 
 /* ════════════════════════════════════
    FORM LISTENERS
 ════════════════════════════════════ */
-document.getElementById('mainForm').addEventListener('input',  function() { buildSummary(); updateProgress(); });
-document.getElementById('mainForm').addEventListener('change', function() { buildSummary(); updateProgress(); });
+document.getElementById('mainForm').addEventListener('input',  function () { buildSummary(); updateProgress(); });
+document.getElementById('mainForm').addEventListener('change', function () { buildSummary(); updateProgress(); });
 
 /* ════════════════════════════════════
    SUBMIT
 ════════════════════════════════════ */
-document.getElementById('mainForm').addEventListener('submit', async function(e) {
+document.getElementById('mainForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   var checks = [
-    {id:'fn',    lbl:'Primer Nombre'},
-    {id:'fa',    lbl:'Primer Apellido'},
-    {id:'sa',    lbl:'Segundo Apellido'},
-    {id:'gen',   lbl:'Género'},
-    {id:'dob',   lbl:'Fecha de Nacimiento'},
-    {id:'rfc',   lbl:'RFC'},
-    {id:'curp',  lbl:'CURP'},
-    {id:'cp',    lbl:'Código Postal'},
-    {id:'estado',lbl:'Estado'},
-    {id:'mun',   lbl:'Municipio'},
-    {id:'tel',   lbl:'Teléfono'},
-    {id:'email', lbl:'Correo Electrónico'},
-    {id:'cond',  lbl:'Condición del Vehículo'},
-    {id:'ver',   lbl:'Versión / Trim'},
-    {id:'anio',  lbl:'Año Modelo'},
-    {id:'niv',   lbl:'Número de Serie'},
+    { id: 'fn',     lbl: 'Primer Nombre' },
+    { id: 'fa',     lbl: 'Primer Apellido' },
+    { id: 'sa',     lbl: 'Segundo Apellido' },
+    { id: 'gen',    lbl: 'Género' },
+    { id: 'dob',    lbl: 'Fecha de Nacimiento' },
+    { id: 'rfc',    lbl: 'RFC' },
+    { id: 'curp',   lbl: 'CURP' },
+    { id: 'cp',     lbl: 'Código Postal' },
+    { id: 'estado', lbl: 'Estado' },
+    { id: 'mun',    lbl: 'Municipio' },
+    { id: 'tel',    lbl: 'Teléfono' },
+    { id: 'email',  lbl: 'Correo Electrónico' },
+    { id: 'cond',   lbl: 'Condición del Vehículo' },
+    { id: 'ver',    lbl: 'Versión / Trim' },
+    { id: 'anio',   lbl: 'Año Modelo' },
+    { id: 'niv',    lbl: 'Número de Serie' },
   ];
 
   for (var i = 0; i < checks.length; i++) {
     var el = document.getElementById(checks[i].id);
     if (!el || !el.value.trim()) {
-      if (el) { el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus(); }
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus(); }
       alert('Por favor completa el campo: ' + checks[i].lbl);
       return;
     }
   }
 
   if (!bVal.value.trim()) {
-    bSearch.scrollIntoView({behavior:'smooth',block:'center'}); bSearch.focus();
+    bSearch.scrollIntoView({ behavior: 'smooth', block: 'center' }); bSearch.focus();
     alert('Por favor selecciona una Marca de vehículo.');
     return;
   }
   if (otraWrap.classList.contains('on') && !otraMarca.value.trim()) {
-    otraMarca.scrollIntoView({behavior:'smooth',block:'center'}); otraMarca.focus();
+    otraMarca.scrollIntoView({ behavior: 'smooth', block: 'center' }); otraMarca.focus();
     alert('Por favor especifica la marca del vehículo.');
     return;
   }
   if (!RFC_RE.test(document.getElementById('rfc').value.trim())) {
     var re = document.getElementById('rfc');
-    re.scrollIntoView({behavior:'smooth',block:'center'}); re.focus();
+    re.scrollIntoView({ behavior: 'smooth', block: 'center' }); re.focus();
     alert('El RFC no tiene el formato correcto.');
     return;
   }
   if (!CURP_RE.test(document.getElementById('curp').value.trim())) {
     var cu = document.getElementById('curp');
-    cu.scrollIntoView({behavior:'smooth',block:'center'}); cu.focus();
+    cu.scrollIntoView({ behavior: 'smooth', block: 'center' }); cu.focus();
     alert('La CURP no tiene el formato oficial correcto.');
     return;
   }
 
   var btn = document.getElementById('btnSub');
-  btn.disabled = true;
+  btn.disabled  = true;
   btn.innerHTML = '⏳ &nbsp;Verificando…';
 
   try {
-    var token = await new Promise(function(resolve, reject) {
+    /* reCAPTCHA v3 */
+    var token = await new Promise(function (resolve, reject) {
       if (typeof grecaptcha === 'undefined') { resolve('no-recaptcha'); return; }
-      grecaptcha.ready(function() {
-        grecaptcha.execute(SITE_KEY, {action:'submit_cotizacion'}).then(resolve).catch(reject);
+      grecaptcha.ready(function () {
+        grecaptcha.execute(SITE_KEY, { action: 'submit_cotizacion' }).then(resolve).catch(reject);
       });
     });
     document.getElementById('rcToken').value = token;
 
+    /* Esperar compresión si está en curso */
     var state = attachState['AVA'];
     if (state.files.length > 0) {
       if (state.compressing) {
         btn.innerHTML = '🗜️ &nbsp;Esperando compresión…';
         var waited = 0;
-        await new Promise(function(resolve) {
-          var check = setInterval(function() {
+        await new Promise(function (resolve) {
+          var check = setInterval(function () {
             waited += 200;
             if (!state.compressing || waited >= 30000) { clearInterval(check); resolve(); }
           }, 200);
         });
       }
+      /* Fallback: comprimir en el momento del envío si aún no hay ZIP */
       if (!state.zipBlob && typeof JSZip !== 'undefined') {
         btn.innerHTML = '🗜️ &nbsp;Comprimiendo documentos…';
-        await new Promise(function(resolve) {
-          var zip2 = new JSZip();
-          var snap = state.files.slice();
-          var pending2 = snap.length;
-          snap.forEach(function(f) {
+        await new Promise(function (resolve) {
+          var zip2    = new JSZip();
+          var snap    = state.files.slice();
+          var pending = snap.length;
+          snap.forEach(function (f) {
             var rdr = new FileReader();
-            rdr.onload = function(ev) {
+            rdr.onload = function (ev) {
               zip2.file(f.name, ev.target.result);
-              if (--pending2 === 0) {
-                zip2.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}})
-                  .then(function(blob) { state.zipBlob = blob; resolve(); })
-                  .catch(function() { resolve(); });
+              if (--pending === 0) {
+                zip2.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } })
+                  .then(function (blob) { state.zipBlob = blob; resolve(); })
+                  .catch(function () { resolve(); });
               }
             };
-            rdr.onerror = function() { if (--pending2 === 0) resolve(); };
+            rdr.onerror = function () { if (--pending === 0) resolve(); };
             rdr.readAsArrayBuffer(f);
           });
         });
       }
+      /* Bloquear si el ZIP supera el límite */
       if (state.zipBlob && state.zipBlob.size > MAX_ZIP_BYTES) {
         alert('⛔ El ZIP comprimido supera los 5 MB (' + fmtBytes(state.zipBlob.size) + ').\nElimina algún archivo antes de enviar.');
-        btn.disabled = false;
+        btn.disabled  = false;
         btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
         return;
       }
@@ -2042,22 +1944,22 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     var fd = new FormData(this);
     var stateAVA = attachState['AVA'];
     if (stateAVA.zipBlob) {
-      var zf = new File([stateAVA.zipBlob], 'documentos_ava_'+getToday()+'.zip', {type:'application/zip'});
+      var zf = new File([stateAVA.zipBlob], 'documentos_ava_' + getToday() + '.zip', { type: 'application/zip' });
       fd.append('documentos', zf, zf.name);
     } else if (stateAVA.files.length > 0) {
-      stateAVA.files.forEach(function(f) { fd.append('documentos', f, f.name); });
+      stateAVA.files.forEach(function (f) { fd.append('documentos', f, f.name); });
     }
 
-    await fetch(this.action, {method:'POST', body:fd});
+    await fetch(this.action, { method: 'POST', body: fd });
     showModal();
     resetForm();
 
-  } catch(err) {
-    console.error(err);
+  } catch (err) {
+    console.error('[AVA] submit error:', err);
     showModal();
     resetForm();
   } finally {
-    btn.disabled = !document.getElementById('declCheck').checked;
+    btn.disabled  = !document.getElementById('declCheck').checked;
     btn.innerHTML = '🛡️ &nbsp;Enviar Cotización de Seguro';
   }
 });
@@ -2067,30 +1969,32 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
 ════════════════════════════════════ */
 function resetForm() {
   document.getElementById('mainForm').reset();
-  Object.keys(attachState).forEach(function(type) {
-    attachState[type] = { files:[], zipBlob:null, compressing:false, paused:false, startTime:null, elapsed:0, _runId:null };
-    var fl = document.getElementById('fileList'+type); if(fl) fl.innerHTML='';
-    var cp = document.getElementById('compressProgress'+type); if(cp) cp.classList.remove('show');
-    var om = document.getElementById('offlineMsg'+type); if(om) om.classList.remove('show');
+  Object.keys(attachState).forEach(function (type) {
+    attachState[type] = { files: [], zipBlob: null, compressing: false, paused: false, startTime: null, elapsed: 0, _runId: null };
+    var fl = document.getElementById('fileList' + type);    if (fl) fl.innerHTML = '';
+    var cp = document.getElementById('compressProgress' + type); if (cp) cp.classList.remove('show');
+    var om = document.getElementById('offlineMsg' + type);  if (om) om.classList.remove('show');
     hideAttachMsg(type);
     updateCapacityBar(type);
   });
   clearTimeout(compressionTimers['AVA']);
-  document.getElementById('cpLoad').className = 'cp-load';
-  document.getElementById('cpErr').className  = 'cp-err';
-  document.getElementById('cpBox').className  = 'cp-box';
+  clearTimeout(_cpTimer);
+  document.getElementById('cpLoad').className  = 'cp-load';
+  document.getElementById('cpErr').className   = 'cp-err';
+  document.getElementById('cpBox').className   = 'cp-box';
   document.getElementById('colWrap').className = 'col-wrap';
   bSearch.value = ''; bVal.value = '';
   otraWrap.classList.remove('on');
-  setAF('estado','estHint',''); setAF('mun','munHint','');
-  ['rfc','curp'].forEach(function(id) {
+  setAF('estado', 'estHint', '');
+  setAF('mun',    'munHint', '');
+  ['rfc', 'curp'].forEach(function (id) {
     var el = document.getElementById(id);
-    el.classList.remove('field-ok','field-err');
-    document.getElementById(id+'Hint').textContent = '';
-    document.getElementById(id+'Hint').className   = 'fhint';
+    el.classList.remove('field-ok', 'field-err');
+    document.getElementById(id + 'Hint').textContent = '';
+    document.getElementById(id + 'Hint').className   = 'fhint';
   });
   document.getElementById('declCheck').checked = false;
-  document.getElementById('btnSub').disabled = true;
+  document.getElementById('btnSub').disabled   = true;
   setBadgeState('pending');
   updateProgress(); buildSummary();
 }
@@ -2102,18 +2006,18 @@ function showModal() {
   document.getElementById('modal').classList.add('on');
   document.body.style.overflow = 'hidden';
 }
-window.closeModal = function() {
+window.closeModal = function () {
   document.getElementById('modal').classList.remove('on');
   document.body.style.overflow = '';
 };
-document.getElementById('modal').addEventListener('click', function(e) {
+document.getElementById('modal').addEventListener('click', function (e) {
   if (e.target === this) window.closeModal();
 });
 
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('progWrap').classList.add('on');
   setBadgeState('pending');
   updateProgress();
