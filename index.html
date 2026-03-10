@@ -1068,11 +1068,10 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
     </div>
 
     <!-- ══════════════════════════════
-         NUEVO RESUMEN DE SOLICITUD
+         RESUMEN DE SOLICITUD
     ══════════════════════════════ -->
     <div class="sumbox" id="sumbox">
 
-      <!-- Encabezado con badge de estado dinámico -->
       <div class="sum-hd">
         <div class="sum-hd-left">
           <div class="sum-hd-icon">
@@ -1089,10 +1088,8 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
         </div>
       </div>
 
-      <!-- Cuerpo del resumen (grupos generados dinámicamente) -->
       <div id="sum-body">
 
-        <!-- Grupo: Datos Personales -->
         <div class="sum-grp">
           <div class="sum-grp-lbl">
             <span class="sum-grp-lbl-ico">👤</span>
@@ -1120,7 +1117,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           </div>
         </div>
 
-        <!-- Grupo: Contacto y Domicilio -->
         <div class="sum-grp">
           <div class="sum-grp-lbl">
             <span class="sum-grp-lbl-ico">📞</span>
@@ -1144,7 +1140,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           </div>
         </div>
 
-        <!-- Grupo: Vehículo -->
         <div class="sum-grp">
           <div class="sum-grp-lbl">
             <span class="sum-grp-lbl-ico">🚗</span>
@@ -1168,7 +1163,6 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
           </div>
         </div>
 
-        <!-- Grupo: Documentos -->
         <div class="sum-grp">
           <div class="sum-grp-lbl">
             <span class="sum-grp-lbl-ico">📎</span>
@@ -1181,9 +1175,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
         </div>
 
       </div>
-      <!-- /sum-body -->
 
-      <!-- Footer informativo -->
       <div class="sum-footer">
         <span style="font-size:16px">ℹ️</span>
         <p class="sum-footer-txt">
@@ -1195,9 +1187,7 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
     </div>
     <!-- /sumbox -->
 
-    <!-- ══════════════════════════════════════════
-         DECLARACIÓN
-    ══════════════════════════════════════════ -->
+    <!-- DECLARACIÓN -->
     <label class="decl-wrap" for="declCheck">
       <input type="checkbox" id="declCheck">
       <span class="decl-text">
@@ -1257,11 +1247,13 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 
 /* ════════════════════════════════════
    CONSTANTS
+   — Copomex eliminado; integración codigos.zip
 ════════════════════════════════════ */
-var SITE_KEY   = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
-var CP_TOKEN   = '36da398a-1848-44f3-a952-06c9bfb02cc8';
-var MAX_BYTES  = 5 * 1024 * 1024;
-var OK_EXTS    = ['pdf','jpg','jpeg','png'];
+var SITE_KEY          = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
+var CODIGOS_ZIP_KEY   = 'zp_0611bf837f9dc465afa2b1003e0cd0ab278ff2b94a51f73d';
+var CODIGOS_ZIP_URL   = 'https://api.codigos.zip/api/zip/';
+var MAX_BYTES         = 5 * 1024 * 1024;
+var OK_EXTS           = ['pdf','jpg','jpeg','png'];
 
 /* ════════════════════════════════════
    DARK MODE
@@ -1353,11 +1345,15 @@ function setAF(id, hintId, value) {
 }
 
 /* ════════════════════════════════════
-   CÓDIGO POSTAL
+   CÓDIGO POSTAL — codigos.zip
+   Endpoint: GET /api/zip/:codigo?pais=MX
+   Auth:     Header X-API-Key
+   Response: { estado, municipio, colonias: [...] }
 ════════════════════════════════════ */
 document.getElementById('cp').addEventListener('input', function() {
   var val = this.value.replace(/\D/g,'');
   this.value = val;
+
   var load = document.getElementById('cpLoad');
   var err  = document.getElementById('cpErr');
   var box  = document.getElementById('cpBox');
@@ -1365,38 +1361,64 @@ document.getElementById('cp').addEventListener('input', function() {
   var cs   = document.getElementById('colSel');
   var cb   = document.getElementById('colBadge');
 
+  /* Reset UI */
   load.className = 'cp-load';
   err.className  = 'cp-err';
   box.className  = 'cp-box';
   cw.className   = 'col-wrap';
 
   if (val.length !== 5) {
-    setAF('estado','estHint',''); setAF('mun','munHint','');
+    setAF('estado','estHint','');
+    setAF('mun','munHint','');
     updateProgress(); buildSummary(); return;
   }
 
   load.className = 'cp-load on';
 
-  fetch('https://api.copomex.com/query/info_cp/' + val + '?type=simplified&token=' + CP_TOKEN)
-    .then(function(r) { return r.json(); })
+  fetch(CODIGOS_ZIP_URL + val + '?pais=MX', {
+    headers: { 'X-API-Key': CODIGOS_ZIP_KEY }
+  })
+    .then(function(r) {
+      if (!r.ok) {
+        /* 404 → CP no encontrado; otros → error de servidor */
+        return r.json().then(function(body) {
+          var msg = (body && (body.message || body.error)) || 'Código postal no encontrado.';
+          throw new Error(msg);
+        }).catch(function() {
+          throw new Error(r.status === 404
+            ? 'Código postal no encontrado.'
+            : 'Error del servidor (' + r.status + '). Intenta de nuevo.');
+        });
+      }
+      return r.json();
+    })
     .then(function(data) {
       load.className = 'cp-load';
-      var obj = Array.isArray(data) ? data[0] : data;
-      if (!obj || obj.error || !obj.response) {
-        err.textContent = (obj && obj.error_message) || 'Código postal no encontrado.';
-        err.className = 'cp-err on';
-        setAF('estado','estHint',''); setAF('mun','munHint','');
+
+      /* ── Mapeo de la respuesta de codigos.zip ──
+         data.estado    → nombre del estado
+         data.municipio → nombre del municipio/alcaldía
+         data.colonias  → array de strings con nombres de colonias
+      ── */
+      var estado   = (data.estado   || '').trim();
+      var municipio = (data.municipio || '').trim();
+      var colonias  = Array.isArray(data.colonias)
+        ? data.colonias.slice().sort(function(a,b){ return a.localeCompare(b,'es'); })
+        : [];
+
+      if (!estado && !municipio) {
+        err.textContent = 'Código postal no encontrado.';
+        err.className   = 'cp-err on';
+        setAF('estado','estHint','');
+        setAF('mun','munHint','');
         updateProgress(); buildSummary(); return;
       }
-      var info     = obj.response;
-      var colonias = Array.isArray(info.asentamiento)
-        ? info.asentamiento.slice().sort(function(a,b){ return a.localeCompare(b,'es'); })
-        : (info.asentamiento ? [info.asentamiento] : []);
 
-      setAF('estado','estHint', info.estado || '');
-      setAF('mun','munHint', info.municipio || '');
+      setAF('estado','estHint', estado);
+      setAF('mun','munHint', municipio);
 
-      box.innerHTML = '<span class="cp-badge">CP ' + val + '</span><strong>' + (info.municipio||'') + '</strong>, ' + (info.estado||'');
+      box.innerHTML = '<span class="cp-badge">CP ' + val + '</span>'
+        + '<strong>' + municipio + '</strong>, ' + estado;
       box.className = 'cp-box on';
 
       if (colonias.length > 1) {
@@ -1411,13 +1433,17 @@ document.getElementById('cp').addEventListener('input', function() {
       } else if (colonias.length === 1) {
         cs.innerHTML = '<option value="' + colonias[0] + '" selected>' + colonias[0] + '</option>';
       }
+
       updateProgress(); buildSummary();
     })
-    .catch(function() {
+    .catch(function(e) {
       load.className = 'cp-load';
-      err.textContent = 'No se pudo consultar el código postal. Verifica tu conexión.';
+      err.textContent = e && e.message
+        ? e.message
+        : 'No se pudo consultar el código postal. Verifica tu conexión.';
       err.className = 'cp-err on';
-      setAF('estado','estHint',''); setAF('mun','munHint','');
+      setAF('estado','estHint','');
+      setAF('mun','munHint','');
       updateProgress(); buildSummary();
     });
 });
@@ -1433,10 +1459,10 @@ var BRANDS = {
   'Coreanas':        [{f:'🇰🇷',n:'Daewoo'},{f:'🇰🇷',n:'Genesis'},{f:'🇰🇷',n:'Hyundai'},{f:'🇰🇷',n:'Kia'},{f:'🇰🇷',n:'SsangYong'}],
 };
 
-var bSearch = document.getElementById('brandSearch');
-var bVal    = document.getElementById('brandVal');
-var bDrop   = document.getElementById('brandDrop');
-var otraWrap = document.getElementById('otraWrap');
+var bSearch   = document.getElementById('brandSearch');
+var bVal      = document.getElementById('brandVal');
+var bDrop     = document.getElementById('brandDrop');
+var otraWrap  = document.getElementById('otraWrap');
 var otraMarca = document.getElementById('otraMarca');
 
 function buildBrandDrop(q) {
@@ -1770,10 +1796,8 @@ function updateCompressUI(type,pct,done,remaining,elapsedSec,total){
 }
 
 /* ════════════════════════════════════
-   SUMMARY — nuevo sistema con updateRow / updateRowChip / setBadgeState
+   SUMMARY
 ════════════════════════════════════ */
-
-/* Actualiza el badge de estado del resumen */
 function setBadgeState(state) {
   var badge    = document.getElementById('sum-badge');
   var badgeTxt = document.getElementById('sum-badge-txt');
@@ -1784,7 +1808,6 @@ function setBadgeState(state) {
   badgeTxt.textContent = labels[state] || state;
 }
 
-/* Actualiza el texto de un valor en el resumen con animación de flash */
 function updateRow(id, value) {
   var el = document.getElementById('val-' + id);
   if (!el) return;
@@ -1799,7 +1822,6 @@ function updateRow(id, value) {
   }
 }
 
-/* Actualiza un valor con chip de color */
 function updateRowChip(id, value, chipClass) {
   var container = document.getElementById('val-' + id);
   if (!container) return;
@@ -1826,7 +1848,6 @@ function updateRowChip(id, value, chipClass) {
 function gv(id) { var e=document.getElementById(id); return e?e.value.trim():''; }
 
 function buildSummary() {
-  /* ── Datos Personales ── */
   var nombre = [gv('fn'),gv('sn'),gv('fa'),gv('sa')].filter(Boolean).join(' ').trim();
   updateRow('nombre', nombre);
   updateRow('genero', gv('gen'));
@@ -1834,7 +1855,6 @@ function buildSummary() {
   updateRow('rfc',    gv('rfc'));
   updateRow('curp',   gv('curp'));
 
-  /* ── Contacto y Domicilio ── */
   updateRow('tel',   gv('tel'));
   updateRow('email', gv('email'));
   var cpMun = gv('cp') && gv('mun') ? 'CP ' + gv('cp') + ' — ' + gv('mun') : (gv('cp') || '');
@@ -1842,7 +1862,6 @@ function buildSummary() {
   var coloniaEst = gv('colSel') && gv('estado') ? gv('colSel') + ' / ' + gv('estado') : (gv('estado') || gv('colSel') || '');
   updateRow('colonia', coloniaEst);
 
-  /* ── Vehículo ── */
   updateRowChip('tipo',  gv('cond'), '');
   var marca = bVal.value || '';
   if (!marca && otraWrap.classList.contains('on')) marca = 'Otra (' + gv('otraMarca') + ')';
@@ -1851,12 +1870,10 @@ function buildSummary() {
   updateRow('anio', anioVer);
   updateRow('vin',  gv('niv'));
 
-  /* ── Documentos ── */
   var nf = attachState['AVA'].files.length;
   var zipInfo = attachState['AVA'].zipBlob ? ' — ZIP: ' + fmtBytes(attachState['AVA'].zipBlob.size) : '';
   updateRowChip('archivos', nf ? nf + ' archivo(s)' + zipInfo : '', 'files');
 
-  /* ── Badge de estado ── */
   var requiredFilled = [nombre, gv('gen'), gv('dob'), gv('rfc'), gv('curp'), gv('tel'), gv('email'),
                         gv('cp'), gv('estado'), gv('cond'), marca, gv('ver'), gv('anio'), gv('niv')];
   var allFilled = requiredFilled.every(function(v){ return v && v.trim(); });
