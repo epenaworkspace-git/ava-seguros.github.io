@@ -1097,14 +1097,14 @@ input.field-err { border-color:var(--red)!important;   background:#fff1f1!import
 
 /* ════════════════════════════════════
    CONFIGURACIÓN GLOBAL
-   CP: api-sepomex.hckdrk.mx
+   CP: mexico-api.devaleff.com
    Pública, sin API key, CORS abierto
    GET /query/info_cp/{cp}
    Respuesta: { error, response: [{ asentamiento, municipio, estado, ... }] }
 ════════════════════════════════════ */
 var SITE_KEY      = '6Lc9zGUsAAAAAG2K5TAav3VrS9obGfFqXO5cnOkV';
 var MAX_ZIP_BYTES = 5 * 1024 * 1024;
-var CP_BASE_URL   = 'https://api-sepomex.hckdrk.mx/query/info_cp/';
+/* CP_URL se define junto a fetchCP abajo */
 
 /* ════════════════════════════════════
    DARK MODE
@@ -1189,35 +1189,32 @@ function setAF(id, hintId, value) {
 }
 
 /* ════════════════════════════════════
-   CÓDIGO POSTAL — api-sepomex.hckdrk.mx
-   Pública · Sin API key · CORS abierto
-   GET https://api-sepomex.hckdrk.mx/query/info_cp/{cp}
+   CÓDIGO POSTAL — mexico-api.devaleff.com
+   Open source · Sin API key · CORS abierto
+   Datos 2025 confirmados
+   GET https://mexico-api.devaleff.com/api/codigo-postal/{cp}
    Respuesta 200:
    {
-     "error": false,
-     "code_error": 200,
-     "response": [
-       {
-         "asentamiento": "Roma Norte",
-         "tipo_asentamiento": "Colonia",
-         "municipio": "Cuauhtémoc",
-         "ciudad": "Ciudad de México",
-         "estado": "Ciudad de México",
-         "pais": "México",
-         "CP": "06600"
-       }, ...
+     "meta": { "total": N },
+     "data": [
+       { "d_codigo":"06600", "d_estado":"Ciudad de México",
+         "d_ciudad":"Ciudad de México", "d_asenta":"Juárez",
+         "D_mnpio":"Cuauhtémoc", "d_tipo_asenta":"Colonia" },
+       ...
      ]
    }
+   Campos clave: d_estado, D_mnpio, d_asenta
 ════════════════════════════════════ */
 var _cpTimer = null;
+var CP_URL   = 'https://mexico-api.devaleff.com/api/codigo-postal/';
 
 document.getElementById('cp').addEventListener('input', function () {
   var val = this.value.replace(/\D/g, '');
   this.value = val;
 
-  document.getElementById('cpLoad').className = 'cp-load';
-  document.getElementById('cpErr').className  = 'cp-err';
-  document.getElementById('cpBox').className  = 'cp-box';
+  document.getElementById('cpLoad').className  = 'cp-load';
+  document.getElementById('cpErr').className   = 'cp-err';
+  document.getElementById('cpBox').className   = 'cp-box';
   document.getElementById('colWrap').className = 'col-wrap';
   clearTimeout(_cpTimer);
 
@@ -1233,39 +1230,29 @@ document.getElementById('cp').addEventListener('input', function () {
 function fetchCP(cp) {
   var load = document.getElementById('cpLoad');
   load.className   = 'cp-load on';
-  load.textContent = '\ud83d\udd0d Buscando\u2026';
+  load.textContent = '\uD83D\uDD0D Buscando\u2026';
 
-  fetch(CP_BASE_URL + cp, { method: 'GET' })
+  fetch(CP_URL + encodeURIComponent(cp))
     .then(function (res) {
-      return res.json().then(function (data) {
-        return { ok: res.ok, status: res.status, data: data };
-      });
+      if (res.status === 404) throw { handled: true, msg: 'C\u00f3digo postal no encontrado.' };
+      if (!res.ok) throw { handled: true, msg: 'Error del servidor. Intenta de nuevo.' };
+      return res.json();
     })
-    .then(function (res) {
+    .then(function (json) {
       load.className = 'cp-load';
 
-      /* La API devuelve error:true cuando el CP no existe */
-      if (!res.ok || res.data.error === true) {
-        var msg = res.status === 404 || (res.data && res.data.code_error === 404)
-          ? 'C\u00f3digo postal no encontrado. Verifica los 5 d\u00edgitos.'
-          : 'No se pudo consultar el C.P. Intenta de nuevo.';
-        return showCPError(msg);
-      }
-
-      var rows = res.data.response;
+      var rows = json.data;
       if (!Array.isArray(rows) || rows.length === 0) {
         return showCPError('C\u00f3digo postal no encontrado. Verifica los 5 d\u00edgitos.');
       }
 
-      /* Tomar estado y municipio del primer registro */
-      var estado    = (rows[0].estado    || rows[0].ciudad || '').trim();
-      var municipio = (rows[0].municipio || '').trim();
+      /* Campos confirmados: d_estado, D_mnpio, d_asenta */
+      var estado    = (rows[0].d_estado || '').trim();
+      var municipio = (rows[0].D_mnpio  || rows[0].d_ciudad || '').trim();
 
-      /* Recolectar colonias únicas */
-      var seen     = {};
-      var colonias = [];
+      var seen = {}, colonias = [];
       rows.forEach(function (r) {
-        var c = (r.asentamiento || '').trim();
+        var c = (r.d_asenta || '').trim();
         if (c && !seen[c]) { seen[c] = true; colonias.push(c); }
       });
       colonias.sort(function (a, b) { return a.localeCompare(b, 'es'); });
@@ -1274,9 +1261,8 @@ function fetchCP(cp) {
       setAF('mun',    'munHint', municipio);
 
       var box = document.getElementById('cpBox');
-      box.innerHTML = '<span class="cp-badge">CP ' + cp + '</span>'
-        + '<strong>' + municipio + '</strong>'
-        + (estado ? ', ' + estado : '');
+      box.innerHTML = '<span class="cp-badge">CP ' + cp + '</span><strong>'
+        + municipio + '</strong>' + (estado ? ', ' + estado : '');
       box.className = 'cp-box on';
 
       var cs = document.getElementById('colSel');
@@ -1298,11 +1284,12 @@ function fetchCP(cp) {
 
       updateProgress(); buildSummary();
     })
-    .catch(function (err) {
+    .catch(function (e) {
       document.getElementById('cpLoad').className = 'cp-load';
-      showCPError(navigator.onLine
-        ? 'No se pudo consultar el C.P. Intenta de nuevo.'
-        : 'Sin conexi\u00f3n a internet. Verifica tu red.');
+      var msg = (e && e.handled) ? e.msg
+        : (navigator.onLine ? 'No se pudo consultar el C.P. Intenta de nuevo.'
+                            : 'Sin conexi\u00f3n a internet.');
+      showCPError(msg);
     });
 }
 
