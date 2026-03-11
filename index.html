@@ -1193,37 +1193,24 @@ function setAF(id, hintId, value) {
 /* ════════════════════════════════════
    CÓDIGO POSTAL — codigos.zip API
    ─────────────────────────────────
-   GET https://api.codigos.zip/api/zip/{cp}?pais=MX
-   Header: X-API-Key: <CZ_API_KEY>
+   Intento 1: Header X-API-Key  (recomendado por la doc)
+   Intento 2: Query param ?api_key=  (fallback si CORS bloquea header)
 
-   Respuesta 200:
-   {
-     "estado":    "Ciudad de México",
-     "municipio": "Cuauhtémoc",
-     "colonias":  ["Colonia Roma Norte", "Colonia Roma Sur", ...]
-   }
-
-   Errores manejados:
-   • 401 → API Key inválida
-   • 404 → CP no encontrado
-   • 429 → Rate limit excedido
-   • 5xx → Error de servidor
-   • Sin red → mensaje de conexión
+   Estructura de respuesta normalizada:
+   { estado, municipio, colonias[] }
+   — se detectan también aliases: state, city, settlements, asentamiento
 ════════════════════════════════════ */
-var _cpTimer = null;   /* debounce handle */
+var _cpTimer = null;
 
 document.getElementById('cp').addEventListener('input', function () {
-  var val  = this.value.replace(/\D/g, '');
+  var val = this.value.replace(/\D/g, '');
   this.value = val;
 
   var load = document.getElementById('cpLoad');
   var err  = document.getElementById('cpErr');
   var box  = document.getElementById('cpBox');
   var cw   = document.getElementById('colWrap');
-  var cs   = document.getElementById('colSel');
-  var cb   = document.getElementById('colBadge');
 
-  /* Resetear UI */
   load.className = 'cp-load';
   err.className  = 'cp-err';
   box.className  = 'cp-box';
@@ -1236,104 +1223,177 @@ document.getElementById('cp').addEventListener('input', function () {
     updateProgress(); buildSummary(); return;
   }
 
-  /* Debounce 350 ms para evitar peticiones en cada tecla */
-  _cpTimer = setTimeout(function () { fetchCP(val); }, 350);
+  _cpTimer = setTimeout(function () { fetchCP(val); }, 400);
 });
+
+/* Normaliza cualquier variante de respuesta que pueda devolver la API */
+function normalizeCPResponse(data) {
+  if (!data || typeof data !== 'object') return null;
+
+  /* —— Estado —— */
+  var estado = (
+    data.estado        ||
+    data.state         ||
+    data.nombre_estado ||
+    data.d_estado      ||
+    ''
+  ).toString().trim();
+
+  /* —— Municipio —— */
+  var municipio = (
+    data.municipio      ||
+    data.city           ||
+    data.delegacion     ||
+    data.d_mnpio        ||
+    data.municipality   ||
+    ''
+  ).toString().trim();
+
+  /* —— Colonias —— colonias puede ser array de strings o array de objetos —— */
+  var raw = data.colonias || data.asentamiento || data.settlements || data.colonias_list || [];
+  var colonias = [];
+
+  if (Array.isArray(raw)) {
+    raw.forEach(function (item) {
+      if (typeof item === 'string' && item.trim()) {
+        colonias.push(item.trim());
+      } else if (item && typeof item === 'object') {
+        /* algunos APIs devuelven objetos { nombre, tipo, ... } */
+        var nombre = item.nombre || item.name || item.d_asenta || item.colonia || '';
+        if (nombre.trim()) colonias.push(nombre.trim());
+      }
+    });
+  }
+
+  /* Si la respuesta es un array directo de registros (algunos APIs retornan así) */
+  if (Array.isArray(data)) {
+    data.forEach(function (item) {
+      var e = item.estado || item.state || '';
+      var m = item.municipio || item.city || '';
+      var c = item.colonia || item.asentamiento || item.nombre || '';
+      if (!estado && e)    estado    = e.toString().trim();
+      if (!municipio && m) municipio = m.toString().trim();
+      if (c.trim()) colonias.push(c.trim());
+    });
+  }
+
+  colonias.sort(function (a, b) { return a.localeCompare(b, 'es'); });
+
+  return { estado: estado, municipio: municipio, colonias: colonias };
+}
 
 function fetchCP(cp) {
   var load = document.getElementById('cpLoad');
-  var err  = document.getElementById('cpErr');
-  var box  = document.getElementById('cpBox');
-  var cw   = document.getElementById('colWrap');
-  var cs   = document.getElementById('colSel');
-  var cb   = document.getElementById('colBadge');
-
   load.className = 'cp-load on';
+  load.textContent = '🔍 Buscando…';
 
-  fetch(CZ_BASE_URL + cp + '?pais=MX', {
-    method:  'GET',
-    headers: { 'X-API-Key': CZ_API_KEY }
-  })
-    .then(function (response) {
-      /* Intentar leer el body JSON sin importar el status */
-      return response.json().then(function (body) {
-        return { status: response.status, ok: response.ok, body: body };
-      }).catch(function () {
-        return { status: response.status, ok: response.ok, body: null };
-      });
-    })
-    .then(function (res) {
-      load.className = 'cp-load';
+  /* — Intento 1: header X-API-Key — */
+  var url1  = CZ_BASE_URL + cp + '?pais=MX';
+  var opts1 = { method: 'GET', headers: { 'X-API-Key': CZ_API_KEY } };
 
-      if (!res.ok) {
-        /* ── Manejo granular de errores HTTP ── */
-        var msg = '';
-        if (res.status === 401) {
-          msg = 'Error de autenticación con el servicio de CP. Contacta al administrador.';
-        } else if (res.status === 404) {
-          msg = 'Código postal no encontrado. Verifica los 5 dígitos ingresados.';
-        } else if (res.status === 429) {
-          msg = 'Límite de consultas alcanzado. Intenta en unos minutos.';
-        } else if (res.status >= 500) {
-          msg = 'El servicio de códigos postales no está disponible. Intenta más tarde.';
-        } else {
-          msg = (res.body && (res.body.message || res.body.error)) || 'Error desconocido (código ' + res.status + ').';
+  /* — Intento 2 (fallback): api_key como query param — */
+  var url2  = CZ_BASE_URL + cp + '?pais=MX&api_key=' + CZ_API_KEY;
+  var opts2 = { method: 'GET' };
+
+  console.log('[AVA/CP] Consultando CP:', cp);
+  console.log('[AVA/CP] URL:', url1);
+
+  function doFetch(url, opts, isFallback) {
+    return fetch(url, opts)
+      .then(function (response) {
+        console.log('[AVA/CP] HTTP', response.status, isFallback ? '(fallback)' : '(intento 1)');
+        return response.text().then(function (txt) {
+          return { status: response.status, ok: response.ok, text: txt };
+        });
+      })
+      .then(function (res) {
+        var data = null;
+        try { data = JSON.parse(res.text); } catch (e) {
+          console.warn('[AVA/CP] Body no es JSON:', res.text.slice(0, 200));
         }
-        showCPError(msg); return;
-      }
 
-      /* ── Respuesta exitosa ──
-         Estructura esperada de codigos.zip:
-         { estado: string, municipio: string, colonias: string[] }
-      ── */
-      var data = res.body;
-      if (!data) { showCPError('Respuesta inesperada del servidor.'); return; }
+        console.log('[AVA/CP] Body:', data);
 
-      var estado    = (data.estado    || '').trim();
-      var municipio = (data.municipio || '').trim();
-      var colonias  = Array.isArray(data.colonias)
-        ? data.colonias.slice().sort(function (a, b) { return a.localeCompare(b, 'es'); })
-        : [];
+        if (!res.ok) {
+          var errMsg = '';
+          if (res.status === 401 || res.status === 403) {
+            errMsg = 'API Key inválida o inactiva. Verifica tu dashboard en codigos.zip.';
+          } else if (res.status === 404) {
+            errMsg = 'Código postal no encontrado. Verifica los 5 dígitos.';
+          } else if (res.status === 429) {
+            errMsg = 'Límite de consultas alcanzado. Intenta en unos minutos.';
+          } else if (res.status >= 500) {
+            errMsg = 'Servicio de CP no disponible. Intenta más tarde.';
+          } else {
+            errMsg = (data && (data.message || data.error)) || ('Error ' + res.status);
+          }
+          throw { handled: true, msg: errMsg, status: res.status };
+        }
 
-      if (!estado && !municipio) {
-        showCPError('Código postal no encontrado. Verifica los 5 dígitos ingresados.');
-        return;
-      }
+        var norm = normalizeCPResponse(data);
+        console.log('[AVA/CP] Normalizado:', norm);
 
-      /* Autocompletar Estado y Municipio */
-      setAF('estado', 'estHint', estado);
-      setAF('mun',    'munHint', municipio);
+        if (!norm || (!norm.estado && !norm.municipio)) {
+          throw { handled: true, msg: 'Código postal no encontrado. Verifica los 5 dígitos.' };
+        }
 
-      /* Caja informativa */
+        return norm;
+      });
+  }
+
+  doFetch(url1, opts1, false)
+    .catch(function (err1) {
+      /* Si el error es manejado (HTTP error conocido) no intentamos fallback */
+      if (err1 && err1.handled) throw err1;
+      /* Si es error de red/CORS → intentar con query param */
+      console.warn('[AVA/CP] Intento 1 falló (posible CORS):', err1.message || err1);
+      console.log('[AVA/CP] Intentando fallback con query param…');
+      return doFetch(url2, opts2, true);
+    })
+    .then(function (norm) {
+      var load2 = document.getElementById('cpLoad');
+      var box   = document.getElementById('cpBox');
+      var cw    = document.getElementById('colWrap');
+      var cs    = document.getElementById('colSel');
+      var cb    = document.getElementById('colBadge');
+
+      load2.className = 'cp-load';
+
+      setAF('estado', 'estHint', norm.estado);
+      setAF('mun',    'munHint', norm.municipio);
+
       box.innerHTML = '<span class="cp-badge">CP ' + cp + '</span>'
-        + '<strong>' + municipio + '</strong>, ' + estado;
+        + '<strong>' + norm.municipio + '</strong>'
+        + (norm.estado ? ', ' + norm.estado : '');
       box.className = 'cp-box on';
 
-      /* Selector de colonias */
-      if (colonias.length > 1) {
+      if (norm.colonias.length > 1) {
         cs.innerHTML = '<option value="">Elige tu colonia…</option>';
-        colonias.forEach(function (c) {
+        norm.colonias.forEach(function (c) {
           var o = document.createElement('option');
           o.value = o.textContent = c;
           cs.appendChild(o);
         });
-        cb.textContent = colonias.length + ' opciones';
-        cw.className   = 'col-wrap on';
-      } else if (colonias.length === 1) {
-        /* Una sola colonia: preseleccionar */
-        cs.innerHTML = '<option value="' + colonias[0] + '" selected>' + colonias[0] + '</option>';
+        cb.textContent = norm.colonias.length + ' opciones';
+        cw.className = 'col-wrap on';
+      } else if (norm.colonias.length === 1) {
+        cs.innerHTML = '<option value="' + norm.colonias[0] + '" selected>' + norm.colonias[0] + '</option>';
       }
 
       updateProgress(); buildSummary();
     })
-    .catch(function (networkErr) {
-      /* Error de red / CORS / sin conexión */
-      load.className = 'cp-load';
-      var msg = navigator.onLine
-        ? 'No se pudo consultar el código postal. Intenta de nuevo.'
-        : 'Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+    .catch(function (finalErr) {
+      document.getElementById('cpLoad').className = 'cp-load';
+      var msg;
+      if (finalErr && finalErr.handled) {
+        msg = finalErr.msg;
+      } else if (!navigator.onLine) {
+        msg = 'Sin conexión a internet. Verifica tu red.';
+      } else {
+        msg = 'No se pudo consultar el código postal. Revisa tu conexión e intenta de nuevo.';
+        console.error('[AVA/CP] Error final:', finalErr);
+      }
       showCPError(msg);
-      console.warn('[codigos.zip] fetchCP error:', networkErr);
     });
 }
 
