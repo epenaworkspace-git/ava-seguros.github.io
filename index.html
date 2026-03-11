@@ -1269,17 +1269,17 @@ function fetchCP(cp) {
       var cb = document.getElementById('colBadge');
       var cw = document.getElementById('colWrap');
 
-      if (colonias.length > 1) {
-        cs.innerHTML = '<option value="">Elige tu colonia\u2026</option>';
+      if (colonias.length >= 1) {
+        cs.innerHTML = colonias.length > 1
+          ? '<option value="">Elige tu colonia\u2026</option>'
+          : '';
         colonias.forEach(function (c) {
           var o = document.createElement('option');
           o.value = o.textContent = c;
           cs.appendChild(o);
         });
-        cb.textContent = colonias.length + ' opciones';
+        cb.textContent = colonias.length === 1 ? '1 opci\u00f3n' : colonias.length + ' opciones';
         cw.className   = 'col-wrap on';
-      } else if (colonias.length === 1) {
-        cs.innerHTML = '<option value="' + colonias[0] + '" selected>' + colonias[0] + '</option>';
       }
 
       updateProgress(); buildSummary();
